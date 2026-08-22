@@ -139,3 +139,11 @@ ion-tab-button:not(.tab-selected)::part(native):hover {
   height: 28px !important;
   width: 28px !important;
 }
+// The native ML Kit camera preview is rendered behind the Capacitor WebView.
+// This selector must remain global; Angular-scoped page styles cannot match body.
+body.barcode-scanning-active {
+  visibility: hidden;
+  background: transparent;
+  --background: transparent;
+  --ion-background-color: transparent;
+}
