@@ -7,6 +7,8 @@
     "ABOUT_SIMPLE_QR": "關於QRWerk",
     "ADD": "新增",
     "ACTIONS": "操作",
+    "DELETE_ALL_ENTRIES": "刪除所有項目",
+    "NO_ENTRIES_TO_MANAGE": "沒有可管理的項目。",
     "MANAGE_ENTRIES": "管理項目", "MANAGE_GROUPS": "管理群組", "TRANSFER_DATA": "傳輸資料", "ADD_ENTRIES": "新增項目", "RENAME_GROUP": "重新命名群組", "NO_ENTRIES_AVAILABLE": "沒有其他可用項目",
     "MOVE_ENTRIES": "移動項目", "SELECT_ENTRIES": "選擇項目", "MOVE_TO_GROUP": "移動到哪個群組？", "ENTRIES_MOVED": "個項目已移動",
     "ADD_BCC": "新增密件副本",

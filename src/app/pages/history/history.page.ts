@@ -707,6 +707,14 @@ export class HistoryPage {
         handler: () => this.presentRecordManagement(),
       });
       buttons.push({ text: this.translate.instant('TRANSFER_DATA'), icon: 'swap-vertical-outline', handler: () => this.presentDataTransfer() });
+      if (this.env.scanRecords?.length) {
+        buttons.push({
+          text: this.translate.instant('DELETE_ALL_ENTRIES'),
+          icon: 'trash-outline',
+          role: 'destructive',
+          handler: () => this.removeAll(),
+        });
+      }
     } else if (this.env.bookmarks?.length) {
       buttons.push({ text: this.translate.instant('REMOVE_ALL'), icon: 'trash-outline', role: 'destructive', handler: () => this.removeAll() });
     }
@@ -719,12 +727,21 @@ export class HistoryPage {
   }
 
   private async presentRecordManagement(): Promise<void> {
-    const buttons: any[] = [];
-    if (this.env.scanRecords?.length) {
-      buttons.push({ text: this.translate.instant('MOVE_ENTRIES'), icon: 'move-outline', handler: () => this.selectEntriesToMove() });
-      buttons.push({ text: this.translate.instant('REMOVE_ALL'), icon: 'trash-outline', role: 'destructive', handler: () => this.removeAll() });
+    if (!this.env.scanRecords?.length) {
+      const alert = await this.alertController.create({
+        header: this.translate.instant('MANAGE_ENTRIES'),
+        message: this.translate.instant('NO_ENTRIES_TO_MANAGE'),
+        cssClass: ['alert-bg'],
+        buttons: [this.translate.instant('OK')],
+      });
+      await alert.present();
+      return;
     }
-    buttons.push({ text: this.translate.instant('CANCEL'), role: 'cancel' });
+
+    const buttons: any[] = [
+      { text: this.translate.instant('MOVE_ENTRIES'), icon: 'move-outline', handler: () => this.selectEntriesToMove() },
+      { text: this.translate.instant('CANCEL'), role: 'cancel' },
+    ];
     const actionSheet = await this.actionSheetController.create({ header: this.translate.instant('MANAGE_ENTRIES'), buttons });
     await actionSheet.present();
   }

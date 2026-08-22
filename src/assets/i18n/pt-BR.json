@@ -7,6 +7,8 @@
     "ABOUT_SIMPLE_QR": "Sobre o QRWerk",
     "ADD": "Adicionar",
     "ACTIONS": "Ações",
+    "DELETE_ALL_ENTRIES": "Excluir todos os itens",
+    "NO_ENTRIES_TO_MANAGE": "Não há itens para gerenciar.",
     "MANAGE_ENTRIES": "Gerenciar itens", "MANAGE_GROUPS": "Gerenciar grupos", "TRANSFER_DATA": "Transferir dados", "ADD_ENTRIES": "Adicionar itens", "RENAME_GROUP": "Renomear grupo", "NO_ENTRIES_AVAILABLE": "Nenhum item adicional disponível",
     "MOVE_ENTRIES": "Mover itens", "SELECT_ENTRIES": "Selecionar itens", "MOVE_TO_GROUP": "Mover para qual grupo?", "ENTRIES_MOVED": "itens movidos",
     "ADD_BCC": "Adicionar CCO",
