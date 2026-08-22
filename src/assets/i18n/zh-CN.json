@@ -35,6 +35,7 @@
     "BATCH_SAVED": "个批量扫描已保存",
     "DUPLICATE_SCANS": "重复代码", "DUPLICATE_MODE_EXPLANATION": "QRWerk 应如何处理已识别的代码？", "ALLOW_DUPLICATES": "允许重复代码", "PREVENT_BATCH_DUPLICATES": "在当前批次中阻止", "PREVENT_HISTORY_DUPLICATES": "在完整历史中阻止", "DUPLICATE_IN_BATCH": "已在当前批次中扫描", "DUPLICATE_IN_HISTORY": "此代码已存在于历史中", "BATCH_SUMMARY": "批次完成", "DUPLICATES_CURRENT_BATCH": "当前批次重复项", "DUPLICATES_HISTORY": "已存在于历史中", "DETECTED": "已识别",
     "BATCH_SETTINGS": "批量扫描设置", "BATCH_SETTINGS_EXPLANATION": "这些设置将保存用于后续批次。", "PAUSE_BETWEEN_SCANS": "扫描间隔", "PAUSE_EXPLANATION": "每次识别后相机会等待，避免立即重复扫描同一代码。", "AUTOFOCUS": "自动对焦", "ON": "开", "OFF": "关", "START_SCANNING": "开始扫描", "COMPLETE_HISTORY": "完整历史", "CURRENT_BATCH": "当前批次", "SECONDS_SHORT": "秒", "ENTER_CODE_MANUALLY": "手动输入代码", "CODE": "代码", "MANUAL_CODE_SAVED": "代码已保存",
+    "SCAN_SETTINGS": "扫描设置", "ALLOW": "允许", "BLOCK_IN_SCAN_SESSION": "在同一批次中阻止", "BLOCK_IN_HISTORY": "同时阻止历史记录", "RECORD_TIMELINE": "记录时间线", "FIRST_DETECTED": "首次识别", "DUPLICATE_DETECTED": "检测到重复项",
     "SAVE_ALL": "全部保存",
     "SAVE_SELECTION": "保存所选项",
     "CREATE_GROUP": "创建组", "DELETE_GROUP": "删除组", "GROUP_DELETE_INFO": "其中的代码将移至未分组。", "EXPORT_SCOPE": "要导出什么？", "CURRENT_FILTER": "当前视图", "SELECT_GROUPS": "选择组", "SELECT_CODES": "选择代码", "CONTINUE": "继续",

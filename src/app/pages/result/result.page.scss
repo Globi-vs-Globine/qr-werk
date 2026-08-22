@@ -37,3 +37,13 @@ ion-textarea[readonly] {
 .detailed-action-button-container::before, .detailed-action-button-container::after {
     content: ''
 }
+
+.history-timeline {
+    border: 1px solid rgba(0, 165, 170, 0.35);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.muted-duplicate-icon {
+    color: rgba(154, 126, 63, 0.8);
+}

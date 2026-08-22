@@ -19,3 +19,8 @@ ion-badge ion-icon {
   display: flex;
   flex-wrap: wrap;
 }
+
+.duplicate-badge {
+  --background: rgba(154, 126, 63, 0.72);
+  --color: #fff8e6;
+}

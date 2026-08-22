@@ -7,4 +7,5 @@ export class ScanRecord {
     group: string | undefined;
     duplicateCount?: number;
     lastDuplicateAt?: Date;
+    duplicateDetectedAt?: Date[];
 }

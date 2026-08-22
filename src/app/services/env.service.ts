@@ -164,6 +164,7 @@ export class EnvService {
   recordSource: 'create' | 'view' | 'scan' | 'external-share' | undefined;
   detailedRecordSource: 'create' | 'view-log' | 'view-bookmark' | 'scan-camera' | 'scan-image' | 'external-share' | undefined;
   viewResultFrom: '/tabs/scan' | '/tabs/generate' | '/tabs/history' | undefined;
+  selectedScanRecordId: string | undefined;
 
   public firstAppLoad: boolean = true;  // once loaded, turn it false
   public openScannerOnNextScanEntry: boolean = false;
@@ -986,6 +987,7 @@ export class EnvService {
     if (!record) return false;
     record.duplicateCount = (record.duplicateCount ?? 0) + 1;
     record.lastDuplicateAt = new Date();
+    record.duplicateDetectedAt = [...(record.duplicateDetectedAt ?? []), record.lastDuplicateAt];
     await Preferences.set({
       key: this.KEY_SCAN_RECORDS,
       value: JSON.stringify(this.scanRecords),

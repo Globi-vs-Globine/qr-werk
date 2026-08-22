@@ -369,7 +369,7 @@ export class HistoryPage {
     }
   }
 
-  viewRecord(data: string, source: "view-log" | "view-bookmark") {
+  viewRecord(data: string, source: "view-log" | "view-bookmark", recordId?: string) {
     this.isLoading = true;
     this.changeDetectorRef.detach();
     this.env.viewingScanRecords = [];
@@ -381,6 +381,7 @@ export class HistoryPage {
     this.env.recordSource = "view";
     this.env.detailedRecordSource = source;
     this.env.viewResultFrom = "/tabs/history";
+    this.env.selectedScanRecordId = recordId;
     this.router.navigate(['tabs/result']);
   }
 

@@ -133,7 +133,7 @@
             <ion-item-sliding #slidingItem>
               <ion-item class="ion-no-padding ripple-parent" detail="false"
                 [lines]="i === group.records.length - 1? 'none' : 'full'"
-                (click)="viewRecord(record.text, 'view-log')">
+                (click)="viewRecord(record.text, 'view-log', record.id)">
                 <ion-label class="ion-padding-start">
                   <div class="ion-padding-horizontal" style="overflow-x: clip; text-overflow: ellipsis;">
                     <p>
@@ -153,7 +153,7 @@
                       <ion-icon name="bookmark" aria-hidden="true"></ion-icon>
                       <span *ngIf="bookmarkLabel(record) as label">{{ label }}</span>
                     </ion-badge>
-                    <ion-badge *ngIf="record.duplicateCount" class="my-1 ms-1" color="warning">
+                    <ion-badge *ngIf="record.duplicateCount" class="my-1 ms-1 duplicate-badge">
                       <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
                       {{ (record.duplicateCount || 0) + 1 }}× {{ 'DETECTED' | translate }}
                     </ion-badge>

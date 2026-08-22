@@ -11,6 +11,7 @@ const scannerViewPath = path.join(
   'Plugin',
   'BarcodeScannerView.swift',
 );
+const scannerImplementationPath = path.join(path.dirname(scannerViewPath), 'BarcodeScanner.swift');
 
 if (!fs.existsSync(scannerViewPath)) {
   console.log('ML Kit iOS scanner source not installed; skipping QRWerk UI patch.');
@@ -18,12 +19,14 @@ if (!fs.existsSync(scannerViewPath)) {
 }
 
 let source = fs.readFileSync(scannerViewPath, 'utf8');
+let implementationSource = fs.readFileSync(scannerImplementationPath, 'utf8');
 const patchMarker = 'QRWerk: reveal the guide only after the camera preview has started.';
 const zoomPatchMarker = 'QRWerk: offer a simple 1x/2x scanner zoom control.';
 const scannerPolishPatchMarker = 'QRWerk: keep all scanner controls within easy thumb reach.';
 const autofocusPatchMarker = 'QRWerk: respect the batch autofocus preference.';
+const manualInputPatchMarker = 'QRWerk: allow manual input without leaving the scanner.';
 
-if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker)) {
+if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker) && source.includes(manualInputPatchMarker) && implementationSource.includes(manualInputPatchMarker)) {
   console.log('QRWerk ML Kit iOS scanner UI patch already applied.');
   process.exit(0);
 }
@@ -50,6 +53,13 @@ function replaceOnce(before, after, label) {
     throw new Error(`Cannot apply QRWerk ML Kit patch: ${label} was not found.`);
   }
   source = source.replace(before, after);
+}
+
+function replaceImplementationOnce(before, after, label) {
+  if (!implementationSource.includes(before)) {
+    throw new Error(`Cannot apply QRWerk ML Kit patch: ${label} was not found.`);
+  }
+  implementationSource = implementationSource.replace(before, after);
 }
 
 if (!source.includes(patchMarker)) {
@@ -221,5 +231,107 @@ replaceOnce(
 );
 }
 
+if (!source.includes(manualInputPatchMarker)) {
+replaceOnce(
+  `    func onCancel()\n`,
+  `    func onCancel()\n` +
+    `    func onManualInput(_ value: String)\n`,
+  'manual input delegate',
+);
+
+replaceOnce(
+  `    private var cancelButton: UIButton?\n`,
+  `    private var cancelButton: UIButton?\n` +
+    `    // QRWerk: allow manual input without leaving the scanner.\n` +
+    `    private var manualInputButton: UIButton?\n`,
+  'manual input state',
+);
+
+replaceOnce(
+  `                self.addCancelButton()\n`,
+  `                self.addCancelButton()\n` +
+    `                self.addManualInputButton()\n`,
+  'initial manual input button',
+);
+
+replaceOnce(
+  `        self.removeCancelButton()\n        self.removeVideoPreviewLayer()\n`,
+  `        self.removeCancelButton()\n        self.removeManualInputButton()\n        self.removeVideoPreviewLayer()\n`,
+  'manual input cleanup',
+);
+
+replaceOnce(
+  `            self.removeCancelButton()\n            self.addCancelButton()\n`,
+  `            self.removeCancelButton()\n            self.addCancelButton()\n            self.removeManualInputButton()\n            self.addManualInputButton()\n`,
+  'manual input layout',
+);
+
+replaceOnce(
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 105, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 142.5, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  'four-control cancel position',
+);
+replaceOnce(
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 30, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) + 7.5, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  'four-control torch position',
+);
+replaceOnce(
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) + 45, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) + 82.5, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  'four-control zoom position',
+);
+
+replaceOnce(
+  `    private func addCancelButton() {\n`,
+  `    private func addManualInputButton() {\n` +
+    `        let image = UIImage(systemName: "keyboard.fill")?.withTintColor(.white, renderingMode: .alwaysOriginal)\n` +
+    `        let button = UIButton(type: .custom)\n` +
+    `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 67.5, y: self.bounds.size.height - 86, width: 60, height: 60)\n` +
+    `        button.backgroundColor = .black.withAlphaComponent(0.5)\n` +
+    `        button.setImage(image, for: .normal)\n` +
+    `        button.layer.cornerRadius = button.bounds.size.width / 2\n` +
+    `        button.imageEdgeInsets = UIEdgeInsets(top: 17, left: 15, bottom: 17, right: 15)\n` +
+    `        button.accessibilityLabel = "Manual input"\n` +
+    `        button.addTarget(self, action: #selector(onManualInput), for: .touchUpInside)\n` +
+    `        self.addSubview(button)\n` +
+    `        self.manualInputButton = button\n` +
+    `    }\n\n` +
+    `    private func removeManualInputButton() {\n` +
+    `        self.manualInputButton?.removeFromSuperview()\n` +
+    `        self.manualInputButton = nil\n` +
+    `    }\n\n` +
+    `    @objc private func onManualInput() {\n` +
+    `        let isGerman = Locale.preferredLanguages.first?.hasPrefix("de") == true\n` +
+    `        let alert = UIAlertController(title: isGerman ? "Code manuell eingeben" : "Enter code manually", message: nil, preferredStyle: .alert)\n` +
+    `        alert.addTextField { textField in textField.autocapitalizationType = .none }\n` +
+    `        alert.addAction(UIAlertAction(title: isGerman ? "Abbrechen" : "Cancel", style: .cancel))\n` +
+    `        alert.addAction(UIAlertAction(title: isGerman ? "Speichern" : "Save", style: .default) { _ in\n` +
+    `            guard let value = alert.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines), !value.isEmpty else { return }\n` +
+    `            self.delegate?.onManualInput(value)\n` +
+    `        })\n` +
+    `        self.window?.rootViewController?.present(alert, animated: true)\n` +
+    `    }\n\n` +
+    `    private func addCancelButton() {\n`,
+  'manual input control',
+);
+}
+
+if (!implementationSource.includes(manualInputPatchMarker)) {
+replaceImplementationOnce(
+  `    public func onCancel() {\n`,
+  `    // QRWerk: allow manual input without leaving the scanner.\n` +
+    `    public func onManualInput(_ value: String) {\n` +
+    `        if let scanCompletionHandler = self.scanCompletionHandler {\n` +
+    `            scanCompletionHandler(nil, nil, "QRWERK_MANUAL:" + value)\n` +
+    `        }\n` +
+    `        self.stopScan()\n` +
+    `    }\n\n` +
+    `    public func onCancel() {\n`,
+  'manual input completion',
+);
+}
+
 fs.writeFileSync(scannerViewPath, source);
+fs.writeFileSync(scannerImplementationPath, implementationSource);
 console.log('Applied QRWerk ML Kit iOS scanner UI patch.');

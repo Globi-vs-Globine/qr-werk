@@ -10,7 +10,6 @@ import {
 import { SplashScreen } from '@capacitor/splash-screen';
 import {
   AlertController,
-  ActionSheetController,
   InputCustomEvent,
   IonRouterOutlet,
   LoadingController,
@@ -69,7 +68,6 @@ export class ScanPage {
 
   constructor(
     public alertController: AlertController,
-    private actionSheetController: ActionSheetController,
     public loadingController: LoadingController,
     public routerOutlet: IonRouterOutlet,
     private router: Router,
@@ -419,6 +417,11 @@ export class ScanPage {
       }
       await this.processQrCode(barcode.rawValue, barcode.format);
     } catch (err) {
+      const manualValue = this.manualCodeFromScannerError(err);
+      if (manualValue) {
+        await this.processQrCode(manualValue, '' as BarcodeFormat);
+        return;
+      }
       // Closing the native scanner is a normal action. The scan page remains
       // usable and offers a button to open it again.
       if (this.env.debugMode === 'on') {
@@ -431,8 +434,14 @@ export class ScanPage {
   }
 
   async scanBatchUsingNativeInterface(): Promise<void> {
-    const batchOptions = await this.configureBatchScan();
-    if (!batchOptions) return;
+    const duplicateMode = (await Preferences.get({ key: 'batch-duplicate-mode' })).value as BatchDuplicateMode | null;
+    const pauseRawValue = (await Preferences.get({ key: 'batch-pause-ms' })).value;
+    const autofocusValue = (await Preferences.get({ key: 'batch-autofocus' })).value;
+    const batchOptions: BatchScanOptions = {
+      duplicateMode: duplicateMode ?? 'batch',
+      pauseMs: pauseRawValue == null || !Number.isFinite(Number(pauseRawValue)) ? 500 : Number(pauseRawValue),
+      autofocus: autofocusValue !== 'off',
+    };
 
     await Preferences.set({
       key: 'qrwerk-batch-autofocus',
@@ -448,25 +457,34 @@ export class ScanPage {
     let historyDuplicates = 0;
     try {
       while (true) {
-        const result = await BarcodeScanner.scan({
-          formats: [
-            BarcodeFormat.Aztec,
-            BarcodeFormat.Codabar,
-            BarcodeFormat.Code128,
-            BarcodeFormat.Code39,
-            BarcodeFormat.Code93,
-            BarcodeFormat.DataMatrix,
-            BarcodeFormat.Ean13,
-            BarcodeFormat.Ean8,
-            BarcodeFormat.Itf,
-            BarcodeFormat.Pdf417,
-            BarcodeFormat.QrCode,
-            BarcodeFormat.UpcA,
-            BarcodeFormat.UpcE,
-          ],
-        });
-        const barcode = result.barcodes[0];
-        const value = barcode?.rawValue?.trim();
+        let value: string | undefined;
+        let barcodeFormat: BarcodeFormat | string = '';
+        try {
+          const result = await BarcodeScanner.scan({
+            formats: [
+              BarcodeFormat.Aztec,
+              BarcodeFormat.Codabar,
+              BarcodeFormat.Code128,
+              BarcodeFormat.Code39,
+              BarcodeFormat.Code93,
+              BarcodeFormat.DataMatrix,
+              BarcodeFormat.Ean13,
+              BarcodeFormat.Ean8,
+              BarcodeFormat.Itf,
+              BarcodeFormat.Pdf417,
+              BarcodeFormat.QrCode,
+              BarcodeFormat.UpcA,
+              BarcodeFormat.UpcE,
+            ],
+          });
+          const barcode = result.barcodes[0];
+          value = barcode?.rawValue?.trim();
+          barcodeFormat = barcode?.format ?? '';
+        } catch (err) {
+          const manualValue = this.manualCodeFromScannerError(err);
+          if (!manualValue) throw err;
+          value = manualValue;
+        }
         if (!value) {
           continue;
         }
@@ -499,7 +517,7 @@ export class ScanPage {
         scannedValues.add(value);
         this.env.recordSource = 'scan';
         this.env.detailedRecordSource = 'scan-camera';
-        this.env.resultContentFormat = barcode.format;
+        this.env.resultContentFormat = barcodeFormat;
         await this.env.saveScanRecord(value);
         savedCount += 1;
         await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
@@ -522,175 +540,21 @@ export class ScanPage {
     }
   }
 
-  private async configureBatchScan(): Promise<BatchScanOptions | undefined> {
-    const duplicateMode = (await Preferences.get({ key: 'batch-duplicate-mode' })).value as BatchDuplicateMode | null;
-    const pauseRawValue = (await Preferences.get({ key: 'batch-pause-ms' })).value;
-    const pauseValue = pauseRawValue == null ? 1500 : Number(pauseRawValue);
-    const autofocusValue = (await Preferences.get({ key: 'batch-autofocus' })).value;
-    const options: BatchScanOptions = {
-      duplicateMode: duplicateMode ?? 'batch',
-      pauseMs: Number.isFinite(pauseValue) && pauseValue >= 0 ? pauseValue : 1500,
-      autofocus: autofocusValue !== 'off',
-    };
-
-    return new Promise(async resolve => {
-      const showMenu = async (): Promise<void> => {
-        const actionSheet = await this.actionSheetController.create({
-          header: this.translate.instant('BATCH_SETTINGS'),
-          subHeader: this.translate.instant('BATCH_SETTINGS_EXPLANATION'),
-          buttons: [
-            {
-              text: `${this.translate.instant('DUPLICATE_SCANS')}: ${this.duplicateModeLabel(options.duplicateMode)}`,
-              icon: 'copy-outline',
-              handler: () => void this.selectBatchDuplicateMode(options).then(showMenu),
-            },
-            {
-              text: `${this.translate.instant('PAUSE_BETWEEN_SCANS')}: ${this.pauseLabel(options.pauseMs)}`,
-              icon: 'timer-outline',
-              handler: () => void this.selectBatchPause(options).then(showMenu),
-            },
-            {
-              text: `${this.translate.instant('AUTOFOCUS')}: ${this.translate.instant(options.autofocus ? 'ON' : 'OFF')}`,
-              icon: 'aperture-outline',
-              handler: async () => {
-                options.autofocus = !options.autofocus;
-                await Preferences.set({ key: 'batch-autofocus', value: options.autofocus ? 'on' : 'off' });
-                await showMenu();
-              },
-            },
-            {
-              text: this.translate.instant('START_SCANNING'),
-              icon: 'scan-outline',
-              handler: () => resolve(options),
-            },
-            {
-              text: this.translate.instant('CANCEL'),
-              role: 'cancel',
-              handler: () => resolve(undefined),
-            },
-          ],
-          backdropDismiss: false,
-        });
-        await actionSheet.present();
-      };
-      await showMenu();
-    });
-  }
-
-  private async selectBatchDuplicateMode(options: BatchScanOptions): Promise<void> {
-    return new Promise(async resolve => {
-      const alert = await this.alertController.create({
-        header: this.translate.instant('DUPLICATE_SCANS'),
-        message: this.translate.instant('DUPLICATE_MODE_EXPLANATION'),
-        inputs: [
-          {
-            type: 'radio',
-            label: this.translate.instant('ALLOW_DUPLICATES'),
-            value: 'allow',
-            checked: options.duplicateMode === 'allow',
-          },
-          {
-            type: 'radio',
-            label: this.translate.instant('PREVENT_BATCH_DUPLICATES'),
-            value: 'batch',
-            checked: options.duplicateMode === 'batch',
-          },
-          {
-            type: 'radio',
-            label: this.translate.instant('PREVENT_HISTORY_DUPLICATES'),
-            value: 'history',
-            checked: options.duplicateMode === 'history',
-          },
-        ],
-        buttons: [
-          {
-            text: this.translate.instant('CANCEL'), role: 'cancel', handler: () => resolve(),
-          },
-          {
-            text: this.translate.instant('SAVE'),
-            handler: async value => {
-              options.duplicateMode = value as BatchDuplicateMode;
-              await Preferences.set({ key: 'batch-duplicate-mode', value: options.duplicateMode });
-              resolve();
-            },
-          },
-        ],
-        backdropDismiss: false,
-        cssClass: ['alert-bg'],
-      });
-      await alert.present();
-    });
-  }
-
-  private async selectBatchPause(options: BatchScanOptions): Promise<void> {
-    return new Promise(async resolve => {
-      const pauses = [500, 1000, 1500, 2000, 3000];
-      const alert = await this.alertController.create({
-        header: this.translate.instant('PAUSE_BETWEEN_SCANS'),
-        message: this.translate.instant('PAUSE_EXPLANATION'),
-        inputs: pauses.map(pause => ({
-          type: 'radio' as const,
-          label: this.pauseLabel(pause),
-          value: pause,
-          checked: options.pauseMs === pause,
-        })),
-        buttons: [
-          { text: this.translate.instant('CANCEL'), role: 'cancel', handler: () => resolve() },
-          {
-            text: this.translate.instant('SAVE'),
-            handler: async value => {
-              options.pauseMs = Number(value);
-              await Preferences.set({ key: 'batch-pause-ms', value: String(options.pauseMs) });
-              resolve();
-            },
-          },
-        ],
-        backdropDismiss: false,
-        cssClass: ['alert-bg'],
-      });
-      await alert.present();
-    });
-  }
-
-  private duplicateModeLabel(mode: BatchDuplicateMode): string {
-    if (mode === 'allow') return this.translate.instant('ALLOW_DUPLICATES');
-    if (mode === 'history') return this.translate.instant('COMPLETE_HISTORY');
-    return this.translate.instant('CURRENT_BATCH');
-  }
-
-  private pauseLabel(milliseconds: number): string {
-    return `${milliseconds / 1000} ${this.translate.instant('SECONDS_SHORT')}`;
-  }
-
   private async waitBetweenBatchScans(milliseconds: number): Promise<void> {
     if (milliseconds > 0) await new Promise(resolve => setTimeout(resolve, milliseconds));
   }
 
-  async enterCodeManually(): Promise<void> {
-    const alert = await this.alertController.create({
-      header: this.translate.instant('ENTER_CODE_MANUALLY'),
-      inputs: [{ name: 'code', type: 'textarea', placeholder: this.translate.instant('CODE') }],
-      buttons: [
-        { text: this.translate.instant('CANCEL'), role: 'cancel' },
-        {
-          text: this.translate.instant('SAVE'),
-          handler: async values => {
-            const value = String(values.code ?? '').trim();
-            if (!value) return false;
-            this.env.recordSource = 'scan';
-            this.env.resultContentFormat = '';
-            await this.env.saveScanRecord(value);
-            delete this.env.recordSource;
-            await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
-            await this.presentToast(this.translate.instant('MANUAL_CODE_SAVED'), 'short', 'bottom');
-            return true;
-          },
-        },
-      ],
-      cssClass: ['alert-bg'],
-    });
-    await alert.present();
+  private manualCodeFromScannerError(error: unknown): string | undefined {
+    const message = typeof error === 'string'
+      ? error
+      : String((error as { message?: string })?.message ?? error ?? '');
+    const marker = 'QRWERK_MANUAL:';
+    const markerIndex = message.indexOf(marker);
+    if (markerIndex < 0) return undefined;
+    const value = message.slice(markerIndex + marker.length).trim();
+    return value || undefined;
   }
+
 
   private async showBatchSummary(
     savedCount: number,

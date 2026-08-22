@@ -29,6 +29,7 @@ import { fadeIn } from 'src/app/utils/animations';
 import { Router } from '@angular/router';
 import { QRCodeElementType } from 'angularx-qrcode';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { ScanRecord } from 'src/app/models/scan-record';
 
 @Component({
   selector: 'app-result',
@@ -81,6 +82,18 @@ export class ResultPage {
   showQrFirst: boolean = false;
 
   resultSaved: boolean = false;
+
+  get selectedHistoryRecord(): ScanRecord | undefined {
+    if (!this.env.selectedScanRecordId) return undefined;
+    return this.env.scanRecords.find(record => record.id === this.env.selectedScanRecordId);
+  }
+
+  get duplicateTimestamps(): Date[] {
+    const record = this.selectedHistoryRecord;
+    if (!record) return [];
+    if (record.duplicateDetectedAt?.length) return record.duplicateDetectedAt;
+    return record.lastDuplicateAt ? [record.lastDuplicateAt] : [];
+  }
 
   @ViewChildren(MatFormField) formFields!: QueryList<MatFormField>;
 
@@ -213,6 +226,7 @@ export class ResultPage {
     delete this.env.recordSource;
     delete this.env.detailedRecordSource;
     delete this.env.viewResultFrom;
+    delete this.env.selectedScanRecordId;
   }
 
   goBackToOverview(): void {
