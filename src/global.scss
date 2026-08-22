@@ -139,3 +139,12 @@ ion-tab-button:not(.tab-selected)::part(native):hover {
   height: 28px !important;
   width: 28px !important;
 }
+
+// The iOS scanner is a native camera view. Hide the web tab bar while iOS
+// presents or dismisses it so both interfaces never appear on top of each other.
+body.native-barcode-scanner-active ion-tab-bar {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transition: none !important;
+}

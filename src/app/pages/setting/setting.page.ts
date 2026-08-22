@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Toast } from '@capacitor/toast';
-import { ActionSheetController, AlertController, LoadingController, Platform } from '@ionic/angular';
+import { AlertController, LoadingController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvService } from 'src/app/services/env.service';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { Preferences } from '@capacitor/preferences';
 
 @Component({
     selector: 'app-setting',
@@ -17,7 +16,6 @@ export class SettingPage {
 
   constructor(
     public alertController: AlertController,
-    private actionSheetController: ActionSheetController,
     public loadingController: LoadingController,
     private router: Router,
     public env: EnvService,
@@ -65,92 +63,6 @@ export class SettingPage {
 
   setScanRecordLogging() {
     this.router.navigate(['setting-record']);
-  }
-
-  async openScanSettings(): Promise<void> {
-    const duplicateMode = (await Preferences.get({ key: 'batch-duplicate-mode' })).value ?? 'batch';
-    const pauseRaw = (await Preferences.get({ key: 'batch-pause-ms' })).value;
-    const pauseMs = pauseRaw == null ? 500 : Number(pauseRaw);
-    const autofocus = (await Preferences.get({ key: 'batch-autofocus' })).value !== 'off';
-    const actionSheet = await this.actionSheetController.create({
-      header: this.translate.instant('SCAN_SETTINGS'),
-      buttons: [
-        {
-          text: `${this.translate.instant('DUPLICATE_SCANS')}: ${this.duplicateSettingLabel(duplicateMode)}`,
-          icon: 'copy-outline',
-          handler: () => this.chooseDuplicateSetting(duplicateMode),
-        },
-        {
-          text: `${this.translate.instant('PAUSE_BETWEEN_SCANS')}: ${pauseMs / 1000} ${this.translate.instant('SECONDS_SHORT')}`,
-          icon: 'timer-outline',
-          handler: () => this.chooseScanPause(pauseMs),
-        },
-        {
-          text: `${this.translate.instant('AUTOFOCUS')}: ${this.translate.instant(autofocus ? 'ON' : 'OFF')}`,
-          icon: 'aperture-outline',
-          handler: async () => {
-            await Preferences.set({ key: 'batch-autofocus', value: autofocus ? 'off' : 'on' });
-            await this.openScanSettings();
-          },
-        },
-        { text: this.translate.instant('CLOSE'), role: 'cancel' },
-      ],
-    });
-    await actionSheet.present();
-  }
-
-  private duplicateSettingLabel(mode: string): string {
-    if (mode === 'allow') return this.translate.instant('ALLOW');
-    if (mode === 'history') return this.translate.instant('BLOCK_IN_HISTORY');
-    return this.translate.instant('BLOCK_IN_SCAN_SESSION');
-  }
-
-  private async chooseDuplicateSetting(currentMode: string): Promise<void> {
-    const alert = await this.alertController.create({
-      header: this.translate.instant('DUPLICATE_SCANS'),
-      inputs: [
-        { type: 'radio', label: this.translate.instant('ALLOW'), value: 'allow', checked: currentMode === 'allow' },
-        { type: 'radio', label: this.translate.instant('BLOCK_IN_SCAN_SESSION'), value: 'batch', checked: currentMode === 'batch' },
-        { type: 'radio', label: this.translate.instant('BLOCK_IN_HISTORY'), value: 'history', checked: currentMode === 'history' },
-      ],
-      buttons: [
-        { text: this.translate.instant('CANCEL'), role: 'cancel' },
-        {
-          text: this.translate.instant('SAVE'),
-          handler: async value => {
-            await Preferences.set({ key: 'batch-duplicate-mode', value: String(value) });
-            await this.openScanSettings();
-          },
-        },
-      ],
-      cssClass: ['alert-bg'],
-    });
-    await alert.present();
-  }
-
-  private async chooseScanPause(currentPause: number): Promise<void> {
-    const pauses = [500, 1000, 1500, 2000, 3000];
-    const alert = await this.alertController.create({
-      header: this.translate.instant('PAUSE_BETWEEN_SCANS'),
-      inputs: pauses.map(pause => ({
-        type: 'radio' as const,
-        label: `${pause / 1000} ${this.translate.instant('SECONDS_SHORT')}`,
-        value: pause,
-        checked: pause === currentPause,
-      })),
-      buttons: [
-        { text: this.translate.instant('CANCEL'), role: 'cancel' },
-        {
-          text: this.translate.instant('SAVE'),
-          handler: async value => {
-            await Preferences.set({ key: 'batch-pause-ms', value: String(value) });
-            await this.openScanSettings();
-          },
-        },
-      ],
-      cssClass: ['alert-bg'],
-    });
-    await alert.present();
   }
 
   goBackupRestore() {

@@ -57,6 +57,29 @@
     </ion-label>
   </ion-item>
 
+  <ion-list-header class="ion-margin-start ion-padding-horizontal mt-1">
+    <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'SCAN_SETTINGS' | translate }}</ion-text>
+  </ion-list-header>
+  <ion-item button="true" detail="true" lines="full" (click)="chooseDuplicateSetting()">
+    <ion-icon slot="start" color="primary" name="copy-outline"></ion-icon>
+    <ion-label>
+      <h2>{{ 'DUPLICATE_SCANS' | translate }}</h2>
+      <p>{{ duplicateSettingLabel }}</p>
+    </ion-label>
+  </ion-item>
+  <ion-item button="true" detail="true" lines="full" (click)="chooseScanPause()">
+    <ion-icon slot="start" color="primary" name="timer-outline"></ion-icon>
+    <ion-label>
+      <h2>{{ 'PAUSE_BETWEEN_SCANS' | translate }}</h2>
+      <p>{{ scanPauseMs / 1000 }} {{ 'SECONDS_SHORT' | translate }}</p>
+    </ion-label>
+  </ion-item>
+  <ion-item lines="full">
+    <ion-icon slot="start" color="primary" name="aperture-outline"></ion-icon>
+    <ion-label>{{ 'AUTOFOCUS' | translate }}</ion-label>
+    <ion-toggle slot="end" color="primary" [(ngModel)]="autofocus" (ionChange)="autofocusChanged()"></ion-toggle>
+  </ion-item>
+
   <ion-list-header class="ion-margin-start ion-padding-horizontal mt-1"><ion-text
       [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'TASK' | translate }}</ion-text></ion-list-header>
   <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setResultPageButtons()">

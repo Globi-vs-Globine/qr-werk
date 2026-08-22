@@ -115,6 +115,7 @@ export class ScanPage {
   }
 
   async ionViewDidLeave(): Promise<void> {
+    this.setNativeScannerActive(false);
     try {
       const { available } = await BarcodeScanner.isTorchAvailable();
       if (available) {
@@ -386,7 +387,7 @@ export class ScanPage {
   }
 
   async scanUsingNativeInterface(): Promise<void> {
-    this.nativeScannerActive = true;
+    this.setNativeScannerActive(true);
     try {
       const result = await BarcodeScanner.scan({
         formats: [
@@ -428,8 +429,10 @@ export class ScanPage {
         console.log('Native scanner closed:', err);
       }
     } finally {
-      await new Promise(resolve => setTimeout(resolve, 120));
-      this.nativeScannerActive = false;
+      // Keep the launcher and tab bar covered until the native camera has
+      // completely finished its dismissal animation.
+      await new Promise(resolve => setTimeout(resolve, 260));
+      this.setNativeScannerActive(false);
     }
   }
 
@@ -439,7 +442,7 @@ export class ScanPage {
     const autofocusValue = (await Preferences.get({ key: 'batch-autofocus' })).value;
     const batchOptions: BatchScanOptions = {
       duplicateMode: duplicateMode ?? 'batch',
-      pauseMs: pauseRawValue == null || !Number.isFinite(Number(pauseRawValue)) ? 500 : Number(pauseRawValue),
+      pauseMs: pauseRawValue == null || !Number.isFinite(Number(pauseRawValue)) ? 1000 : Number(pauseRawValue),
       autofocus: autofocusValue !== 'off',
     };
 
@@ -447,7 +450,7 @@ export class ScanPage {
       key: 'qrwerk-batch-autofocus',
       value: batchOptions.autofocus ? 'on' : 'off',
     });
-    this.nativeScannerActive = true;
+    this.setNativeScannerActive(true);
     const scannedValues = new Set<string>();
     const valuesBeforeBatch = new Set(
       (this.env.scanRecords ?? []).map(record => record.text.trim()),
@@ -535,9 +538,14 @@ export class ScanPage {
       if (savedCount > 0 || currentBatchDuplicates > 0 || historyDuplicates > 0) {
         await this.showBatchSummary(savedCount, currentBatchDuplicates, historyDuplicates);
       }
-      await new Promise(resolve => setTimeout(resolve, 120));
-      this.nativeScannerActive = false;
+      await new Promise(resolve => setTimeout(resolve, 260));
+      this.setNativeScannerActive(false);
     }
+  }
+
+  private setNativeScannerActive(active: boolean): void {
+    this.nativeScannerActive = active;
+    document.body.classList.toggle('native-barcode-scanner-active', active);
   }
 
   private async waitBetweenBatchScans(milliseconds: number): Promise<void> {

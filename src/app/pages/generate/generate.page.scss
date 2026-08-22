@@ -11,12 +11,18 @@ mat-form-field {
     .mat-form-field-outline,
     .mat-form-field-label,
     .mat-select-arrow,
+    .mat-select-arrow-wrapper,
+    .mat-mdc-select-arrow,
+    .mat-mdc-select-arrow svg,
+    .mat-mdc-select-arrow svg path,
     .mat-select-trigger,
     .mat-select-value,
     .mat-select-value-text,
     mat-select-trigger span,
     mat-icon {
         color: #00a5aa !important;
+        fill: #00a5aa !important;
+        border-top-color: #00a5aa !important;
     }
 
     .mat-form-field-outline-thick {
