@@ -4,7 +4,20 @@
 
 Öffne in der unteren Navigation **Erstellen**. Wähle den gewünschten Inhaltstyp und fülle die angezeigten Felder aus.
 
-Je nach Typ kann QRWerk beispielsweise Texte, Internetadressen, Kontaktdaten, Telefonnummern, E-Mail-Angaben oder WLAN-Informationen in einem QR-Code abbilden.
+## Unterstützte Inhalte
+
+QRWerk kann weit mehr als einfachen Text in einem QR-Code speichern. Du kannst gezielt einen passenden Inhaltstyp auswählen:
+
+- **Freier Text** – beispielsweise Nummern, Hinweise oder beliebige Informationen
+- **Internetadresse (URL)** – führt beim Scannen direkt zu einer Webseite
+- **Kontaktdaten (vCard)** – überträgt Namen, Telefonnummern und weitere Kontaktangaben
+- **Telefonnummer** – bereitet eine Nummer zum Anrufen vor
+- **SMS-Nachricht** – enthält eine Telefonnummer und auf Wunsch einen vorgegebenen Nachrichtentext
+- **E-Mail** – enthält Empfänger, Betreff und Nachrichtentext
+- **WLAN-Zugang** – enthält Netzwerkname, Verschlüsselung und Passwort
+- **Standort** – speichert geografische Koordinaten
+
+Damit erkennt die empfangende App den Zweck des QR-Codes und kann direkt die passende Aktion anbieten, beispielsweise eine Webseite öffnen, einen Kontakt speichern oder eine WLAN-Verbindung vorbereiten.
 
 ## Inhalt kontrollieren
 
