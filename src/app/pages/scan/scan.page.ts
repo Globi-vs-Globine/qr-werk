@@ -217,11 +217,13 @@ export class ScanPage {
         }
       : undefined;
 
-    const listener = await BarcodeScanner.addListener(
-      'barcodesScanned',
-      async (event) => {
+    // iOS emits one barcode at a time. The plural event currently fails with
+    // UNIMPLEMENTED before startScan() can start the camera on Capacitor 7.
+    const listener = await (BarcodeScanner.addListener as any)(
+      'barcodeScanned',
+      async (event: { barcode: any }) => {
         this.ngZone.run(async () => {
-          const firstBarcode = event.barcodes[0];
+          const firstBarcode = event.barcode;
           if (!firstBarcode) {
             return;
           }

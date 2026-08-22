@@ -27,6 +27,17 @@
 
 @import "~material-design-icons/iconfont/material-icons.css";
 
+/* The native scanner renders its camera below Capacitor's WebView. */
+html:has(body.barcode-scanning-active),
+body.barcode-scanning-active,
+body.barcode-scanning-active ion-app,
+body.barcode-scanning-active ion-router-outlet,
+body.barcode-scanning-active ion-content {
+    background: transparent !important;
+    --background: transparent !important;
+    --ion-background-color: transparent !important;
+}
+
 .text-center-toast {
     text-align: center;
     --max-width: 320px;
