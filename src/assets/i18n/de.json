@@ -26,6 +26,7 @@
     "BACKGROUND_COLOR": "Hintergrundfarbe",
     "BATCH_SCAN": "Batch scannen",
     "BATCH_SAVED": "Batch-Scans gespeichert",
+    "SAVE_ALL": "Alle speichern",
     "GROUP": "Gruppe",
     "GROUP_NAME": "Gruppenname",
     "ALL_GROUPS": "Alle Gruppen",

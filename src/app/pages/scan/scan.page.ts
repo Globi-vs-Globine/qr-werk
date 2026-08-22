@@ -2,6 +2,7 @@ import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   BarcodeScanner,
+  Barcode,
   BarcodeFormat,
   LensFacing,
   StartScanOptions,
@@ -574,14 +575,24 @@ export class ScanPage {
         },
       );
     }
-    await Camera.getPhoto(options).then(
-      async (photo: Photo) => {
-        getPictureLoading.dismiss();
+
+    if (Capacitor.isNativePlatform()) {
+      await getPictureLoading.dismiss();
+      try {
+        const selection = await Camera.pickImages({
+          quality: 100,
+          correctOrientation: true,
+          limit: 0,
+        });
+        if (!selection.photos.length) return;
+
         const decodingLoading = await this.presentLoading(
           this.translate.instant('DECODING'),
         );
-        if (Capacitor.isNativePlatform() && photo.path) {
-          try {
+        const detected: Barcode[] = [];
+        try {
+          for (const photo of selection.photos) {
+            if (!photo.path) continue;
             const result = await BarcodeScanner.readBarcodesFromImage({
               path: photo.path,
               formats: [
@@ -600,57 +611,40 @@ export class ScanPage {
                 BarcodeFormat.UpcE,
               ],
             });
-            await decodingLoading.dismiss();
-            const barcodes = result.barcodes.filter((barcode) =>
-              barcode.rawValue?.trim(),
-            );
-            if (barcodes.length === 0) {
-              await this.presentToast(
-                this.translate.instant('MSG.NO_QR_CODE'),
-                'short',
-                'center',
-              );
-              return;
-            }
-            if (barcodes.length === 1) {
-              this.processQrCode(
-                barcodes[0].rawValue,
-                barcodes[0].format,
-                'scan-image',
-              );
-              return;
-            }
-            const alert = await this.alertController.create({
-              header: `${barcodes.length} ${this.translate.instant('SCANNED')}`,
-              buttons: [
-                ...barcodes.map((barcode) => ({
-                  text: barcode.displayValue || barcode.rawValue,
-                  handler: () => {
-                    this.processQrCode(
-                      barcode.rawValue,
-                      barcode.format,
-                      'scan-image',
-                    );
-                  },
-                })),
-                { text: this.translate.instant('CLOSE'), role: 'cancel' },
-              ],
-              cssClass: ['alert-can-copy'],
-            });
-            await alert.present();
-          } catch (err) {
-            await decodingLoading.dismiss();
-            if (this.env.debugMode === 'on') {
-              console.log('Image barcode scan failed:', err);
-            }
-            await this.presentToast(
-              this.translate.instant('MSG.NO_QR_CODE'),
-              'short',
-              'center',
-            );
+            detected.push(...result.barcodes);
           }
+        } finally {
+          await decodingLoading.dismiss();
+        }
+
+        const unique = detected.filter(
+          (barcode, index, all) =>
+            !!barcode.rawValue?.trim() &&
+            all.findIndex(item => item.rawValue === barcode.rawValue) === index,
+        );
+        if (!unique.length) {
+          await this.presentToast(
+            this.translate.instant('MSG.NO_QR_CODE'),
+            'short',
+            'center',
+          );
           return;
         }
+        await this.presentImportedBarcodes(unique);
+      } catch (err) {
+        if (this.env.debugMode === 'on') {
+          console.log('Image selection or barcode scan failed:', err);
+        }
+      }
+      return;
+    }
+
+    await Camera.getPhoto(options).then(
+      async (photo: Photo) => {
+        getPictureLoading.dismiss();
+        const decodingLoading = await this.presentLoading(
+          this.translate.instant('DECODING'),
+        );
         await this.convertDataUrlToImageData(photo?.dataUrl ?? '').then(
           async (imageData) => {
             await this.getJsQr(
@@ -693,6 +687,46 @@ export class ScanPage {
         }
       },
     );
+  }
+
+  private async presentImportedBarcodes(barcodes: Barcode[]): Promise<void> {
+    if (barcodes.length === 1) {
+      this.processQrCode(barcodes[0].rawValue, barcodes[0].format, 'scan-image');
+      return;
+    }
+
+    const alert = await this.alertController.create({
+      header: `${barcodes.length} ${this.translate.instant('SCANNED')}`,
+      buttons: [
+        {
+          text: this.translate.instant('SAVE_ALL'),
+          handler: async () => {
+            for (const barcode of barcodes) {
+              this.env.recordSource = 'scan';
+              this.env.detailedRecordSource = 'scan-image';
+              this.env.resultContentFormat = barcode.format;
+              await this.env.saveScanRecord(barcode.rawValue);
+            }
+            delete this.env.recordSource;
+            delete this.env.detailedRecordSource;
+            await this.presentToast(
+              `${barcodes.length} ${this.translate.instant('SAVED')}`,
+              'short',
+              'bottom',
+            );
+          },
+        },
+        ...barcodes.map((barcode) => ({
+          text: barcode.displayValue || barcode.rawValue,
+          handler: () => {
+            this.processQrCode(barcode.rawValue, barcode.format, 'scan-image');
+          },
+        })),
+        { text: this.translate.instant('CLOSE'), role: 'cancel' },
+      ],
+      cssClass: ['alert-can-copy'],
+    });
+    await alert.present();
   }
 
   private async convertDataUrlToImageData(
