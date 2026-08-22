@@ -23,6 +23,11 @@ const routes: Routes = [
         loadChildren: () => import('../scan/scan.module').then(m => m.ScanPageModule)
       },
       {
+        path: 'import-image',
+        data: { preload: true },
+        loadChildren: () => import('../scan/scan.module').then(m => m.ScanPageModule)
+      },
+      {
         path: 'result',
         data: { preload: true },
         loadChildren: () => import('../result/result.module').then(m => m.ResultPageModule)

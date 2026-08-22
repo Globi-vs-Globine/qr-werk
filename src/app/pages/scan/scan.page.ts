@@ -79,7 +79,11 @@ export class ScanPage {
       await EdgeToEdge.setBackgroundColor({ color: '#000000' });
       await StatusBar.setBackgroundColor({ color: '#000000' });
     }
-    await this.prepareScanner();
+    if (this.router.url.startsWith('/tabs/import-image')) {
+      await this.scanFromImage();
+    } else {
+      await this.prepareScanner();
+    }
   }
 
   async ionViewWillLeave() {
