@@ -11,6 +11,14 @@
 </ion-header>
 
 <ion-content #content class="ion-no-border">
+  @if (usesNativeScanner) {
+  <div class="native-scanner-launcher">
+    <ion-icon name="qr-code-outline"></ion-icon>
+    <ion-button size="large" (click)="tapHaptic(); scanUsingNativeInterface()">
+      {{ 'SCAN' | translate }}
+    </ion-button>
+  </div>
+  } @else {
   <div #square class="square"></div>
   @if (minZoomRatio !== undefined && maxZoomRatio !== undefined) {
   <div class="zoom-ratio-wrapper">
@@ -30,5 +38,6 @@
       <ion-icon name="flashlight" [color]="flashActive? 'warning' : 'white'"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  }
   }
 </ion-content>

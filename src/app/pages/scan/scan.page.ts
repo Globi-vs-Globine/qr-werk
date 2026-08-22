@@ -51,6 +51,8 @@ export class ScanPage {
   maxZoomRatio: number | undefined;
   zoomRatio: number = 0;
 
+  readonly usesNativeScanner = Capacitor.getPlatform() === 'ios';
+
   @ViewChild('square')
   public squareElement: ElementRef<HTMLDivElement> | undefined;
 
@@ -175,6 +177,12 @@ export class ScanPage {
 
   async scanQrUsingMlkitModule(): Promise<void> {
     await this.stopScannerUsingMlkitModule();
+
+    if (this.usesNativeScanner) {
+      await this.scanUsingNativeInterface();
+      return;
+    }
+
     document.querySelector('body')?.classList.add('barcode-scanning-active');
 
     const options: StartScanOptions = {
@@ -217,13 +225,11 @@ export class ScanPage {
         }
       : undefined;
 
-    // iOS emits one barcode at a time. The plural event currently fails with
-    // UNIMPLEMENTED before startScan() can start the camera on Capacitor 7.
-    const listener = await (BarcodeScanner.addListener as any)(
-      'barcodeScanned',
-      async (event: { barcode: any }) => {
+    const listener = await BarcodeScanner.addListener(
+      'barcodesScanned',
+      async (event) => {
         this.ngZone.run(async () => {
-          const firstBarcode = event.barcode;
+          const firstBarcode = event.barcodes[0];
           if (!firstBarcode) {
             return;
           }
@@ -350,6 +356,45 @@ export class ScanPage {
       BarcodeScanner.getMaxZoomRatio().then((result) => {
         this.maxZoomRatio = result.zoomRatio;
       });
+    }
+  }
+
+  async scanUsingNativeInterface(): Promise<void> {
+    try {
+      const result = await BarcodeScanner.scan({
+        formats: [
+          BarcodeFormat.Aztec,
+          BarcodeFormat.Codabar,
+          BarcodeFormat.Code128,
+          BarcodeFormat.Code39,
+          BarcodeFormat.Code93,
+          BarcodeFormat.DataMatrix,
+          BarcodeFormat.Ean13,
+          BarcodeFormat.Ean8,
+          BarcodeFormat.Itf,
+          BarcodeFormat.Pdf417,
+          BarcodeFormat.QrCode,
+          BarcodeFormat.UpcA,
+          BarcodeFormat.UpcE,
+        ],
+      });
+      const barcode = result.barcodes[0];
+      if (!barcode?.rawValue?.trim()) {
+        return;
+      }
+      if (
+        this.env.vibration === 'on' ||
+        this.env.vibration === 'on-scanned'
+      ) {
+        await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
+      }
+      await this.processQrCode(barcode.rawValue, barcode.format);
+    } catch (err) {
+      // Closing the native scanner is a normal action. The scan page remains
+      // usable and offers a button to open it again.
+      if (this.env.debugMode === 'on') {
+        console.log('Native scanner closed:', err);
+      }
     }
   }
 
