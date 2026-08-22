@@ -56,12 +56,14 @@ export class HistoryPage {
     return this.groupFilter;
   }
 
+  isBookmarked(record: ScanRecord): boolean {
+    return this.env.bookmarks.some(item => item.text === record.text);
+  }
+
   bookmarkLabel(record: ScanRecord): string | undefined {
     const bookmark = this.env.bookmarks.find(item => item.text === record.text);
     if (!bookmark) return undefined;
-    return bookmark.tag?.trim()
-      ? `${this.translate.instant('BOOKMARK')}: ${bookmark.tag.trim()}`
-      : this.translate.instant('BOOKMARK');
+    return bookmark.tag?.trim() || undefined;
   }
 
   bookmarkGroups(bookmark: Bookmark): string[] {

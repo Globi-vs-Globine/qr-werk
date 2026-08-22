@@ -149,9 +149,9 @@
                     <ion-badge *ngIf="record.barcodeType" class="my-1" color="primary">
                       {{ getBarcodeFormat(record.barcodeType) }}
                     </ion-badge>
-                    <ion-badge *ngIf="bookmarkLabel(record) as label" class="my-1 ms-1" color="secondary">
+                    <ion-badge *ngIf="isBookmarked(record)" class="my-1 ms-1" color="secondary">
                       <ion-icon name="bookmark" aria-hidden="true"></ion-icon>
-                      {{ label }}
+                      <span *ngIf="bookmarkLabel(record) as label">{{ label }}</span>
                     </ion-badge>
                   </div>
                 </ion-label>
