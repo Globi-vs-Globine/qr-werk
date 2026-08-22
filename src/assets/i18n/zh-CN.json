@@ -29,7 +29,7 @@
     "SAVE_ALL": "全部保存",
     "SAVE_SELECTION": "保存所选项",
     "CREATE_GROUP": "创建组", "DELETE_GROUP": "删除组", "GROUP_DELETE_INFO": "其中的代码将移至未分组。", "EXPORT_SCOPE": "要导出什么？", "CURRENT_FILTER": "当前视图", "SELECT_GROUPS": "选择组", "SELECT_CODES": "选择代码", "CONTINUE": "继续",
-    "GROUP": "组", "GROUP_NAME": "组名", "ALL_GROUPS": "所有组", "UNGROUPED": "未分组", "FULL_DETAILS": "完整数据", "CODES_ONLY": "仅代码", "COPY_CODES": "复制代码", "START": "开始",
+    "GROUP": "组", "GROUP_NAME": "组名", "ALL_GROUPS": "所有组", "UNGROUPED": "未分组", "FULL_DETAILS": "完整数据", "CODES_ONLY": "仅代码", "COPY_CODES": "复制代码", "IMPORT_CODES": "导入代码", "PASTE_CODES": "在此粘贴代码", "ONE_CODE_PER_LINE": "每个非空行将作为单独条目导入；重复行会保留。", "IMPORT_TO_GROUP": "导入到哪个组？", "CODES_IMPORTED": "个代码已导入", "NO_VALID_CODES": "未输入有效代码", "START": "开始",
     "BACKING_UP": "备份中",
     "BACKUP": "备份",
     "BASE64": "Base64",

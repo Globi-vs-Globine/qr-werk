@@ -29,7 +29,7 @@
     "SAVE_ALL": "Сохранить все",
     "SAVE_SELECTION": "Сохранить выбранное",
     "CREATE_GROUP": "Создать группу", "DELETE_GROUP": "Удалить группу", "GROUP_DELETE_INFO": "Коды будут перемещены в Без группы.", "EXPORT_SCOPE": "Что экспортировать?", "CURRENT_FILTER": "Текущий вид", "SELECT_GROUPS": "Выбрать группы", "SELECT_CODES": "Выбрать коды", "CONTINUE": "Продолжить",
-    "GROUP": "Группа", "GROUP_NAME": "Название группы", "ALL_GROUPS": "Все группы", "UNGROUPED": "Без группы", "FULL_DETAILS": "Полные данные", "CODES_ONLY": "Только коды", "COPY_CODES": "Копировать коды", "START": "Начать",
+    "GROUP": "Группа", "GROUP_NAME": "Название группы", "ALL_GROUPS": "Все группы", "UNGROUPED": "Без группы", "FULL_DETAILS": "Полные данные", "CODES_ONLY": "Только коды", "COPY_CODES": "Копировать коды", "IMPORT_CODES": "Импортировать коды", "PASTE_CODES": "Вставьте коды сюда", "ONE_CODE_PER_LINE": "Каждая непустая строка импортируется отдельно; дубликаты сохраняются.", "IMPORT_TO_GROUP": "В какую группу импортировать?", "CODES_IMPORTED": "кодов импортировано", "NO_VALID_CODES": "Не введено допустимых кодов", "START": "Начать",
     "BACKING_UP": "Сохранение резервной копии",
     "BACKUP": "Резервное копирование",
     "BASE64": "Base64",

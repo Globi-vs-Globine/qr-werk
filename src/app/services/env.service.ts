@@ -949,7 +949,7 @@ export class EnvService {
   async saveScanRecord(value: string, group?: string): Promise<void> {
     const record = new ScanRecord();
     const date = new Date();
-    record.id = String(date.getTime());
+    record.id = uuidv4();
     record.text = value;
     record.createdAt = date;
     record.group = group?.trim() || undefined;

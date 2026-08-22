@@ -636,6 +636,107 @@ export class HistoryPage {
     await actionSheet.present();
   }
 
+  async importCodes(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('IMPORT_CODES'),
+      message: this.translate.instant('ONE_CODE_PER_LINE'),
+      inputs: [{
+        name: 'codes',
+        type: 'textarea',
+        placeholder: this.translate.instant('PASTE_CODES'),
+        attributes: { rows: 10, autocapitalize: 'off', autocorrect: 'off', spellcheck: false },
+      }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CONTINUE'),
+          handler: data => {
+            const codes = String(data.codes ?? '')
+              .split(/\r?\n/)
+              .map(code => code.trim())
+              .filter(code => code.length > 0);
+            if (!codes.length) {
+              this.presentToast(this.translate.instant('NO_VALID_CODES'), 'short', 'bottom');
+              return false;
+            }
+            this.presentCodeImportDestination(codes);
+            return true;
+          },
+        },
+      ],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
+  }
+
+  private async presentCodeImportDestination(codes: string[]): Promise<void> {
+    const buttons = [
+      {
+        text: this.translate.instant('UNGROUPED'),
+        icon: 'folder-outline',
+        handler: () => this.saveImportedCodes(codes),
+      },
+      ...this.groupNames.map(group => ({
+        text: group,
+        icon: 'folder',
+        handler: () => this.saveImportedCodes(codes, group),
+      })),
+      {
+        text: this.translate.instant('CREATE_GROUP'),
+        icon: 'folder-open-outline',
+        handler: () => this.createImportGroup(codes),
+      },
+      { text: this.translate.instant('CANCEL'), role: 'cancel' as const },
+    ];
+    const actionSheet = await this.actionSheetController.create({
+      header: `${this.translate.instant('IMPORT_TO_GROUP')} (${codes.length})`,
+      buttons,
+    });
+    await actionSheet.present();
+  }
+
+  private async createImportGroup(codes: string[]): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('CREATE_GROUP'),
+      inputs: [{ name: 'group', type: 'text', placeholder: this.translate.instant('GROUP_NAME'), attributes: { maxlength: 40 } }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CREATE'),
+          handler: data => {
+            const group = data.group?.trim();
+            if (!group) return false;
+            this.saveImportedCodes(codes, group);
+            return true;
+          },
+        },
+      ],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
+  }
+
+  private async saveImportedCodes(codes: string[], group?: string): Promise<void> {
+    const previousSource = this.env.recordSource;
+    const previousFormat = this.env.resultContentFormat;
+    this.env.recordSource = 'scan';
+    this.env.resultContentFormat = '';
+    try {
+      for (const code of codes) await this.env.saveScanRecord(code, group);
+      if (group && !this.managedGroups.includes(group)) {
+        this.managedGroups.push(group);
+        this.managedGroups.sort((a, b) => a.localeCompare(b));
+        this.collapsedGroups.add(group);
+        await this.saveManagedGroups();
+      }
+      this.firstLoadItems();
+      await this.presentToast(`${codes.length} ${this.translate.instant('CODES_IMPORTED')}`, 'short', 'bottom');
+    } finally {
+      this.env.recordSource = previousSource;
+      this.env.resultContentFormat = previousFormat;
+    }
+  }
+
   private async presentExportFormats(records: ScanRecord[]) {
     if (!records.length) return;
     const actionSheet = await this.actionSheetController.create({

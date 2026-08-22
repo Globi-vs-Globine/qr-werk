@@ -29,7 +29,7 @@
     "SAVE_ALL": "全部儲存",
     "SAVE_SELECTION": "儲存所選項",
     "CREATE_GROUP": "建立群組", "DELETE_GROUP": "刪除群組", "GROUP_DELETE_INFO": "其中的代碼將移至未分組。", "EXPORT_SCOPE": "要匯出什麼？", "CURRENT_FILTER": "目前檢視", "SELECT_GROUPS": "選擇群組", "SELECT_CODES": "選擇代碼", "CONTINUE": "繼續",
-    "GROUP": "群組", "GROUP_NAME": "群組名稱", "ALL_GROUPS": "所有群組", "UNGROUPED": "未分組", "FULL_DETAILS": "完整資料", "CODES_ONLY": "僅代碼", "COPY_CODES": "複製代碼", "START": "開始",
+    "GROUP": "群組", "GROUP_NAME": "群組名稱", "ALL_GROUPS": "所有群組", "UNGROUPED": "未分組", "FULL_DETAILS": "完整資料", "CODES_ONLY": "僅代碼", "COPY_CODES": "複製代碼", "IMPORT_CODES": "匯入代碼", "PASTE_CODES": "在此貼上代碼", "ONE_CODE_PER_LINE": "每個非空白行會分別匯入；重複行會保留。", "IMPORT_TO_GROUP": "要匯入哪個群組？", "CODES_IMPORTED": "個代碼已匯入", "NO_VALID_CODES": "未輸入有效代碼", "START": "開始",
     "BACKING_UP": "備份中",
     "BACKUP": "備份",
     "BASE64": "Base64",
