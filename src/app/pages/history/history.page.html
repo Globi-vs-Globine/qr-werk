@@ -251,20 +251,10 @@
 
 <ion-footer
   [ngStyle]="env.colorTheme === 'dark'?  {'background-color': '#222428'} : (env.colorTheme === 'black'? {'background-color': '#000000'} : {'background-color': '#F0F0F0'})">
-  <ion-row class="d-flex justify-content-around">
-    <ion-button (click)="tapHaptic(); importCodes()" color="primary" fill="clear"
-      *ngIf="segmentModel === 'history'">
-      <ion-icon name="clipboard-outline" slot="start"></ion-icon>
-      {{ 'IMPORT_CODES' | translate }}
-    </ion-button>
-    <ion-button (click)="tapHaptic(); exportHistory()" color="primary" fill="clear"
-      *ngIf="segmentModel === 'history' && env.scanRecords && env.scanRecords.length > 0">
-      <ion-icon name="share-outline" slot="start"></ion-icon>
-      {{ 'EXPORT' | translate }}
-    </ion-button>
-    <ion-button (click)="tapHaptic(); removeAll()" [color]="'danger'" fill="clear"
-      *ngIf="(segmentModel === 'bookmarks' && env.viewingBookmarks && env.viewingBookmarks.length > 0) || (segmentModel === 'history' && env.viewingScanRecords && env.viewingScanRecords.length > 0)">
-      {{ 'REMOVE_ALL' | translate }}
+  <ion-row class="ion-justify-content-center">
+    <ion-button (click)="tapHaptic(); historyActions()" color="primary" fill="clear">
+      <ion-icon name="ellipsis-horizontal-circle-outline" slot="start"></ion-icon>
+      {{ 'ACTIONS' | translate }}
     </ion-button>
   </ion-row>
 </ion-footer>

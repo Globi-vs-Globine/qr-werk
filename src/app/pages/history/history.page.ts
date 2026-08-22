@@ -636,6 +636,41 @@ export class HistoryPage {
     await actionSheet.present();
   }
 
+  async historyActions(): Promise<void> {
+    const buttons: any[] = [];
+    if (this.segmentModel === 'history') {
+      buttons.push({
+        text: this.translate.instant('IMPORT_CODES'),
+        icon: 'clipboard-outline',
+        handler: () => this.importCodes(),
+      });
+      if (this.env.scanRecords?.length) {
+        buttons.push({
+          text: this.translate.instant('EXPORT'),
+          icon: 'share-outline',
+          handler: () => this.exportHistory(),
+        });
+      }
+    }
+    const hasEntries = this.segmentModel === 'history'
+      ? !!this.env.scanRecords?.length
+      : !!this.env.bookmarks?.length;
+    if (hasEntries) {
+      buttons.push({
+        text: this.translate.instant('REMOVE_ALL'),
+        icon: 'trash-outline',
+        role: 'destructive',
+        handler: () => this.removeAll(),
+      });
+    }
+    buttons.push({ text: this.translate.instant('CANCEL'), role: 'cancel' });
+    const actionSheet = await this.actionSheetController.create({
+      header: this.translate.instant('ACTIONS'),
+      buttons,
+    });
+    await actionSheet.present();
+  }
+
   async importCodes(): Promise<void> {
     const alert = await this.alertController.create({
       header: this.translate.instant('IMPORT_CODES'),
