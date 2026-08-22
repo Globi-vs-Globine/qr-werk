@@ -29,6 +29,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule)
   },
   {
+    path: 'guide',
+    loadChildren: () => import('./pages/guide/guide.module').then(m => m.GuidePageModule)
+  },
+  {
     path: 'setting-vibration',
     loadChildren: () => import('./pages/setting-vibration/setting-vibration.module').then(m => m.SettingVibrationPageModule)
   },

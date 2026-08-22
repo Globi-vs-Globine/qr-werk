@@ -31,6 +31,16 @@
       </ion-label>
     </div>
   </ion-item>
+  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="navigateGuide()">
+    <ion-icon class="ion-margin-start ion-padding-horizontal" color="primary" name="book-outline"></ion-icon>
+    <ion-label>
+      <p class="ion-padding-horizontal pre-line">
+        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'" style="font-size: large;">
+          Anleitung
+        </ion-text>
+      </p>
+    </ion-label>
+  </ion-item>
 
   <ion-list-header class="ion-margin-start ion-padding-horizontal mt-1">
     <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'FUNCTIONS' | translate }}</ion-text>

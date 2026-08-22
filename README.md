@@ -13,6 +13,8 @@ This repository is an iOS-focused fork of [tomfong/simple-qr](https://github.com
 
 QRWerk ist eine datenschutzfreundliche App zum Scannen, Erstellen und Organisieren von QR-Codes und Barcodes. Dieser Fork konzentriert sich insbesondere auf eine zuverlässige iOS-Version, Mehrfach-Scans, Bildimporte, Gruppen sowie den flexiblen Export der Scan-Historie.
 
+Die ausführliche Bedienungsanleitung findest du in der [QRWerk-Dokumentation](docs/README.md). Dieselben deutschen Kapitel sind in der App unter **Einstellungen → Anleitung** offline verfügbar.
+
 Die Verarbeitung und die Historie bleiben grundsätzlich lokal auf dem Gerät. Eine Internetverbindung wird nur für Aktionen verwendet, die der Benutzer ausdrücklich auslöst, beispielsweise das Öffnen einer Internetadresse.
 
 ## Current features / Aktuelle Funktionen
