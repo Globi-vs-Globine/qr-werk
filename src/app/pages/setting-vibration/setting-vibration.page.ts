@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
-import { EnvService } from 'src/app/services/env.service';
+import { EnvService, VibrationType } from 'src/app/services/env.service';
 
 @Component({
     selector: 'app-setting-vibration',
@@ -16,5 +16,10 @@ export class SettingVibrationPage {
 
   async saveVibration() {
     await Preferences.set({ key: this.env.KEY_VIBRATION, value: this.env.vibration });
+  }
+
+  async setVibration(value: VibrationType): Promise<void> {
+    this.env.vibration = value;
+    await this.saveVibration();
   }
 }

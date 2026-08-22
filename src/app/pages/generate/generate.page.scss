@@ -20,9 +20,9 @@ mat-form-field {
     .mat-select-value-text,
     mat-select-trigger span,
     mat-icon {
-        color: #00a5aa !important;
-        fill: #00a5aa !important;
-        border-top-color: #00a5aa !important;
+        color: var(--qrwerk-accent, #007f83) !important;
+        fill: var(--qrwerk-accent, #007f83) !important;
+        border-top-color: var(--qrwerk-accent, #007f83) !important;
     }
 
     .mat-form-field-outline-thick {

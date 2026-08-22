@@ -52,7 +52,7 @@ ion-textarea[readonly] {
 }
 
 .history-timeline {
-    border: 1px solid rgba(0, 165, 170, 0.35);
+    border: 1px solid rgba(var(--qrwerk-accent-rgb, 0, 127, 131), 0.35);
     border-radius: 12px;
     overflow: hidden;
 }

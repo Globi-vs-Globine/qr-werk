@@ -25,8 +25,9 @@ const zoomPatchMarker = 'QRWerk: offer a simple 1x/2x scanner zoom control.';
 const scannerPolishPatchMarker = 'QRWerk: keep all scanner controls within easy thumb reach.';
 const autofocusPatchMarker = 'QRWerk: respect the batch autofocus preference.';
 const manualInputPatchMarker = 'QRWerk: allow manual input without leaving the scanner.';
+const accentColorPatchMarker = 'QRWerk: use the selected accent color for the scanner guide.';
 
-if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker) && source.includes(manualInputPatchMarker) && implementationSource.includes(manualInputPatchMarker)) {
+if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker) && source.includes(manualInputPatchMarker) && source.includes(accentColorPatchMarker) && implementationSource.includes(manualInputPatchMarker)) {
   console.log('QRWerk ML Kit iOS scanner UI patch already applied.');
   process.exit(0);
 }
@@ -228,6 +229,32 @@ replaceOnce(
   `        view.layer.borderColor = UIColor.white.cgColor\n`,
   `        view.layer.borderColor = UIColor(red: 0, green: 165.0 / 255.0, blue: 170.0 / 255.0, alpha: 1).cgColor\n`,
   'petrol detection guide',
+);
+}
+
+if (!source.includes(accentColorPatchMarker)) {
+replaceOnce(
+  `        view.layer.borderColor = UIColor(red: 0, green: 165.0 / 255.0, blue: 170.0 / 255.0, alpha: 1).cgColor\n`,
+  `        // QRWerk: use the selected accent color for the scanner guide.\n` +
+    `        view.layer.borderColor = self.qrwerkAccentColor().cgColor\n`,
+  'selected scanner accent color',
+);
+
+replaceOnce(
+  `    private func addDetectionAreaView() {\n`,
+  `    private func qrwerkAccentColor() -> UIColor {\n` +
+    `        let selected = UserDefaults.standard.string(forKey: "CapacitorStorage.accent-color") ?? "petrol"\n` +
+    `        switch selected {\n` +
+    `        case "blue": return UIColor(red: 0, green: 104.0 / 255.0, blue: 184.0 / 255.0, alpha: 1)\n` +
+    `        case "violet": return UIColor(red: 109.0 / 255.0, green: 75.0 / 255.0, blue: 195.0 / 255.0, alpha: 1)\n` +
+    `        case "green": return UIColor(red: 40.0 / 255.0, green: 122.0 / 255.0, blue: 67.0 / 255.0, alpha: 1)\n` +
+    `        case "orange": return UIColor(red: 166.0 / 255.0, green: 75.0 / 255.0, blue: 0, alpha: 1)\n` +
+    `        case "pink": return UIColor(red: 168.0 / 255.0, green: 58.0 / 255.0, blue: 114.0 / 255.0, alpha: 1)\n` +
+    `        default: return UIColor(red: 0, green: 127.0 / 255.0, blue: 131.0 / 255.0, alpha: 1)\n` +
+    `        }\n` +
+    `    }\n\n` +
+    `    private func addDetectionAreaView() {\n`,
+  'scanner accent helper',
 );
 }
 

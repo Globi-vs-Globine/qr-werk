@@ -22,11 +22,11 @@
   </ion-item>
 
   <ion-radio-group [(ngModel)]="env.vibration" (ionChange)="saveVibration()" style="margin-bottom: var(--ion-safe-area-bottom, 0);">
-    <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none">
+    <ion-item button="true" class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setVibration('on')">
       <ion-label class="ion-padding-start">
         <p class="ion-padding-horizontal pre-line">
           <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'" style="font-size: large;">
-            {{ 'TURN_ON' | translate }}
+            {{ 'HAPTIC_AND_SCAN_FEEDBACK' | translate }}
           </ion-text>
         </p>
       </ion-label>
@@ -34,7 +34,7 @@
         [color]="'primary'">
       </ion-radio>
     </ion-item>
-    <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none">
+    <ion-item button="true" class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setVibration('on-haptic')">
       <ion-label class="ion-padding-start">
         <p class="ion-padding-horizontal pre-line">
           <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'" style="font-size: large;">
@@ -46,11 +46,11 @@
         [color]="'primary'">
       </ion-radio>
     </ion-item>
-    <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none">
+    <ion-item button="true" class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setVibration('on-scanned')">
       <ion-label class="ion-padding-start">
         <p class="ion-padding-horizontal pre-line">
           <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'" style="font-size: large;">
-            {{ 'SCANNING_FEEDBACK_ONLY' | translate }}
+            {{ 'SCAN_VIBRATION_ONLY' | translate }}
           </ion-text>
         </p>
       </ion-label>
@@ -58,11 +58,11 @@
         [color]="'primary'">
       </ion-radio>
     </ion-item>
-    <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none">
+    <ion-item button="true" class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setVibration('off')">
       <ion-label class="ion-padding-start">
         <p class="ion-padding-horizontal pre-line">
           <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'" style="font-size: large;">
-            {{ 'TURN_OFF' | translate }}
+            {{ 'OFF' | translate }}
           </ion-text>
         </p>
       </ion-label>
