@@ -71,7 +71,7 @@ export class SettingRecordPage {
   async onBackup() {
     // const loading1 = await this.presentLoading(this.translate.instant("ENCRYPTING"));
     const backup = {
-      application: "Simple QR",
+      application: "QRWerk",
       scanRecords: this.env.scanRecords,
       bookmarks: this.env.bookmarks
     };
@@ -197,7 +197,8 @@ export class SettingRecordPage {
   async restore(value: string) {
     try {
       const restore = JSON.parse(value);
-      if (restore.application != "Simple QR") {
+      // Keep backups from the upstream app compatible after the QRWerk rename.
+      if (!["QRWerk", "Simple QR"].includes(restore.application)) {
         this.presentToast(this.translate.instant("MSG.INVALID_BK_FILE"), "short", "bottom");
         return;
       }

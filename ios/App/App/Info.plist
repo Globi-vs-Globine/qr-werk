@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Simple QR</string>
+	<string>QRWerk</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,10 +22,10 @@
 	<array>
 		<dict>
 			<key>CFBundleURLName</key>
-			<string>com.tomfong.simpleqr</string>
+			<string>ch.qrwerk.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>simpleqr</string>
+				<string>qrwerk</string>
 			</array>
 		</dict>
 	</array>
@@ -34,13 +34,13 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Simple QR uses Camera to scan barcodes</string>
+	<string>QRWerk uses the camera to scan QR codes and barcodes</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Simple QR uses Contacts to add contact</string>
+	<string>QRWerk uses Contacts only when you choose to add a scanned contact</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Simple QR uses Photo Library to save QR code image</string>
+	<string>QRWerk uses the photo library only when you choose to save a QR code image</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Simple QR uses Photo Library to import image and scan QR code</string>
+	<string>QRWerk uses the photo library only when you choose images for scanning</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
