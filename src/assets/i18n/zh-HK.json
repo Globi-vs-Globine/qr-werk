@@ -34,6 +34,7 @@
     "BATCH_SCAN": "批量掃描",
     "BATCH_SAVED": "個批量掃描已儲存",
     "DUPLICATE_SCANS": "重複代碼", "DUPLICATE_MODE_EXPLANATION": "QRWerk 應如何處理已識別的代碼？", "ALLOW_DUPLICATES": "允許重複代碼", "PREVENT_BATCH_DUPLICATES": "在目前批次中阻止", "PREVENT_HISTORY_DUPLICATES": "在完整記錄中阻止", "DUPLICATE_IN_BATCH": "已在目前批次中掃描", "DUPLICATE_IN_HISTORY": "此代碼已存在於記錄中", "BATCH_SUMMARY": "批次完成", "DUPLICATES_CURRENT_BATCH": "目前批次重複項", "DUPLICATES_HISTORY": "已存在於記錄中", "DETECTED": "已識別",
+    "BATCH_SETTINGS": "批量掃描設定", "BATCH_SETTINGS_EXPLANATION": "這些設定會儲存供之後的批次使用。", "PAUSE_BETWEEN_SCANS": "掃描間隔", "PAUSE_EXPLANATION": "每次識別後相機會等待，避免立即重複掃描同一代碼。", "AUTOFOCUS": "自動對焦", "ON": "開", "OFF": "關", "START_SCANNING": "開始掃描", "COMPLETE_HISTORY": "完整記錄", "CURRENT_BATCH": "目前批次", "SECONDS_SHORT": "秒", "ENTER_CODE_MANUALLY": "手動輸入代碼", "CODE": "代碼", "MANUAL_CODE_SAVED": "代碼已儲存",
     "SAVE_ALL": "全部儲存",
     "SAVE_SELECTION": "儲存所選項",
     "CREATE_GROUP": "建立群組", "DELETE_GROUP": "刪除群組", "GROUP_DELETE_INFO": "其中的代碼將移至未分組。", "EXPORT_SCOPE": "要匯出什麼？", "CURRENT_FILTER": "目前檢視", "SELECT_GROUPS": "選擇群組", "SELECT_CODES": "選擇代碼", "CONTINUE": "繼續",

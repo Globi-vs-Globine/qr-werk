@@ -27,6 +27,10 @@
         <ion-icon slot="start" name="image-outline"></ion-icon>
         {{ 'IMPORT_IMAGE' | translate }}
       </ion-button>
+      <ion-button size="large" fill="outline" (click)="tapHaptic(); enterCodeManually()">
+        <ion-icon slot="start" name="keypad-outline"></ion-icon>
+        {{ 'ENTER_CODE_MANUALLY' | translate }}
+      </ion-button>
     </div>
   </div>
   } @else {

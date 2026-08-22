@@ -21,10 +21,28 @@ let source = fs.readFileSync(scannerViewPath, 'utf8');
 const patchMarker = 'QRWerk: reveal the guide only after the camera preview has started.';
 const zoomPatchMarker = 'QRWerk: offer a simple 1x/2x scanner zoom control.';
 const scannerPolishPatchMarker = 'QRWerk: keep all scanner controls within easy thumb reach.';
+const autofocusPatchMarker = 'QRWerk: respect the batch autofocus preference.';
 
-if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker)) {
+if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker)) {
   console.log('QRWerk ML Kit iOS scanner UI patch already applied.');
   process.exit(0);
+}
+
+if (!source.includes(autofocusPatchMarker)) {
+replaceOnce(
+  `            // Set focus mode\n` +
+    `            if device.isFocusModeSupported(.continuousAutoFocus) {\n` +
+    `                device.focusMode = .continuousAutoFocus\n` +
+    `            }\n`,
+  `            // QRWerk: respect the batch autofocus preference.\n` +
+    `            let autofocusEnabled = UserDefaults.standard.string(forKey: "CapacitorStorage.qrwerk-batch-autofocus") != "off"\n` +
+    `            if autofocusEnabled && device.isFocusModeSupported(.continuousAutoFocus) {\n` +
+    `                device.focusMode = .continuousAutoFocus\n` +
+    `            } else if !autofocusEnabled && device.isFocusModeSupported(.locked) {\n` +
+    `                device.focusMode = .locked\n` +
+    `            }\n`,
+  'batch autofocus preference',
+);
 }
 
 function replaceOnce(before, after, label) {
