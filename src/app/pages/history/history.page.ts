@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, IonItemSliding, LoadingController, ModalController, PopoverController, ToastController } from '@ionic/angular';
+import { ActionSheetController, AlertController, IonItemSliding, LoadingController, ModalController, PopoverController, ToastController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/env.service';
 import { format, Locale } from 'date-fns';
 import { de, enUS, fr, it, ptBR, ru, zhCN, zhHK } from 'date-fns/locale';
@@ -11,6 +11,7 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Toast } from '@capacitor/toast';
 import { fastFadeIn, flyOut } from 'src/app/utils/animations';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { HistoryExportFormat, HistoryExportService } from 'src/app/services/history-export.service';
 
 @Component({
     selector: 'app-history',
@@ -39,7 +40,9 @@ export class HistoryPage {
     public modalController: ModalController,
     public popoverController: PopoverController,
     private route: ActivatedRoute,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private actionSheetController: ActionSheetController,
+    private historyExportService: HistoryExportService
   ) {
     this.route.params.subscribe(val => {
       setTimeout(() => this.firstLoadItems(), 200);
@@ -449,6 +452,33 @@ export class HistoryPage {
         ]
       });
       alert.present();
+    }
+  }
+
+  async exportHistory() {
+    const actionSheet = await this.actionSheetController.create({
+      header: this.translate.instant('EXPORT'),
+      buttons: [
+        { text: 'CSV', icon: 'document-text', handler: () => this.shareHistory('csv') },
+        { text: 'TXT', icon: 'reader', handler: () => this.shareHistory('txt') },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' }
+      ]
+    });
+    await actionSheet.present();
+  }
+
+  private async shareHistory(exportFormat: HistoryExportFormat) {
+    const loading = await this.presentLoading(this.translate.instant('EXPORTING'));
+    try {
+      await this.historyExportService.exportAndShare(this.env.scanRecords, this.env.bookmarks, exportFormat);
+    } catch (err) {
+      await this.presentToast(
+        this.env.isDebugging ? `Export failed: ${JSON.stringify(err)}` : this.translate.instant('MSG.EXPORT_FAILED'),
+        this.env.isDebugging ? 'long' : 'short',
+        'bottom'
+      );
+    } finally {
+      await loading.dismiss();
     }
   }
 

@@ -256,6 +256,7 @@
         "ERROR_CORRECTION_LEVEL_EXPLAIN": "<p>O código QR tem a capacidade de correção de erros para restaurar dados mesmo se o código estiver danificado.</p><br><p>Há 4 níveis disponíveis:</p><p>O nível L restaura 7% dos bytes de dados.</p><p>O nível M restaura 15% dos bytes de dados.</p><p>O nível Q restaura 25% dos bytes de dados.</p><p>O nível H restaura 30% dos bytes de dados.</p><br><p>Por favor, lembre-se de que elevar o nível pode melhorar a capacidade de correção de erros, mas também aumenta o tamanho do código QR. Portanto, para casos gerais, é recomendado o nível M.</p>",
         "EXIT_APP": "<p>Tem certeza de que deseja sair do aplicativo?</p><p>Se você gosta do Simple QR, por favor, avalie-o na loja.</p>",
         "EXPORT_TO_CSV_EXPLAIN": "Você pode exportar todos os registros e favoritos para um arquivo CSV.",
+        "EXPORT_FAILED": "Não foi possível exportar o histórico de leituras.",
         "FAILED_SAVING_CONTACT": "Falha ao salvar o contato",
         "FAIL_PREPARE_SMS": "Falha ao enviar mensagem",
         "IMPORT_FAILED": "Falha na importação",

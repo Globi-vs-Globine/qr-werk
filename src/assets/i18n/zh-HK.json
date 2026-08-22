@@ -256,6 +256,7 @@
         "ERROR_CORRECTION_LEVEL_EXPLAIN": "<p>QR 碼具有容錯能力，即使圖形有破損，仍然可以被機器讀取內容。</p><br><p>容錯率分為四個等級：</p><p>L 等級可容錯 7% 的字碼；</p><p>M 等級可容錯 15% 的字碼；</p><p>Q 等級可容錯 25% 的字碼；</p><p>H 等級可容錯 30% 的字碼。</p><br><p>容錯率愈高，QR 碼圖形面積則愈大。因此，在一般情況下建議使用 M 等級。</p>",
         "EXIT_APP": "<p>確定要離開？</p><p>若您喜歡簡易QR，歡迎前往商店評分。</p>",
         "EXPORT_TO_CSV_EXPLAIN": "您可以將所有掃描記錄及書籤匯出至CSV檔案。",
+        "EXPORT_FAILED": "無法匯出掃描記錄。",
         "FAILED_SAVING_CONTACT": "無法新增聯絡人",
         "FAIL_PREPARE_SMS": "無法傳送信息",
         "IMPORT_FAILED": "匯入失敗",
