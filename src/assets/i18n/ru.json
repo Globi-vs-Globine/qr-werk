@@ -7,7 +7,7 @@
     "ABOUT_SIMPLE_QR": "О Simple QR",
     "ADD": "Добавить",
     "ACTIONS": "Действия",
-    "MANAGE_ENTRIES": "Управление записями", "MANAGE_GROUPS": "Управление группами",
+    "MANAGE_ENTRIES": "Управление записями", "MANAGE_GROUPS": "Управление группами", "TRANSFER_DATA": "Передача данных", "ADD_ENTRIES": "Добавить записи", "RENAME_GROUP": "Переименовать группу", "NO_ENTRIES_AVAILABLE": "Нет доступных записей",
     "MOVE_ENTRIES": "Переместить записи", "SELECT_ENTRIES": "Выбрать записи", "MOVE_TO_GROUP": "В какую группу переместить?", "ENTRIES_MOVED": "записей перемещено",
     "ADD_BCC": "Добавить BCC",
     "ADD_CC": "Добавить CC",

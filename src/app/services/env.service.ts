@@ -1000,6 +1000,16 @@ export class EnvService {
     });
   }
 
+  async renameScanRecordGroup(previousGroup: string, newGroup: string): Promise<void> {
+    this.scanRecords
+      .filter(record => record.group === previousGroup)
+      .forEach(record => record.group = newGroup.trim());
+    await Preferences.set({
+      key: this.KEY_SCAN_RECORDS,
+      value: JSON.stringify(this.scanRecords),
+    });
+  }
+
   async saveRestoredScanRecords(records: ScanRecord[]): Promise<void> {
     records.forEach(
       r => {

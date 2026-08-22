@@ -7,7 +7,7 @@
     "ABOUT_SIMPLE_QR": "Sobre o Simple QR",
     "ADD": "Adicionar",
     "ACTIONS": "Ações",
-    "MANAGE_ENTRIES": "Gerenciar itens", "MANAGE_GROUPS": "Gerenciar grupos",
+    "MANAGE_ENTRIES": "Gerenciar itens", "MANAGE_GROUPS": "Gerenciar grupos", "TRANSFER_DATA": "Transferir dados", "ADD_ENTRIES": "Adicionar itens", "RENAME_GROUP": "Renomear grupo", "NO_ENTRIES_AVAILABLE": "Nenhum item adicional disponível",
     "MOVE_ENTRIES": "Mover itens", "SELECT_ENTRIES": "Selecionar itens", "MOVE_TO_GROUP": "Mover para qual grupo?", "ENTRIES_MOVED": "itens movidos",
     "ADD_BCC": "Adicionar CCO",
     "ADD_CC": "Adicionar CC",
