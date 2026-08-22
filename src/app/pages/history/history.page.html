@@ -146,7 +146,7 @@
                         {{ maskDatetimeAndSource(record.createdAt, record.source) }}
                       </ion-text>
                     </p>
-                    <ion-badge *ngIf="record.barcodeType" class="my-1" color="primary">
+                    <ion-badge *ngIf="record.barcodeType" class="my-1 barcode-type-badge">
                       {{ getBarcodeFormat(record.barcodeType) }}
                     </ion-badge>
                     <ion-badge *ngIf="isBookmarked(record)" class="my-1 ms-1" color="secondary">

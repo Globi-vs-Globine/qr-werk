@@ -15,6 +15,20 @@ ion-badge ion-icon {
   vertical-align: -1px;
 }
 
+.barcode-type-badge {
+  --background: rgba(0, 165, 170, 0.14);
+  --color: #006d70;
+  border: 1px solid rgba(0, 165, 170, 0.22);
+  font-weight: 500;
+}
+
+:host-context(body.dark) .barcode-type-badge,
+:host-context(body.black) .barcode-type-badge {
+  --background: rgba(0, 165, 170, 0.18);
+  --color: #67dadd;
+  border-color: rgba(103, 218, 221, 0.22);
+}
+
 .bookmark-groups {
   display: flex;
   flex-wrap: wrap;
