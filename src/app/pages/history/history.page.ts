@@ -370,35 +370,92 @@ export class HistoryPage {
 
   async assignGroup(record: ScanRecord, slidingItem: IonItemSliding) {
     await slidingItem.close();
+    await this.presentGroupDestination([record]);
+  }
+
+  private async selectEntriesToMove(): Promise<void> {
+    const records = this.filteredScanRecords;
+    if (!records.length) return;
     const alert = await this.alertController.create({
-      header: this.translate.instant('GROUP_NAME'),
-      inputs: [{
-        name: 'group',
-        type: 'text',
-        value: record.group ?? '',
-        placeholder: this.translate.instant('GROUP_NAME'),
-        attributes: { maxlength: 40 },
-      }],
+      header: this.translate.instant('SELECT_ENTRIES'),
+      inputs: records.map(record => ({
+        type: 'checkbox',
+        label: record.text,
+        value: record.id,
+        checked: false,
+      })),
       buttons: [
         { text: this.translate.instant('CANCEL'), role: 'cancel' },
         {
-          text: this.translate.instant('SAVE'),
-          handler: async data => {
-            await this.env.setScanRecordGroup(record.id, data.group);
-            const name = data.group?.trim();
-            if (name && !this.managedGroups.includes(name)) {
-              this.managedGroups.push(name);
-              this.managedGroups.sort((a, b) => a.localeCompare(b));
-              this.collapsedGroups.add(name);
-              await this.saveManagedGroups();
-            }
-            this.firstLoadItems();
+          text: this.translate.instant('CONTINUE'),
+          handler: (selected: string[]) => {
+            const chosen = records.filter(record => selected.includes(record.id));
+            if (!chosen.length) return false;
+            this.presentGroupDestination(chosen);
+            return true;
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  private async presentGroupDestination(records: ScanRecord[]): Promise<void> {
+    const actionSheet = await this.actionSheetController.create({
+      header: `${this.translate.instant('MOVE_TO_GROUP')} (${records.length})`,
+      buttons: [
+        {
+          text: this.translate.instant('UNGROUPED'),
+          icon: 'folder-outline',
+          handler: () => this.moveEntriesToGroup(records),
+        },
+        ...this.groupNames.map(group => ({
+          text: group,
+          icon: 'folder',
+          handler: () => this.moveEntriesToGroup(records, group),
+        })),
+        {
+          text: this.translate.instant('CREATE_GROUP'),
+          icon: 'folder-open-outline',
+          handler: () => this.createGroupForEntries(records),
+        },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+      ],
+    });
+    await actionSheet.present();
+  }
+
+  private async createGroupForEntries(records: ScanRecord[]): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('CREATE_GROUP'),
+      inputs: [{ name: 'group', type: 'text', placeholder: this.translate.instant('GROUP_NAME'), attributes: { maxlength: 40 } }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CREATE'),
+          handler: data => {
+            const group = data.group?.trim();
+            if (!group) return false;
+            this.moveEntriesToGroup(records, group);
+            return true;
           },
         },
       ],
       cssClass: ['alert-bg'],
     });
     await alert.present();
+  }
+
+  private async moveEntriesToGroup(records: ScanRecord[], group?: string): Promise<void> {
+    for (const record of records) await this.env.setScanRecordGroup(record.id, group);
+    if (group && !this.managedGroups.includes(group)) {
+      this.managedGroups.push(group);
+      this.managedGroups.sort((a, b) => a.localeCompare(b));
+      this.collapsedGroups.add(group);
+      await this.saveManagedGroups();
+    }
+    this.firstLoadItems();
+    await this.presentToast(`${records.length} ${this.translate.instant('ENTRIES_MOVED')}`, 'short', 'bottom');
   }
 
   async addBookmark(record: ScanRecord, slidingItem: IonItemSliding) {
@@ -658,6 +715,11 @@ export class HistoryPage {
         handler: () => this.importCodes(),
       });
       if (this.env.scanRecords?.length) {
+        buttons.push({
+          text: this.translate.instant('MOVE_ENTRIES'),
+          icon: 'folder-open-outline',
+          handler: () => this.selectEntriesToMove(),
+        });
         buttons.push({
           text: this.translate.instant('EXPORT'),
           icon: 'share-outline',

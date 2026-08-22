@@ -7,6 +7,7 @@
     "ABOUT_SIMPLE_QR": "關於簡易QR",
     "ADD": "新增",
     "ACTIONS": "操作",
+    "MOVE_ENTRIES": "移動項目", "SELECT_ENTRIES": "選擇項目", "MOVE_TO_GROUP": "移動到哪個群組？", "ENTRIES_MOVED": "個項目已移動",
     "ADD_BCC": "新增密件副本",
     "ADD_CC": "新增副本",
     "ADD_CONTACT": "新增聯絡人",
