@@ -52,13 +52,6 @@
       <ion-select-option value="__ungrouped__">{{ 'UNGROUPED' | translate }}</ion-select-option>
       <ion-select-option *ngFor="let group of groupNames" [value]="group">{{ group }}</ion-select-option>
     </ion-select>
-    <ion-button slot="end" fill="clear" (click)="createGroup()">
-      <ion-icon slot="icon-only" name="folder-open-outline"></ion-icon>
-    </ion-button>
-    <ion-button *ngIf="groupFilter !== '__all__' && groupFilter !== '__ungrouped__'" slot="end" fill="clear"
-      color="danger" (click)="deleteSelectedGroup()">
-      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-    </ion-button>
   </ion-item>
 
   <!-- When loading -->

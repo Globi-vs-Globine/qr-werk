@@ -640,6 +640,19 @@ export class HistoryPage {
     const buttons: any[] = [];
     if (this.segmentModel === 'history') {
       buttons.push({
+        text: this.translate.instant('CREATE_GROUP'),
+        icon: 'folder-open-outline',
+        handler: () => this.createGroup(),
+      });
+      if (this.groupFilter !== '__all__' && this.groupFilter !== '__ungrouped__') {
+        buttons.push({
+          text: this.translate.instant('DELETE_GROUP'),
+          icon: 'folder-outline',
+          role: 'destructive',
+          handler: () => this.deleteSelectedGroup(),
+        });
+      }
+      buttons.push({
         text: this.translate.instant('IMPORT_CODES'),
         icon: 'clipboard-outline',
         handler: () => this.importCodes(),
