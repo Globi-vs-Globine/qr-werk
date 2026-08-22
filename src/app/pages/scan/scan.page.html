@@ -14,9 +14,16 @@
   @if (usesNativeScanner) {
   <div class="native-scanner-launcher">
     <ion-icon name="qr-code-outline"></ion-icon>
-    <ion-button size="large" (click)="tapHaptic(); scanUsingNativeInterface()">
-      {{ 'SCAN' | translate }}
-    </ion-button>
+    <div class="native-scanner-actions">
+      <ion-button size="large" (click)="tapHaptic(); scanUsingNativeInterface()">
+        <ion-icon slot="start" name="camera-outline"></ion-icon>
+        {{ 'SCAN_BY_CAMERA' | translate }}
+      </ion-button>
+      <ion-button size="large" fill="outline" (click)="tapHaptic(); scanFromImage()">
+        <ion-icon slot="start" name="image-outline"></ion-icon>
+        {{ 'IMPORT_IMAGE' | translate }}
+      </ion-button>
+    </div>
   </div>
   } @else {
   <div #square class="square"></div>

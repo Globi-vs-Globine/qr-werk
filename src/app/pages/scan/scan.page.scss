@@ -62,3 +62,20 @@ ion-fab {
     font-size: 112px;
     opacity: 0.8;
 }
+
+.native-scanner-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: min(320px, calc(100% - 48px));
+}
+
+.native-scanner-actions ion-button {
+    margin: 0;
+}
+
+.native-scanner-actions ion-button ion-icon {
+    color: inherit;
+    font-size: 24px;
+    opacity: 1;
+}
