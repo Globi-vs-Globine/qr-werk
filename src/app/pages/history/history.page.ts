@@ -697,52 +697,60 @@ export class HistoryPage {
     const buttons: any[] = [];
     if (this.segmentModel === 'history') {
       buttons.push({
-        text: this.translate.instant('CREATE_GROUP'),
-        icon: 'folder-open-outline',
-        handler: () => this.createGroup(),
+        text: this.translate.instant('MANAGE_ENTRIES'),
+        icon: 'list-outline',
+        handler: () => this.presentRecordManagement(),
       });
-      if (this.groupFilter !== '__all__' && this.groupFilter !== '__ungrouped__') {
-        buttons.push({
-          text: this.translate.instant('DELETE_GROUP'),
-          icon: 'folder-outline',
-          role: 'destructive',
-          handler: () => this.deleteSelectedGroup(),
-        });
-      }
-      buttons.push({
-        text: this.translate.instant('IMPORT_CODES'),
-        icon: 'clipboard-outline',
-        handler: () => this.importCodes(),
-      });
+      buttons.push({ text: this.translate.instant('IMPORT_CODES'), icon: 'clipboard-outline', handler: () => this.importCodes() });
       if (this.env.scanRecords?.length) {
-        buttons.push({
-          text: this.translate.instant('MOVE_ENTRIES'),
-          icon: 'folder-open-outline',
-          handler: () => this.selectEntriesToMove(),
-        });
         buttons.push({
           text: this.translate.instant('EXPORT'),
           icon: 'share-outline',
           handler: () => this.exportHistory(),
         });
       }
-    }
-    const hasEntries = this.segmentModel === 'history'
-      ? !!this.env.scanRecords?.length
-      : !!this.env.bookmarks?.length;
-    if (hasEntries) {
-      buttons.push({
-        text: this.translate.instant('REMOVE_ALL'),
-        icon: 'trash-outline',
-        role: 'destructive',
-        handler: () => this.removeAll(),
-      });
+    } else if (this.env.bookmarks?.length) {
+      buttons.push({ text: this.translate.instant('REMOVE_ALL'), icon: 'trash-outline', role: 'destructive', handler: () => this.removeAll() });
     }
     buttons.push({ text: this.translate.instant('CANCEL'), role: 'cancel' });
     const actionSheet = await this.actionSheetController.create({
       header: this.translate.instant('ACTIONS'),
       buttons,
     });
+    await actionSheet.present();
+  }
+
+  private async presentRecordManagement(): Promise<void> {
+    const buttons: any[] = [{
+      text: this.translate.instant('MANAGE_GROUPS'),
+      icon: 'folder-outline',
+      handler: () => this.presentGroupManagement(),
+    }];
+    if (this.env.scanRecords?.length) {
+      buttons.push({ text: this.translate.instant('MOVE_ENTRIES'), icon: 'move-outline', handler: () => this.selectEntriesToMove() });
+      buttons.push({ text: this.translate.instant('REMOVE_ALL'), icon: 'trash-outline', role: 'destructive', handler: () => this.removeAll() });
+    }
+    buttons.push({ text: this.translate.instant('CANCEL'), role: 'cancel' });
+    const actionSheet = await this.actionSheetController.create({ header: this.translate.instant('MANAGE_ENTRIES'), buttons });
+    await actionSheet.present();
+  }
+
+  private async presentGroupManagement(): Promise<void> {
+    const buttons: any[] = [{
+      text: this.translate.instant('CREATE_GROUP'),
+      icon: 'folder-open-outline',
+      handler: () => this.createGroup(),
+    }];
+    if (this.groupFilter !== '__all__' && this.groupFilter !== '__ungrouped__') {
+      buttons.push({
+        text: this.translate.instant('DELETE_GROUP'),
+        icon: 'trash-outline',
+        role: 'destructive',
+        handler: () => this.deleteSelectedGroup(),
+      });
+    }
+    buttons.push({ text: this.translate.instant('CANCEL'), role: 'cancel' });
+    const actionSheet = await this.actionSheetController.create({ header: this.translate.instant('MANAGE_GROUPS'), buttons });
     await actionSheet.present();
   }
 

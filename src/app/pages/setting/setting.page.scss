@@ -1,0 +1,16 @@
+ion-item {
+    --min-height: 52px;
+}
+
+ion-item ion-icon,
+ion-item img {
+    min-width: 24px;
+}
+
+ion-list-header {
+    min-height: 40px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}

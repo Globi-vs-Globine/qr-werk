@@ -7,6 +7,7 @@
     "ABOUT_SIMPLE_QR": "À propos de Simple QR",
     "ADD": "Ajouter",
     "ACTIONS": "Actions",
+    "MANAGE_ENTRIES": "Gérer les entrées", "MANAGE_GROUPS": "Gérer les groupes",
     "MOVE_ENTRIES": "Déplacer des entrées", "SELECT_ENTRIES": "Sélectionner des entrées", "MOVE_TO_GROUP": "Déplacer vers quel groupe ?", "ENTRIES_MOVED": "entrées déplacées",
     "ADD_BCC": "Ajouter CCI",
     "ADD_CC": "Ajouter CC",
