@@ -35,7 +35,7 @@ export declare type QrCreateContentTypeType = "freeText" | "url" | "contact" | "
 })
 export class EnvService {
 
-  public appVersionNumber: string = '5.1.1';
+  public appVersionNumber: string = '5.1.1-ios-fork.1';
 
   public startPage: TabPageType = "/tabs/scan";
   public historyPageStartSegment: HistoryPageSegmentType = 'history';
@@ -142,11 +142,12 @@ export class EnvService {
   public readonly ECOSIA_SEARCH_URL: string = "https://www.ecosia.org/search?method=index&q=";
   public readonly BRAVE_SEARCH_URL: string = "https://search.brave.com/search?q=";
 
-  public readonly GITHUB_REPO_URL: string = "https://github.com/tomfong/simple-qr";
+  public readonly GITHUB_REPO_URL: string = "https://github.com/Globi-vs-Globine/simple-qr";
+  public readonly UPSTREAM_REPO_URL: string = "https://github.com/tomfong/simple-qr";
   public readonly GOOGLE_PLAY_URL: string = "https://play.google.com/store/apps/details?id=com.tomfong.simpleqr";
   public readonly APP_STORE_URL: string = "https://apps.apple.com/us/app/simple-qr-by-tom-fong/id1621121553";
-  public readonly GITHUB_RELEASE_URL: string = "https://github.com/tomfong/simple-qr/releases";
-  public readonly PRIVACY_POLICY: string = "https://www.privacypolicies.com/live/771b1123-99bb-4bfe-815e-1046c0437a0f";
+  public readonly GITHUB_RELEASE_URL: string = "https://github.com/Globi-vs-Globine/simple-qr/commits/dev/ios-history-export";
+  public readonly PRIVACY_POLICY: string = "https://github.com/Globi-vs-Globine/simple-qr/blob/dev/ios-history-export/PRIVACY.md";
 
   resultContent: string = '';
   editingContent: boolean = false;
