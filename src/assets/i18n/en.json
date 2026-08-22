@@ -7,6 +7,8 @@
     "ABOUT_SIMPLE_QR": "About QRWerk",
     "ADD": "Add",
     "ACTIONS": "Actions",
+    "FILTER_GROUPS": "Filter groups",
+    "CURRENT_SELECTION": "Showing",
     "DELETE_ALL_ENTRIES": "Delete all entries",
     "NO_ENTRIES_TO_MANAGE": "There are no entries to manage.",
     "MANAGE_ENTRIES": "Manage entries",

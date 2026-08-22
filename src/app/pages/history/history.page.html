@@ -44,14 +44,13 @@
     </ng-container>
   </ion-segment>
 
-  <ion-item *ngIf="segmentModel === 'history'" lines="full">
-    <ion-icon name="folder-outline" slot="start" color="primary"></ion-icon>
-    <ion-select [(ngModel)]="groupFilter" (ionChange)="groupFilterChanged()" [label]="'GROUP' | translate"
-      label-placement="stacked" interface="action-sheet">
-      <ion-select-option value="__all__">{{ 'ALL_GROUPS' | translate }}</ion-select-option>
-      <ion-select-option value="__ungrouped__">{{ 'UNGROUPED' | translate }}</ion-select-option>
-      <ion-select-option *ngFor="let group of groupNames" [value]="group">{{ group }}</ion-select-option>
-    </ion-select>
+  <ion-item *ngIf="segmentModel === 'history'" button detail="true" lines="full"
+    class="group-filter-button" (click)="tapHaptic(); presentGroupFilter()">
+    <ion-icon name="filter-circle-outline" slot="start" color="primary"></ion-icon>
+    <ion-label>
+      <strong>{{ 'FILTER_GROUPS' | translate }}</strong>
+      <p>{{ 'CURRENT_SELECTION' | translate }}: {{ currentGroupFilterLabel }}</p>
+    </ion-label>
   </ion-item>
 
   <!-- When loading -->
@@ -150,6 +149,10 @@
                     <ion-badge *ngIf="record.barcodeType" class="my-1" color="primary">
                       {{ getBarcodeFormat(record.barcodeType) }}
                     </ion-badge>
+                    <ion-badge *ngIf="bookmarkLabel(record) as label" class="my-1 ms-1" color="secondary">
+                      <ion-icon name="bookmark" aria-hidden="true"></ion-icon>
+                      {{ label }}
+                    </ion-badge>
                   </div>
                 </ion-label>
               </ion-item>
@@ -213,6 +216,12 @@
                     {{ bookmark.text }}
                   </ion-text>
                 </p>
+                <div class="bookmark-groups" *ngIf="bookmarkGroups(bookmark) as groups">
+                  <ion-badge *ngFor="let group of groups" color="secondary" class="me-1 my-1">
+                    <ion-icon name="folder-outline" aria-hidden="true"></ion-icon>
+                    {{ group }}
+                  </ion-badge>
+                </div>
                 <p *ngIf="env.debugMode === 'on'">
                   <ion-text color="medium">
                     {{ bookmark.id }}

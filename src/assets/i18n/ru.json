@@ -7,6 +7,8 @@
     "ABOUT_SIMPLE_QR": "О QRWerk",
     "ADD": "Добавить",
     "ACTIONS": "Действия",
+    "FILTER_GROUPS": "Фильтр групп",
+    "CURRENT_SELECTION": "Показано",
     "DELETE_ALL_ENTRIES": "Удалить все записи",
     "NO_ENTRIES_TO_MANAGE": "Нет записей для управления.",
     "MANAGE_ENTRIES": "Управление записями", "MANAGE_GROUPS": "Управление группами", "TRANSFER_DATA": "Передача данных", "ADD_ENTRIES": "Добавить записи", "RENAME_GROUP": "Переименовать группу", "NO_ENTRIES_AVAILABLE": "Нет доступных записей",

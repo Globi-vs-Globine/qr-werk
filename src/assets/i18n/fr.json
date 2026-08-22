@@ -7,6 +7,8 @@
     "ABOUT_SIMPLE_QR": "À propos de QRWerk",
     "ADD": "Ajouter",
     "ACTIONS": "Actions",
+    "FILTER_GROUPS": "Filtrer les groupes",
+    "CURRENT_SELECTION": "Affichage",
     "DELETE_ALL_ENTRIES": "Supprimer toutes les entrées",
     "NO_ENTRIES_TO_MANAGE": "Il n’y a aucune entrée à gérer.",
     "MANAGE_ENTRIES": "Gérer les entrées", "MANAGE_GROUPS": "Gérer les groupes", "TRANSFER_DATA": "Transférer des données", "ADD_ENTRIES": "Ajouter des entrées", "RENAME_GROUP": "Renommer le groupe", "NO_ENTRIES_AVAILABLE": "Aucune autre entrée disponible",

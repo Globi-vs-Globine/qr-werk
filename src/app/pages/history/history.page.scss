@@ -1,0 +1,21 @@
+.group-filter-button ion-icon[slot='start'] {
+  font-size: 28px;
+}
+
+.group-filter-button strong {
+  font-size: 16px;
+}
+
+.group-filter-button p {
+  margin-top: 4px;
+}
+
+ion-badge ion-icon {
+  margin-right: 4px;
+  vertical-align: -1px;
+}
+
+.bookmark-groups {
+  display: flex;
+  flex-wrap: wrap;
+}

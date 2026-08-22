@@ -7,6 +7,8 @@
     "ABOUT_SIMPLE_QR": "关于QRWerk",
     "ADD": "新增",
     "ACTIONS": "操作",
+    "FILTER_GROUPS": "筛选组",
+    "CURRENT_SELECTION": "当前显示",
     "DELETE_ALL_ENTRIES": "删除所有条目",
     "NO_ENTRIES_TO_MANAGE": "没有可管理的条目。",
     "MANAGE_ENTRIES": "管理条目", "MANAGE_GROUPS": "管理组", "TRANSFER_DATA": "传输数据", "ADD_ENTRIES": "添加条目", "RENAME_GROUP": "重命名组", "NO_ENTRIES_AVAILABLE": "没有其他可用条目",

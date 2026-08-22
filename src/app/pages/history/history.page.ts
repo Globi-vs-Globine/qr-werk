@@ -50,6 +50,28 @@ export class HistoryPage {
     return this.env.scanRecords.filter(record => record.group === this.groupFilter);
   }
 
+  get currentGroupFilterLabel(): string {
+    if (this.groupFilter === '__all__') return this.translate.instant('ALL_GROUPS');
+    if (this.groupFilter === '__ungrouped__') return this.translate.instant('UNGROUPED');
+    return this.groupFilter;
+  }
+
+  bookmarkLabel(record: ScanRecord): string | undefined {
+    const bookmark = this.env.bookmarks.find(item => item.text === record.text);
+    if (!bookmark) return undefined;
+    return bookmark.tag?.trim()
+      ? `${this.translate.instant('BOOKMARK')}: ${bookmark.tag.trim()}`
+      : this.translate.instant('BOOKMARK');
+  }
+
+  bookmarkGroups(bookmark: Bookmark): string[] {
+    return [...new Set(
+      this.env.scanRecords
+        .filter(record => record.text === bookmark.text)
+        .map(record => record.group?.trim() || this.translate.instant('UNGROUPED')),
+    )].sort((a, b) => a.localeCompare(b));
+  }
+
   get groupedScanRecords(): Array<{ key: string; name: string; records: ScanRecord[] }> {
     const groups = new Map<string, ScanRecord[]>();
     if (this.groupFilter === '__all__') {
@@ -366,6 +388,33 @@ export class HistoryPage {
 
   groupFilterChanged() {
     this.firstLoadItems();
+  }
+
+  async presentGroupFilter(): Promise<void> {
+    const choices = [
+      { value: '__all__', label: this.translate.instant('ALL_GROUPS') },
+      { value: '__ungrouped__', label: this.translate.instant('UNGROUPED') },
+      ...this.groupNames.map(group => ({ value: group, label: group })),
+    ];
+    const buttons: any[] = choices.map(choice => ({
+      text: choice.label,
+      icon: choice.value === this.groupFilter ? 'checkmark-circle' : 'folder-outline',
+      handler: () => {
+        this.groupFilter = choice.value;
+        this.groupFilterChanged();
+      },
+    }));
+    buttons.push({
+      text: this.translate.instant('CANCEL'),
+      icon: 'close',
+      role: 'cancel',
+      handler: () => undefined,
+    });
+    const actionSheet = await this.actionSheetController.create({
+      header: this.translate.instant('FILTER_GROUPS'),
+      buttons,
+    });
+    await actionSheet.present();
   }
 
   async assignGroup(record: ScanRecord, slidingItem: IonItemSliding) {
