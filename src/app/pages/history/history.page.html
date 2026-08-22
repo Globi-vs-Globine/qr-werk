@@ -153,6 +153,10 @@
                       <ion-icon name="bookmark" aria-hidden="true"></ion-icon>
                       <span *ngIf="bookmarkLabel(record) as label">{{ label }}</span>
                     </ion-badge>
+                    <ion-badge *ngIf="record.duplicateCount" class="my-1 ms-1" color="warning">
+                      <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
+                      {{ (record.duplicateCount || 0) + 1 }}× {{ 'DETECTED' | translate }}
+                    </ion-badge>
                   </div>
                 </ion-label>
               </ion-item>

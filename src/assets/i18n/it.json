@@ -33,6 +33,7 @@
     "BACKGROUND_COLOR": "Colore di sfondo",
     "BATCH_SCAN": "Scansione in serie",
     "BATCH_SAVED": "scansioni in serie salvate",
+    "DUPLICATE_SCANS": "Codici duplicati", "DUPLICATE_MODE_EXPLANATION": "Come deve gestire QRWerk i codici già rilevati?", "ALLOW_DUPLICATES": "Consenti duplicati", "PREVENT_BATCH_DUPLICATES": "Impedisci nella sessione attuale", "PREVENT_HISTORY_DUPLICATES": "Impedisci nell’intera cronologia", "DUPLICATE_IN_BATCH": "Già scansionato in questa sessione", "DUPLICATE_IN_HISTORY": "Questo codice esiste già nella cronologia", "BATCH_SUMMARY": "Sessione completata", "DUPLICATES_CURRENT_BATCH": "Duplicati nella sessione", "DUPLICATES_HISTORY": "Già nella cronologia", "DETECTED": "rilevato",
     "SAVE_ALL": "Salva tutto",
     "SAVE_SELECTION": "Salva selezione",
     "CREATE_GROUP": "Crea gruppo", "DELETE_GROUP": "Elimina gruppo", "GROUP_DELETE_INFO": "I codici saranno spostati in Senza gruppo.", "EXPORT_SCOPE": "Cosa vuoi esportare?", "CURRENT_FILTER": "Vista corrente", "SELECT_GROUPS": "Seleziona gruppi", "SELECT_CODES": "Seleziona codici", "CONTINUE": "Continua",

@@ -17,7 +17,7 @@ import {
 } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvService } from 'src/app/services/env.service';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 import { Toast } from '@capacitor/toast';
 import {
   Camera,
@@ -421,8 +421,17 @@ export class ScanPage {
   }
 
   async scanBatchUsingNativeInterface(): Promise<void> {
+    const duplicateMode = await this.selectBatchDuplicateMode();
+    if (!duplicateMode) return;
+
     this.nativeScannerActive = true;
     const scannedValues = new Set<string>();
+    const valuesBeforeBatch = new Set(
+      (this.env.scanRecords ?? []).map(record => record.text.trim()),
+    );
+    let savedCount = 0;
+    let currentBatchDuplicates = 0;
+    let historyDuplicates = 0;
     try {
       while (true) {
         const result = await BarcodeScanner.scan({
@@ -444,8 +453,32 @@ export class ScanPage {
         });
         const barcode = result.barcodes[0];
         const value = barcode?.rawValue?.trim();
-        if (!value || scannedValues.has(value)) {
+        if (!value) {
           continue;
+        }
+
+        const duplicateInBatch = scannedValues.has(value);
+        const duplicateInHistory = !duplicateInBatch && valuesBeforeBatch.has(value);
+        const isDuplicate = duplicateInBatch || duplicateInHistory;
+
+        if (duplicateInBatch) currentBatchDuplicates += 1;
+        if (duplicateInHistory) historyDuplicates += 1;
+
+        if (isDuplicate) {
+          await this.env.recordDuplicateScan(value);
+          const shouldBlock = duplicateMode === 'history' ||
+            (duplicateMode === 'batch' && duplicateInBatch);
+          if (shouldBlock) {
+            await Haptics.notification({ type: NotificationType.Error }).catch(() => undefined);
+            await this.presentToast(
+              this.translate.instant(
+                duplicateInBatch ? 'DUPLICATE_IN_BATCH' : 'DUPLICATE_IN_HISTORY',
+              ),
+              'short',
+              'top',
+            );
+            continue;
+          }
         }
 
         scannedValues.add(value);
@@ -453,6 +486,7 @@ export class ScanPage {
         this.env.detailedRecordSource = 'scan-camera';
         this.env.resultContentFormat = barcode.format;
         await this.env.saveScanRecord(value);
+        savedCount += 1;
         await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
       }
     } catch (err) {
@@ -463,16 +497,76 @@ export class ScanPage {
     } finally {
       delete this.env.recordSource;
       delete this.env.detailedRecordSource;
-      if (scannedValues.size > 0) {
-        await this.presentToast(
-          `${scannedValues.size} ${this.translate.instant('BATCH_SAVED')}`,
-          'short',
-          'bottom',
-        );
+      if (savedCount > 0 || currentBatchDuplicates > 0 || historyDuplicates > 0) {
+        await this.showBatchSummary(savedCount, currentBatchDuplicates, historyDuplicates);
       }
       await new Promise(resolve => setTimeout(resolve, 120));
       this.nativeScannerActive = false;
     }
+  }
+
+  private async selectBatchDuplicateMode(): Promise<'allow' | 'batch' | 'history' | undefined> {
+    return new Promise(async resolve => {
+      let selectedMode: 'allow' | 'batch' | 'history' = 'batch';
+      const alert = await this.alertController.create({
+        header: this.translate.instant('DUPLICATE_SCANS'),
+        message: this.translate.instant('DUPLICATE_MODE_EXPLANATION'),
+        inputs: [
+          {
+            type: 'radio',
+            label: this.translate.instant('ALLOW_DUPLICATES'),
+            value: 'allow',
+          },
+          {
+            type: 'radio',
+            label: this.translate.instant('PREVENT_BATCH_DUPLICATES'),
+            value: 'batch',
+            checked: true,
+          },
+          {
+            type: 'radio',
+            label: this.translate.instant('PREVENT_HISTORY_DUPLICATES'),
+            value: 'history',
+          },
+        ],
+        buttons: [
+          {
+            text: this.translate.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => resolve(undefined),
+          },
+          {
+            text: this.translate.instant('START'),
+            handler: value => {
+              selectedMode = value as 'allow' | 'batch' | 'history';
+              resolve(selectedMode);
+            },
+          },
+        ],
+        backdropDismiss: false,
+        cssClass: ['alert-bg'],
+      });
+      await alert.present();
+    });
+  }
+
+  private async showBatchSummary(
+    savedCount: number,
+    currentBatchDuplicates: number,
+    historyDuplicates: number,
+  ): Promise<void> {
+    const message = [
+      `${this.translate.instant('BATCH_SAVED')}: ${savedCount}`,
+      `${this.translate.instant('DUPLICATES_CURRENT_BATCH')}: ${currentBatchDuplicates}`,
+      `${this.translate.instant('DUPLICATES_HISTORY')}: ${historyDuplicates}`,
+    ].join('<br>');
+    const alert = await this.alertController.create({
+      header: this.translate.instant('BATCH_SUMMARY'),
+      message,
+      buttons: [this.translate.instant('OK')],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
   }
 
   async setZoomRatio(event: InputCustomEvent) {

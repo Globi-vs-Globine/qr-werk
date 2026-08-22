@@ -5,4 +5,6 @@ export class ScanRecord {
     source: 'create' | 'view' | 'scan' | 'external-share' | undefined;
     barcodeType: string | undefined;
     group: string | undefined;
+    duplicateCount?: number;
+    lastDuplicateAt?: Date;
 }

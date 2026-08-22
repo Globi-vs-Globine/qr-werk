@@ -33,6 +33,7 @@
     "BACKGROUND_COLOR": "Цвет фона",
     "BATCH_SCAN": "Пакетное сканирование",
     "BATCH_SAVED": "пакетных сканирований сохранено",
+    "DUPLICATE_SCANS": "Повторяющиеся коды", "DUPLICATE_MODE_EXPLANATION": "Как QRWerk должен обрабатывать уже распознанные коды?", "ALLOW_DUPLICATES": "Разрешить дубликаты", "PREVENT_BATCH_DUPLICATES": "Запретить в текущей серии", "PREVENT_HISTORY_DUPLICATES": "Запретить во всей истории", "DUPLICATE_IN_BATCH": "Уже отсканировано в этой серии", "DUPLICATE_IN_HISTORY": "Этот код уже есть в истории", "BATCH_SUMMARY": "Серия завершена", "DUPLICATES_CURRENT_BATCH": "Дубликаты в серии", "DUPLICATES_HISTORY": "Уже в истории", "DETECTED": "обнаружено",
     "SAVE_ALL": "Сохранить все",
     "SAVE_SELECTION": "Сохранить выбранное",
     "CREATE_GROUP": "Создать группу", "DELETE_GROUP": "Удалить группу", "GROUP_DELETE_INFO": "Коды будут перемещены в Без группы.", "EXPORT_SCOPE": "Что экспортировать?", "CURRENT_FILTER": "Текущий вид", "SELECT_GROUPS": "Выбрать группы", "SELECT_CODES": "Выбрать коды", "CONTINUE": "Продолжить",

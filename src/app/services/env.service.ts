@@ -981,6 +981,18 @@ export class EnvService {
     }
   }
 
+  async recordDuplicateScan(value: string): Promise<boolean> {
+    const record = this.scanRecords.find(item => item.text.trim() === value.trim());
+    if (!record) return false;
+    record.duplicateCount = (record.duplicateCount ?? 0) + 1;
+    record.lastDuplicateAt = new Date();
+    await Preferences.set({
+      key: this.KEY_SCAN_RECORDS,
+      value: JSON.stringify(this.scanRecords),
+    });
+    return true;
+  }
+
   async setScanRecordGroup(id: string, group?: string): Promise<void> {
     const record = this.scanRecords.find(item => item.id === id);
     if (!record) return;
