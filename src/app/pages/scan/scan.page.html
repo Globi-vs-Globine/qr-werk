@@ -19,6 +19,10 @@
         <ion-icon slot="start" name="camera-outline"></ion-icon>
         {{ 'SCAN_BY_CAMERA' | translate }}
       </ion-button>
+      <ion-button size="large" fill="outline" (click)="tapHaptic(); scanBatchUsingNativeInterface()">
+        <ion-icon slot="start" name="scan-outline"></ion-icon>
+        {{ 'BATCH_SCAN' | translate }}
+      </ion-button>
       <ion-button size="large" fill="outline" (click)="tapHaptic(); scanFromImage()">
         <ion-icon slot="start" name="image-outline"></ion-icon>
         {{ 'IMPORT_IMAGE' | translate }}

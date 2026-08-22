@@ -1,5 +1,10 @@
 <ion-header>
   <ion-toolbar [color]="env.colorTheme === 'black'? 'black' : 'dark'">
+    <ion-buttons slot="start" *ngIf="env.viewResultFrom">
+      <ion-button (click)="tapHaptic(); goBackToOverview()" fill="clear">
+        <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>{{ 'RESULT' | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="tapHaptic(); goSetting()" fill="clear" [color]="'primary'">

@@ -24,6 +24,8 @@
     "AUTO_OPEN_URL": "URL automatisch öffnen",
     "AUTO_QR_CODE_POPUP": "Automatisches QR Code Pop-up",
     "BACKGROUND_COLOR": "Hintergrundfarbe",
+    "BATCH_SCAN": "Batch scannen",
+    "BATCH_SAVED": "Batch-Scans gespeichert",
     "BACKING_UP": "Sichern",
     "BACKUP": "Sicherung",
     "BASE64": "Base64",

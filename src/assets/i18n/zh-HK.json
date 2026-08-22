@@ -24,6 +24,8 @@
     "AUTO_OPEN_URL": "自動打開網址",
     "AUTO_QR_CODE_POPUP": "自動彈出 QR 碼",
     "BACKGROUND_COLOR": "背景顏色",
+    "BATCH_SCAN": "批量掃描",
+    "BATCH_SAVED": "個批量掃描已儲存",
     "BACKING_UP": "備份中",
     "BACKUP": "備份",
     "BASE64": "Base64",

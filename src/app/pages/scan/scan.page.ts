@@ -402,6 +402,58 @@ export class ScanPage {
     }
   }
 
+  async scanBatchUsingNativeInterface(): Promise<void> {
+    const scannedValues = new Set<string>();
+    try {
+      while (true) {
+        const result = await BarcodeScanner.scan({
+          formats: [
+            BarcodeFormat.Aztec,
+            BarcodeFormat.Codabar,
+            BarcodeFormat.Code128,
+            BarcodeFormat.Code39,
+            BarcodeFormat.Code93,
+            BarcodeFormat.DataMatrix,
+            BarcodeFormat.Ean13,
+            BarcodeFormat.Ean8,
+            BarcodeFormat.Itf,
+            BarcodeFormat.Pdf417,
+            BarcodeFormat.QrCode,
+            BarcodeFormat.UpcA,
+            BarcodeFormat.UpcE,
+          ],
+        });
+        const barcode = result.barcodes[0];
+        const value = barcode?.rawValue?.trim();
+        if (!value || scannedValues.has(value)) {
+          continue;
+        }
+
+        scannedValues.add(value);
+        this.env.recordSource = 'scan';
+        this.env.detailedRecordSource = 'scan-camera';
+        this.env.resultContentFormat = barcode.format;
+        await this.env.saveScanRecord(value);
+        await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
+      }
+    } catch (err) {
+      // The native X button ends the batch intentionally.
+      if (this.env.debugMode === 'on') {
+        console.log('Batch scanner closed:', err);
+      }
+    } finally {
+      delete this.env.recordSource;
+      delete this.env.detailedRecordSource;
+      if (scannedValues.size > 0) {
+        await this.presentToast(
+          `${scannedValues.size} ${this.translate.instant('BATCH_SAVED')}`,
+          'short',
+          'bottom',
+        );
+      }
+    }
+  }
+
   async setZoomRatio(event: InputCustomEvent) {
     if (!this.zoomRatio) {
       return;

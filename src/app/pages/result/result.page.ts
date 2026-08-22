@@ -214,6 +214,11 @@ export class ResultPage {
     delete this.env.viewResultFrom;
   }
 
+  goBackToOverview(): void {
+    const target = this.env.viewResultFrom ?? '/tabs/history';
+    this.router.navigateByUrl(target);
+  }
+
   setContentType(): void {
     if (this.env.isSharedContent) {
       this.env.isSharedContent = false;
