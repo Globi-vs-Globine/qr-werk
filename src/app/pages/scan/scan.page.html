@@ -10,7 +10,7 @@
   }
 </ion-header>
 
-<ion-content #content class="ion-no-border">
+<ion-content #content class="ion-no-border" [class.native-scanner-active]="nativeScannerActive">
   @if (usesNativeScanner) {
   <div class="native-scanner-launcher">
     <img class="qrwerk-launcher-logo" src="assets/img/round_icon.png" alt="QRWerk">

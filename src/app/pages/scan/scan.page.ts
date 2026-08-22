@@ -42,6 +42,7 @@ export class ScanPage {
   @ViewChild('content') contentEl: HTMLIonContentElement;
 
   cameraActive: boolean = false;
+  nativeScannerActive: boolean = false;
   flashActive: boolean = false;
 
   permissionAlert: HTMLIonAlertElement;
@@ -75,17 +76,27 @@ export class ScanPage {
   }
 
   async ionViewDidEnter(): Promise<void> {
-    await SplashScreen.hide();
     if (this.platform.is('android')) {
       await EdgeToEdge.setBackgroundColor({ color: '#000000' });
       await StatusBar.setBackgroundColor({ color: '#000000' });
     }
     if (this.router.url.startsWith('/tabs/import-image')) {
       this.env.openScannerOnNextScanEntry = false;
+      await SplashScreen.hide();
       await this.scanFromImage();
     } else if (!this.usesNativeScanner || this.env.openScannerOnNextScanEntry) {
+      const isAutomaticNativeStart = this.usesNativeScanner && this.env.openScannerOnNextScanEntry;
       this.env.openScannerOnNextScanEntry = false;
-      await this.prepareScanner();
+      const scannerPromise = this.prepareScanner();
+      if (isAutomaticNativeStart) {
+        // Keep the launch screen visible while iOS presents its native camera
+        // so the scan menu cannot flash briefly between both screens.
+        await new Promise(resolve => setTimeout(resolve, 220));
+      }
+      await SplashScreen.hide();
+      await scannerPromise;
+    } else {
+      await SplashScreen.hide();
     }
   }
 
@@ -367,6 +378,7 @@ export class ScanPage {
   }
 
   async scanUsingNativeInterface(): Promise<void> {
+    this.nativeScannerActive = true;
     try {
       const result = await BarcodeScanner.scan({
         formats: [
@@ -402,14 +414,14 @@ export class ScanPage {
       if (this.env.debugMode === 'on') {
         console.log('Native scanner closed:', err);
       }
+    } finally {
+      await new Promise(resolve => setTimeout(resolve, 120));
+      this.nativeScannerActive = false;
     }
   }
 
   async scanBatchUsingNativeInterface(): Promise<void> {
-    const groupName = await this.requestBatchGroupName();
-    if (!groupName) {
-      return;
-    }
+    this.nativeScannerActive = true;
     const scannedValues = new Set<string>();
     try {
       while (true) {
@@ -440,7 +452,7 @@ export class ScanPage {
         this.env.recordSource = 'scan';
         this.env.detailedRecordSource = 'scan-camera';
         this.env.resultContentFormat = barcode.format;
-        await this.env.saveScanRecord(value, groupName);
+        await this.env.saveScanRecord(value);
         await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
       }
     } catch (err) {
@@ -458,40 +470,9 @@ export class ScanPage {
           'bottom',
         );
       }
+      await new Promise(resolve => setTimeout(resolve, 120));
+      this.nativeScannerActive = false;
     }
-  }
-
-  private async requestBatchGroupName(): Promise<string | null> {
-    return new Promise(async (resolve) => {
-      const alert = await this.alertController.create({
-        header: this.translate.instant('GROUP_NAME'),
-        inputs: [{
-          name: 'group',
-          type: 'text',
-          placeholder: this.translate.instant('GROUP_NAME'),
-          attributes: { maxlength: 40 },
-        }],
-        buttons: [
-          {
-            text: this.translate.instant('CANCEL'),
-            role: 'cancel',
-            handler: () => resolve(null),
-          },
-          {
-            text: this.translate.instant('START'),
-            handler: (data) => {
-              const name = data.group?.trim();
-              if (!name) return false;
-              resolve(name);
-              return true;
-            },
-          },
-        ],
-        backdropDismiss: false,
-        cssClass: ['alert-bg'],
-      });
-      await alert.present();
-    });
   }
 
   async setZoomRatio(event: InputCustomEvent) {

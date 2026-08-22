@@ -57,6 +57,15 @@ ion-fab {
     height: 100%;
 }
 
+.native-scanner-active {
+    --background: #000;
+}
+
+.native-scanner-active .native-scanner-launcher {
+    visibility: hidden;
+    opacity: 0;
+}
+
 .qrwerk-launcher-logo {
     display: block;
     width: min(210px, 52vw);
