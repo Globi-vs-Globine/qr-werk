@@ -164,6 +164,10 @@ export class QrCodePage {
     this.router.navigate(['setting-qr']);
   }
 
+  close(): void {
+    this.modalController.dismiss();
+  }
+
   async shareQrCode(): Promise<void> {
     const loading = await this.presentLoading(this.translate.instant('PREPARING'));
     this.isSharing = true;

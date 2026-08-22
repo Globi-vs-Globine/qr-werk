@@ -34,12 +34,6 @@ export class SettingAutoQrPage {
     await this.tapHaptic();
   }
 
-  async onShowQrAfterLogViewChange(ev: any) {
-    this.env.showQrAfterLogView = ev ? 'on' : 'off';
-    await Preferences.set({ key: this.env.KEY_SHOW_QR_AFTER_LOG_VIEW, value: this.env.showQrAfterLogView });
-    await this.tapHaptic();
-  }
-
   async onShowQrAfterBookmarkViewChange(ev: any) {
     this.env.showQrAfterBookmarkView = ev ? 'on' : 'off';
     await Preferences.set({ key: this.env.KEY_SHOW_QR_AFTER_BOOKMARK_VIEW, value: this.env.showQrAfterBookmarkView });

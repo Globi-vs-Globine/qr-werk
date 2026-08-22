@@ -116,11 +116,6 @@ export class ResultPage {
       ) {
         this.showQrFirst = true;
       } else if (
-        this.env.detailedRecordSource == 'view-log' &&
-        this.env.showQrAfterLogView == 'on'
-      ) {
-        this.showQrFirst = true;
-      } else if (
         this.env.detailedRecordSource == 'view-bookmark' &&
         this.env.showQrAfterBookmarkView == 'on'
       ) {
