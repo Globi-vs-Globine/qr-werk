@@ -81,8 +81,10 @@ export class ScanPage {
       await StatusBar.setBackgroundColor({ color: '#000000' });
     }
     if (this.router.url.startsWith('/tabs/import-image')) {
+      this.env.openScannerOnNextScanEntry = false;
       await this.scanFromImage();
-    } else {
+    } else if (!this.usesNativeScanner || this.env.openScannerOnNextScanEntry) {
+      this.env.openScannerOnNextScanEntry = false;
       await this.prepareScanner();
     }
   }

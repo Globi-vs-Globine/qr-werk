@@ -166,6 +166,7 @@ export class EnvService {
   viewResultFrom: '/tabs/scan' | '/tabs/generate' | '/tabs/history' | undefined;
 
   public firstAppLoad: boolean = true;  // once loaded, turn it false
+  public openScannerOnNextScanEntry: boolean = false;
 
   initObservable: Observable<boolean> | undefined;
 

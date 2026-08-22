@@ -74,6 +74,9 @@ export class TabsPage {
             return;
           }
           console.log(`tabs.page.ts - ionViewDidEnter() - env.startPage: ${this.env.startPage}`)
+          // Only the initial app navigation may open the native camera
+          // automatically. Later tab changes should show the scan choices.
+          this.env.openScannerOnNextScanEntry = this.env.startPage === '/tabs/scan';
           await this.router.navigate([this.env.startPage], { replaceUrl: true });
         }
       });
