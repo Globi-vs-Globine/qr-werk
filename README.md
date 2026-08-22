@@ -1,165 +1,89 @@
-# Simple QR
+# Simple QR – iOS fork
 
-[![License](https://img.shields.io/github/license/tomfong/simple-qr?style=flat)](https://github.com/tomfong/simple-qr/blob/main/LICENSE)
-[![Last Updated](https://img.shields.io/badge/Last%20Updated-2026--04--09-brightgreen.svg)](https://github.com/tomfong/simple-qr)
+[![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-orange.svg)](LICENSE)
+[![Status: Development](https://img.shields.io/badge/status-development-blue.svg)](https://github.com/Globi-vs-Globine/simple-qr/tree/dev/ios-history-export)
 
-> **IMPORTANT NOTE**  
-Simple QR now uses `@capacitor-mlkit/barcode-scanning (ML Kit)` instead of `@capacitor-community/barcode-scanner (ZXing)`.
+This repository is an iOS-focused fork of [tomfong/simple-qr](https://github.com/tomfong/simple-qr). It keeps the original project and its contributors visible while extending the app under the GNU General Public License v3.0.
 
-<p align="center"><br><img src="https://raw.githubusercontent.com/tomfong/simple-qr/main/.github/images/icon_round.png" width="100" height="100" /></p>
-<p align="center">
-  <strong>
-    Simple QR  
-  </strong>
-</p>
-<br>
-<p align="center">
-  <img height="300" src="https://raw.githubusercontent.com/tomfong/simple-qr/main/.github/images/00.png">
-  <img height="300" src="https://raw.githubusercontent.com/tomfong/simple-qr/main/.github/images/01.png">
-  <img height="300" src="https://raw.githubusercontent.com/tomfong/simple-qr/main/.github/images/02.png">
-  <img height="300" src="https://raw.githubusercontent.com/tomfong/simple-qr/main/.github/images/03.png">
-  <img height="300" src="https://raw.githubusercontent.com/tomfong/simple-qr/main/.github/images/04.png">
-  <img height="300" src="https://raw.githubusercontent.com/tomfong/simple-qr/main/.github/images/05.png">
-  <img height="300" src="https://raw.githubusercontent.com/tomfong/simple-qr/main/.github/images/06.png">
-</p>
+> **Development status**
+>
+> This fork is currently being developed and tested. It has not been published by the fork owner in the Apple App Store or Google Play Store. Store download and rating links therefore are not available yet.
 
-## About
+## Deutsch
 
-Simple QR is a lightweight, privacy-first QR and barcode app. It’s designed to be fast and easy to use for everyday scanning and QR creation, with a clean UI and **no backend**, **no ads**, and **no data collection**. It works offline (except for actions you explicitly trigger, like opening a link or searching the web).
+Simple QR ist eine datenschutzfreundliche App zum Scannen, Erstellen und Organisieren von QR-Codes und Barcodes. Dieser Fork konzentriert sich insbesondere auf eine zuverlässige iOS-Version, Mehrfach-Scans, Bildimporte, Gruppen sowie den flexiblen Export der Scan-Historie.
 
-It's now available on the following platforms.
+Die Verarbeitung und die Historie bleiben grundsätzlich lokal auf dem Gerät. Eine Internetverbindung wird nur für Aktionen verwendet, die der Benutzer ausdrücklich auslöst, beispielsweise das Öffnen einer Internetadresse.
 
-| Google Play | GitHub | 
-|:-:|:-:|
-| [<img src="https://raw.githubusercontent.com/tomfong/simple-qr/main/.github/images/google-play-badge.png" height="50">](https://play.google.com/store/apps/details?id=com.tomfong.simpleqr) | [<img src="https://raw.githubusercontent.com/tomfong/simple-qr/main/.github/images/github-badge.png" height="50">](https://github.com/tomfong/simple-qr/releases/latest) | 
+## Current features / Aktuelle Funktionen
 
-Author: Tom FONG
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat&logo=github&logoColor=white)](https://github.com/tomfong)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tom-lh-fong/)
+### Scanning / Scannen
 
-## Features
+- Scan QR codes and common barcode formats with the native iOS camera scanner.
+- Supported formats include QR Code, EAN-8, EAN-13, UPC-A, UPC-E, Code 39, Code 93, Code 128, Codabar, ITF, Aztec, Data Matrix and PDF417.
+- Batch scan multiple codes consecutively and save them directly to a group.
+- Import one or multiple images from the photo library.
+- Detect multiple codes in one image.
+- Review detected codes and save all or only a selected subset.
 
-### Scan
+### History and groups / Protokoll und Gruppen
 
-- Scan **QR codes and many common barcode formats** quickly (e.g. UPC/EAN, Code 39/93/128, ITF, Codabar, Aztec, Data Matrix, PDF417, etc.)
-- Scan from your **camera** or **import an image** and decode the code from it
-- (Android) Start scanning quickly from the **Quick Settings tile**
+- Keep a local history of scanned, imported and created codes.
+- Bookmark important entries.
+- Create, rename and delete groups independently of existing entries.
+- Move individual entries into groups.
+- Collapse and expand groups for a clearer overview.
+- Select individual entries or entire groups for export.
+- Export as CSV or TXT, either with complete record details or only the code contents.
+- Copy selected code contents directly to the clipboard.
+- Back up and restore records.
 
-### Create
+### Creating and actions / Erstellen und Aktionen
 
-- Create QR codes using templates:
-  - Free Text, URL, vCard Contact, Phone Number, Message, Email, Wi‑Fi, Geolocation
-- Generate a shareable QR code from any result content
-- Create QR codes from content **shared to Simple QR** from other apps (Android share sheet)
+- Create QR codes from text, URLs, contacts, phone numbers, messages, email addresses, Wi-Fi access data and locations.
+- Use context-sensitive actions such as opening links, copying content or starting a web search.
+- Customize generated QR codes and app appearance.
 
-### Organize
+## Privacy / Datenschutz
 
-- Automatically keep a **history** of what you scan/create/view
-- **Bookmark** frequently used items for quick access
-- **Backup/restore** your records
+The app has no advertising backend and does not require an account. Scan history and groups are stored locally. Camera and photo-library access are used only for scanning or importing codes initiated by the user.
 
-### Actions & utilities
+See [PRIVACY.md](PRIVACY.md) for the privacy information maintained with this fork. The document must be reviewed again before any public App Store release.
 
-- One-tap actions based on content type (open URLs/apps, add contacts from vCards, call phone numbers, send SMS/email, open locations in maps)
-- Quick tools like **copy to clipboard**, **web search**, and **Base64 encode/decode**
+## iOS development
 
-### Personalize
+Detailed prerequisites, build instructions, known iOS hurdles and GPL notes are documented in [docs/ios-development.md](docs/ios-development.md).
 
-- Customize generated QR codes (e.g. error correction, colors, margin) and adjust **screen brightness**
-- Customize the app (e.g. start page, language, theme)
-
-### Demo
-
-[![Simple QR Demo on YouTube](https://img.youtube.com/vi/qGg3F91j90A/0.jpg)](https://www.youtube.com/watch?v=qGg3F91j90A)
-
-### Languages Supported
-
-* English (en)
-* Chinese (Hong Kong) 中文 (香港) (zh-HK)
-* Chinese (Simplified) 简体中文 (zh-CN)
-* German Deutsch (de)
-* French Français (fr)
-* Italian Italiano (it)
-* Portuguese (Brazil) (pt-BR)
-* Russian Русский (ru)
-
-You are welcomed to help translate the app into more languages (refer to this <a href="#how-to-help-translate">section</a>)
-
-## Contribute
-
-* Sponsor the project.
-
-  [![GitHub Sponsor](https://img.shields.io/badge/sponsor-30363D?style=flat&logo=GitHub-Sponsors&logoColor=#white)](https://github.com/sponsors/tomfong?frequency=one-time)
-  [![Buy me a Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-FFDD00?style=flat&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/tomfong)
-
-* Star the project.
-
-  [![Stars](https://img.shields.io/github/stars/tomfong/simple-qr?style=flat)](https://github.com/tomfong/simple-qr/stargazers)
-
-* Open issues to report bugs or share any new ideas.
-
-  [![Issues](https://img.shields.io/github/issues/tomfong/simple-qr?style=flat)](https://github.com/tomfong/simple-qr/issues)
-
-* Translate the app into different languages.
-
-### How to help translate?
-
-1. Take a look at this [JSON](https://github.com/tomfong/simple-qr/blob/master/src/assets/i18n/en.json)
-2. Download it, rename it to <i>locale</i>.json, e.g. ja.json for Japanese, de.json for German
-3. Change the values of each key.
-    * Try to stick to the meaning of the original wordings.
-    * Preserve special characters, e.g. ```<p> <b> \n```.
-    * Preserve wordings with { }, e.g. ```{secret}```.
-    * <b>DO NOT</b> change the key names.
-    * <b>DO NOT</b> change the order.
-4. Email the JSON to me (tomfong.dev@gmail.com) after you finish.
-
-### Build the project
-
-1. Run ```npm install``` to install all dependencies.
-2. Run ```npm run build```
-
-### iOS fork development
-
-This fork contains an iOS preparation branch with portable code-signing settings and native CSV/TXT sharing for the complete scan history. See [docs/ios-development.md](docs/ios-development.md) for prerequisites, build steps, known hurdles and GPL notes.
-
-### Contributors
-
-Thank you the following contributors who have made the app better!
-
-| Name | GitHub | How? |
-|:-:|:-:|:-:|
-| mondstern | [mondlicht-und-sterne](https://github.com/mondlicht-und-sterne) | German language translation |
-| Valentino Bocchetti | [luftmensch-luftmensch](https://github.com/luftmensch-luftmensch) | Italian language translation |
-| Smooth-E | [Smooth-E](https://github.com/Smooth-E) | Russian language translation |
-| Daniel Ribeiro | [drcsj](https://github.com/drcsj) | Portuguese (Brazil) language translation |
-
-## Framework
+Basic development flow:
 
 ```sh
-  Ionic:
-    Ionic CLI                     : 7.2.1 
-    Ionic Framework               : @ionic/angular 8.7.3
-    @angular-devkit/build-angular : 20.2.0
-    @angular-devkit/schematics    : 20.2.0
-    @angular/cli                  : 20.2.0
-    @ionic/angular-toolkit        : 11.0.1
-
-  Capacitor:
-    Capacitor CLI      : 7.4.3
-    @capacitor/android : 7.4.3
-    @capacitor/core    : 7.4.3
-    @capacitor/ios     : 7.4.3
+npm install
+npm run build
+npx cap sync ios
 ```
 
-## Privacy Policy
+Then open `ios/App/App.xcworkspace` in Xcode. A unique bundle identifier and a valid Apple development team are required to install the app on a physical iPhone or iPad.
 
-Please read the [Privacy Policy](https://www.privacypolicies.com/live/771b1123-99bb-4bfe-815e-1046c0437a0f)
+## Project status and releases / Projektstatus und Versionen
 
-## License
+- Active development takes place on [`dev/ios-history-export`](https://github.com/Globi-vs-Globine/simple-qr/tree/dev/ios-history-export).
+- Changes are reviewed through pull requests before they are merged into `main`.
+- This fork currently provides no official App Store, Google Play or packaged GitHub release.
+- Bugs and feature requests for this fork belong in its [GitHub Issues](https://github.com/Globi-vs-Globine/simple-qr/issues).
 
-[![License](https://img.shields.io/github/license/tomfong/simple-qr?style=flat)](https://github.com/tomfong/simple-qr/blob/main/LICENSE)
+## Origin and attribution / Herkunft und Namensnennung
 
----
+The original Simple QR project was created by **Tom Fong** and is available at [tomfong/simple-qr](https://github.com/tomfong/simple-qr). The original contributors and their work remain documented through the Git history and the upstream repository.
 
-_SIMPLE DEV ． SIMPLER WORLD_
+This fork is maintained independently at [Globi-vs-Globine/simple-qr](https://github.com/Globi-vs-Globine/simple-qr). Upstream store publications, personal profiles, sponsorship pages and demonstrations are not presented as publications or endorsements of this fork.
+
+## Technology / Technik
+
+- Ionic and Angular
+- Capacitor 7
+- Capacitor ML Kit barcode scanning
+- Native iOS project with CocoaPods
+
+## License / Lizenz
+
+Simple QR and this fork are licensed under the [GNU General Public License v3.0](LICENSE). Copyright notices, Git history, attribution and the corresponding source code must remain available when the software is redistributed.
