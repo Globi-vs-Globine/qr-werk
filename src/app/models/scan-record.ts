@@ -4,4 +4,5 @@ export class ScanRecord {
     createdAt!: Date;
     source: 'create' | 'view' | 'scan' | 'external-share' | undefined;
     barcodeType: string | undefined;
+    group: string | undefined;
 }

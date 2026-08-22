@@ -26,6 +26,7 @@
     "BACKGROUND_COLOR": "背景颜色",
     "BATCH_SCAN": "批量扫描",
     "BATCH_SAVED": "个批量扫描已保存",
+    "GROUP": "组", "GROUP_NAME": "组名", "ALL_GROUPS": "所有组", "UNGROUPED": "未分组", "FULL_DETAILS": "完整数据", "CODES_ONLY": "仅代码", "COPY_CODES": "复制代码", "START": "开始",
     "BACKING_UP": "备份中",
     "BACKUP": "备份",
     "BASE64": "Base64",

@@ -946,12 +946,13 @@ export class EnvService {
     await Preferences.set({ key: this.KEY_QR_CODE_MARGIN, value: JSON.stringify(this.qrCodeMargin) });
   }
 
-  async saveScanRecord(value: string): Promise<void> {
+  async saveScanRecord(value: string, group?: string): Promise<void> {
     const record = new ScanRecord();
     const date = new Date();
     record.id = String(date.getTime());
     record.text = value;
     record.createdAt = date;
+    record.group = group?.trim() || undefined;
     if (this.recordSource != null) {
       record.source = this.recordSource;
       if (this.recordSource == 'scan') {
@@ -977,6 +978,16 @@ export class EnvService {
         this.presentToast("Err when stringify scanRecords: " + JSON.stringify(e), "long", "top");
       }
     }
+  }
+
+  async setScanRecordGroup(id: string, group?: string): Promise<void> {
+    const record = this.scanRecords.find(item => item.id === id);
+    if (!record) return;
+    record.group = group?.trim() || undefined;
+    await Preferences.set({
+      key: this.KEY_SCAN_RECORDS,
+      value: JSON.stringify(this.scanRecords),
+    });
   }
 
   async saveRestoredScanRecords(records: ScanRecord[]): Promise<void> {

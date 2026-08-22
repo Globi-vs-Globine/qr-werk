@@ -403,6 +403,10 @@ export class ScanPage {
   }
 
   async scanBatchUsingNativeInterface(): Promise<void> {
+    const groupName = await this.requestBatchGroupName();
+    if (!groupName) {
+      return;
+    }
     const scannedValues = new Set<string>();
     try {
       while (true) {
@@ -433,7 +437,7 @@ export class ScanPage {
         this.env.recordSource = 'scan';
         this.env.detailedRecordSource = 'scan-camera';
         this.env.resultContentFormat = barcode.format;
-        await this.env.saveScanRecord(value);
+        await this.env.saveScanRecord(value, groupName);
         await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
       }
     } catch (err) {
@@ -452,6 +456,39 @@ export class ScanPage {
         );
       }
     }
+  }
+
+  private async requestBatchGroupName(): Promise<string | null> {
+    return new Promise(async (resolve) => {
+      const alert = await this.alertController.create({
+        header: this.translate.instant('GROUP_NAME'),
+        inputs: [{
+          name: 'group',
+          type: 'text',
+          placeholder: this.translate.instant('GROUP_NAME'),
+          attributes: { maxlength: 40 },
+        }],
+        buttons: [
+          {
+            text: this.translate.instant('CANCEL'),
+            role: 'cancel',
+            handler: () => resolve(null),
+          },
+          {
+            text: this.translate.instant('START'),
+            handler: (data) => {
+              const name = data.group?.trim();
+              if (!name) return false;
+              resolve(name);
+              return true;
+            },
+          },
+        ],
+        backdropDismiss: false,
+        cssClass: ['alert-bg'],
+      });
+      await alert.present();
+    });
   }
 
   async setZoomRatio(event: InputCustomEvent) {

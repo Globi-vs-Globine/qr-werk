@@ -26,6 +26,7 @@
     "BACKGROUND_COLOR": "Couleur de l'arrière plan",
     "BATCH_SCAN": "Scanner en série",
     "BATCH_SAVED": "scans en série enregistrés",
+    "GROUP": "Groupe", "GROUP_NAME": "Nom du groupe", "ALL_GROUPS": "Tous les groupes", "UNGROUPED": "Sans groupe", "FULL_DETAILS": "Détails complets", "CODES_ONLY": "Codes uniquement", "COPY_CODES": "Copier les codes", "START": "Démarrer",
     "BACKING_UP": "Sauvegarde",
     "BACKUP": "Sauvegarde",
     "BASE64": "Base64",

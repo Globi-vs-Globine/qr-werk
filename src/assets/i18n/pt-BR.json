@@ -26,6 +26,7 @@
     "BACKGROUND_COLOR": "Cor de Fundo",
     "BATCH_SCAN": "Digitalização em lote",
     "BATCH_SAVED": "leituras em lote salvas",
+    "GROUP": "Grupo", "GROUP_NAME": "Nome do grupo", "ALL_GROUPS": "Todos os grupos", "UNGROUPED": "Sem grupo", "FULL_DETAILS": "Dados completos", "CODES_ONLY": "Somente códigos", "COPY_CODES": "Copiar códigos", "START": "Iniciar",
     "BACKING_UP": "Fazendo Backup",
     "BACKUP": "Backup",
     "BASE64": "Base64",

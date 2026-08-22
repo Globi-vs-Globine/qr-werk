@@ -44,6 +44,16 @@
     </ng-container>
   </ion-segment>
 
+  <ion-item *ngIf="segmentModel === 'history' && env.scanRecords.length > 0" lines="full">
+    <ion-icon name="folder-outline" slot="start" color="primary"></ion-icon>
+    <ion-select [(ngModel)]="groupFilter" (ionChange)="groupFilterChanged()" [label]="'GROUP' | translate"
+      label-placement="stacked" interface="action-sheet">
+      <ion-select-option value="__all__">{{ 'ALL_GROUPS' | translate }}</ion-select-option>
+      <ion-select-option value="__ungrouped__">{{ 'UNGROUPED' | translate }}</ion-select-option>
+      <ion-select-option *ngFor="let group of groupNames" [value]="group">{{ group }}</ion-select-option>
+    </ion-select>
+  </ion-item>
+
   <!-- When loading -->
   <ng-container *ngIf="isLoading">
     <ion-list>
@@ -140,11 +150,18 @@
                     <span>{{ getBarcodeFormat(record.barcodeType) }}</span>
                   </div>
                 </ion-badge>
+                <ion-badge *ngIf="record.group" class="my-1 ms-1" color="secondary">
+                  <ion-icon name="folder-outline"></ion-icon>
+                  {{ record.group }}
+                </ion-badge>
               </div>
             </ion-label>
           </ion-item>
           <ion-item-options side="start">
-            <ion-item-option [color]="'primary'" expandable (click)="addBookmark(record, slidingItem)">
+            <ion-item-option [color]="'secondary'" (click)="assignGroup(record, slidingItem)">
+              <ion-icon slot="icon-only" name="folder-open"></ion-icon>
+            </ion-item-option>
+            <ion-item-option [color]="'primary'" (click)="addBookmark(record, slidingItem)">
               <ion-icon slot="icon-only" name="bookmark"></ion-icon>
             </ion-item-option>
           </ion-item-options>

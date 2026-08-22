@@ -1,21 +1,25 @@
 import { Injectable } from '@angular/core';
 import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
+import { Clipboard } from '@capacitor/clipboard';
 import { format } from 'date-fns';
 import { Bookmark } from '../models/bookmark';
 import { ScanRecord } from '../models/scan-record';
 
 export type HistoryExportFormat = 'csv' | 'txt';
+export type HistoryExportContent = 'full' | 'codes';
 
 @Injectable({ providedIn: 'root' })
 export class HistoryExportService {
 
-  async exportAndShare(records: ScanRecord[], bookmarks: Bookmark[], exportFormat: HistoryExportFormat): Promise<void> {
+  async exportAndShare(records: ScanRecord[], bookmarks: Bookmark[], exportFormat: HistoryExportFormat, content: HistoryExportContent = 'full'): Promise<void> {
     const timestamp = format(new Date(), 'yyyyMMddHHmmss');
-    const filename = `simpleqr-history-${timestamp}.${exportFormat}`;
-    const data = exportFormat === 'csv'
-      ? this.toCsv(records, bookmarks)
-      : this.toText(records, bookmarks);
+    const filename = `simpleqr-${content === 'codes' ? 'codes' : 'history'}-${timestamp}.${exportFormat}`;
+    const data = content === 'codes'
+      ? this.codesOnly(records)
+      : exportFormat === 'csv'
+        ? this.toCsv(records, bookmarks)
+        : this.toText(records, bookmarks);
 
     const result = await Filesystem.writeFile({
       path: filename,
@@ -35,9 +39,13 @@ export class HistoryExportService {
     }
   }
 
+  async copyCodes(records: ScanRecord[]): Promise<void> {
+    await Clipboard.write({ string: this.codesOnly(records) });
+  }
+
   private toCsv(records: ScanRecord[], bookmarks: Bookmark[]): string {
     const rows: string[][] = [
-      ['ID', 'Content', 'Created at', 'Source', 'Barcode type', 'Bookmarked', 'Tag']
+      ['ID', 'Content', 'Created at', 'Source', 'Barcode type', 'Group', 'Bookmarked', 'Tag']
     ];
 
     records.forEach(record => {
@@ -48,6 +56,7 @@ export class HistoryExportService {
         this.isoDate(record.createdAt),
         record.source ?? '',
         record.barcodeType ?? '',
+        record.group ?? '',
         bookmark ? 'TRUE' : 'FALSE',
         bookmark?.tag ?? ''
       ]);
@@ -56,7 +65,7 @@ export class HistoryExportService {
     bookmarks
       .filter(bookmark => !records.some(record => record.text === bookmark.text))
       .forEach(bookmark => rows.push([
-        '', bookmark.text ?? '', this.isoDate(bookmark.createdAt), '', '', 'TRUE', bookmark.tag ?? ''
+        '', bookmark.text ?? '', this.isoDate(bookmark.createdAt), '', '', '', 'TRUE', bookmark.tag ?? ''
       ]));
 
     return '\uFEFF' + rows.map(row => row.map(value => this.csvCell(value)).join(',')).join('\r\n') + '\r\n';
@@ -70,6 +79,7 @@ export class HistoryExportService {
         `Date: ${this.isoDate(record.createdAt)}`,
         `Source: ${record.source ?? '-'}`,
         `Barcode type: ${record.barcodeType ?? '-'}`,
+        `Group: ${record.group ?? '-'}`,
         `Bookmarked: ${bookmark ? 'yes' : 'no'}`,
         ...(bookmark?.tag ? [`Tag: ${bookmark.tag}`] : []),
         'Content:',
@@ -77,6 +87,10 @@ export class HistoryExportService {
       ].join('\n');
     });
     return lines.join('\n\n---\n\n') + (lines.length ? '\n' : '');
+  }
+
+  private codesOnly(records: ScanRecord[]): string {
+    return records.map(record => record.text ?? '').filter(Boolean).join('\n') + (records.length ? '\n' : '');
   }
 
   private csvCell(value: unknown): string {

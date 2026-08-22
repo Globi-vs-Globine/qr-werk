@@ -11,7 +11,7 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Toast } from '@capacitor/toast';
 import { fastFadeIn, flyOut } from 'src/app/utils/animations';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { HistoryExportFormat, HistoryExportService } from 'src/app/services/history-export.service';
+import { HistoryExportContent, HistoryExportFormat, HistoryExportService } from 'src/app/services/history-export.service';
 
 @Component({
     selector: 'app-history',
@@ -29,6 +29,18 @@ export class HistoryPage {
   dummyArr = Array.from(Array(10).keys());
 
   isLoading: boolean = false;
+  groupFilter: string = '__all__';
+
+  get groupNames(): string[] {
+    return [...new Set(this.env.scanRecords.map(record => record.group).filter((group): group is string => !!group))]
+      .sort((a, b) => a.localeCompare(b));
+  }
+
+  get filteredScanRecords(): ScanRecord[] {
+    if (this.groupFilter === '__all__') return this.env.scanRecords;
+    if (this.groupFilter === '__ungrouped__') return this.env.scanRecords.filter(record => !record.group);
+    return this.env.scanRecords.filter(record => record.group === this.groupFilter);
+  }
 
   constructor(
     public alertController: AlertController,
@@ -58,7 +70,7 @@ export class HistoryPage {
     }
     this.env.viewingScanRecords = [];
     this.env.viewingBookmarks = [];
-    const scanRecords = [...this.env.scanRecords];
+    const scanRecords = [...this.filteredScanRecords];
     this.env.viewingScanRecords = scanRecords.slice(0, 15);
     const bookmarks = [...this.env.bookmarks];
     this.env.viewingBookmarks = bookmarks.slice(0, 15);
@@ -66,7 +78,7 @@ export class HistoryPage {
   }
 
   loadMoreScanRecords() {
-    const scanRecords = [...this.env.scanRecords]
+    const scanRecords = [...this.filteredScanRecords]
     this.env.viewingScanRecords.push(...scanRecords.slice(this.env.viewingScanRecords.length, this.env.viewingScanRecords.length + 15));
   }
 
@@ -79,7 +91,7 @@ export class HistoryPage {
     setTimeout(() => {
       ev.target.complete();
       this.loadMoreScanRecords();
-      if (this.env.viewingScanRecords.length === this.env.scanRecords.length) {
+      if (this.env.viewingScanRecords.length === this.filteredScanRecords.length) {
         ev.target.disabled = true;
       }
     }, 500);
@@ -231,6 +243,36 @@ export class HistoryPage {
 
   async segmentChanged(ev: any) {
     this.firstLoadItems();
+  }
+
+  groupFilterChanged() {
+    this.firstLoadItems();
+  }
+
+  async assignGroup(record: ScanRecord, slidingItem: IonItemSliding) {
+    await slidingItem.close();
+    const alert = await this.alertController.create({
+      header: this.translate.instant('GROUP_NAME'),
+      inputs: [{
+        name: 'group',
+        type: 'text',
+        value: record.group ?? '',
+        placeholder: this.translate.instant('GROUP_NAME'),
+        attributes: { maxlength: 40 },
+      }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('SAVE'),
+          handler: async data => {
+            await this.env.setScanRecordGroup(record.id, data.group);
+            this.firstLoadItems();
+          },
+        },
+      ],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
   }
 
   async addBookmark(record: ScanRecord, slidingItem: IonItemSliding) {
@@ -459,18 +501,20 @@ export class HistoryPage {
     const actionSheet = await this.actionSheetController.create({
       header: this.translate.instant('EXPORT'),
       buttons: [
-        { text: 'CSV', icon: 'document-text', handler: () => this.shareHistory('csv') },
-        { text: 'TXT', icon: 'reader', handler: () => this.shareHistory('txt') },
+        { text: `${this.translate.instant('FULL_DETAILS')} (CSV)`, icon: 'document-text', handler: () => this.shareHistory('csv', 'full') },
+        { text: `${this.translate.instant('FULL_DETAILS')} (TXT)`, icon: 'reader', handler: () => this.shareHistory('txt', 'full') },
+        { text: `${this.translate.instant('CODES_ONLY')} (TXT)`, icon: 'list', handler: () => this.shareHistory('txt', 'codes') },
+        { text: this.translate.instant('COPY_CODES'), icon: 'copy', handler: () => this.copyCodes() },
         { text: this.translate.instant('CANCEL'), role: 'cancel' }
       ]
     });
     await actionSheet.present();
   }
 
-  private async shareHistory(exportFormat: HistoryExportFormat) {
+  private async shareHistory(exportFormat: HistoryExportFormat, content: HistoryExportContent) {
     const loading = await this.presentLoading(this.translate.instant('EXPORTING'));
     try {
-      await this.historyExportService.exportAndShare(this.env.scanRecords, this.env.bookmarks, exportFormat);
+      await this.historyExportService.exportAndShare(this.filteredScanRecords, this.env.bookmarks, exportFormat, content);
     } catch (err) {
       await this.presentToast(
         this.env.isDebugging ? `Export failed: ${JSON.stringify(err)}` : this.translate.instant('MSG.EXPORT_FAILED'),
@@ -480,6 +524,11 @@ export class HistoryPage {
     } finally {
       await loading.dismiss();
     }
+  }
+
+  private async copyCodes() {
+    await this.historyExportService.copyCodes(this.filteredScanRecords);
+    await this.presentToast(this.translate.instant('COPIED'), 'short', 'bottom');
   }
 
   goSetting() {
