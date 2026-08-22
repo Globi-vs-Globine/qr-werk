@@ -20,8 +20,9 @@ if (!fs.existsSync(scannerViewPath)) {
 let source = fs.readFileSync(scannerViewPath, 'utf8');
 const patchMarker = 'QRWerk: reveal the guide only after the camera preview has started.';
 const zoomPatchMarker = 'QRWerk: offer a simple 1x/2x scanner zoom control.';
+const scannerPolishPatchMarker = 'QRWerk: keep all scanner controls within easy thumb reach.';
 
-if (source.includes(patchMarker) && source.includes(zoomPatchMarker)) {
+if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker)) {
   console.log('QRWerk ML Kit iOS scanner UI patch already applied.');
   process.exit(0);
 }
@@ -155,6 +156,50 @@ replaceOnce(
     `    }\n\n` +
     `    private func revealDetectionAreaAfterCameraPreviewStarts() {\n`,
   'zoom controls',
+);
+}
+
+if (!source.includes(scannerPolishPatchMarker)) {
+replaceOnce(
+  `    private func addCancelButton() {\n`,
+  `    // QRWerk: keep all scanner controls within easy thumb reach.\n` +
+    `    private func addCancelButton() {\n`,
+  'scanner controls marker',
+);
+
+replaceOnce(
+  `        if interfaceOrientation.isPortrait {\n` +
+    `            button.frame = CGRect(x: 20, y: 50, width: 50, height: 50)\n` +
+    `        } else {\n` +
+    `            button.frame = CGRect(x: 20, y: 20, width: 50, height: 50)\n` +
+    `        }\n`,
+  `        _ = interfaceOrientation\n` +
+    `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 105, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  'bottom cancel button',
+);
+
+replaceOnce(
+  `        button.layer.cornerRadius = 10\n`,
+  `        button.layer.cornerRadius = button.bounds.size.width / 2\n`,
+  'round cancel button',
+);
+
+replaceOnce(
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 25, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 30, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  'center torch button',
+);
+
+replaceOnce(
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) + 50, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) + 45, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  'align zoom button',
+);
+
+replaceOnce(
+  `        view.layer.borderColor = UIColor.white.cgColor\n`,
+  `        view.layer.borderColor = UIColor(red: 0, green: 165.0 / 255.0, blue: 170.0 / 255.0, alpha: 1).cgColor\n`,
+  'petrol detection guide',
 );
 }
 

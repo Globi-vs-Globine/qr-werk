@@ -5,3 +5,18 @@ mat-form-field {
 ::ng-deep .mat-form-field.mat-focused .mat-form-field-underline {
     display: none;
 }
+
+// Make the content-type control look interactive even before it is opened.
+::ng-deep .content-type-selector {
+    .mat-form-field-outline,
+    .mat-form-field-label,
+    .mat-select-arrow,
+    .mat-select-trigger,
+    mat-icon {
+        color: #00a5aa !important;
+    }
+
+    .mat-form-field-outline-thick {
+        opacity: 1 !important;
+    }
+}
