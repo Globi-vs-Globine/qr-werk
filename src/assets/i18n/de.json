@@ -28,6 +28,7 @@
     "BATCH_SAVED": "Batch-Scans gespeichert",
     "SAVE_ALL": "Alle speichern",
     "SAVE_SELECTION": "Auswahl speichern",
+    "CREATE_GROUP": "Gruppe erstellen", "DELETE_GROUP": "Gruppe löschen", "GROUP_DELETE_INFO": "Die enthaltenen Codes werden nach Ohne Gruppe verschoben.", "EXPORT_SCOPE": "Was möchtest du exportieren?", "CURRENT_FILTER": "Aktuelle Ansicht", "SELECT_GROUPS": "Gruppen auswählen", "SELECT_CODES": "Codes auswählen", "CONTINUE": "Weiter",
     "GROUP": "Gruppe",
     "GROUP_NAME": "Gruppenname",
     "ALL_GROUPS": "Alle Gruppen",

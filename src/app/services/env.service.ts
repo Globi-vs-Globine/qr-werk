@@ -990,6 +990,16 @@ export class EnvService {
     });
   }
 
+  async removeScanRecordGroup(group: string): Promise<void> {
+    this.scanRecords
+      .filter(record => record.group === group)
+      .forEach(record => delete record.group);
+    await Preferences.set({
+      key: this.KEY_SCAN_RECORDS,
+      value: JSON.stringify(this.scanRecords),
+    });
+  }
+
   async saveRestoredScanRecords(records: ScanRecord[]): Promise<void> {
     records.forEach(
       r => {

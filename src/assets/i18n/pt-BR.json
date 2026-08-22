@@ -28,6 +28,7 @@
     "BATCH_SAVED": "leituras em lote salvas",
     "SAVE_ALL": "Salvar tudo",
     "SAVE_SELECTION": "Salvar seleção",
+    "CREATE_GROUP": "Criar grupo", "DELETE_GROUP": "Excluir grupo", "GROUP_DELETE_INFO": "Os códigos serão movidos para Sem grupo.", "EXPORT_SCOPE": "O que deseja exportar?", "CURRENT_FILTER": "Visualização atual", "SELECT_GROUPS": "Selecionar grupos", "SELECT_CODES": "Selecionar códigos", "CONTINUE": "Continuar",
     "GROUP": "Grupo", "GROUP_NAME": "Nome do grupo", "ALL_GROUPS": "Todos os grupos", "UNGROUPED": "Sem grupo", "FULL_DETAILS": "Dados completos", "CODES_ONLY": "Somente códigos", "COPY_CODES": "Copiar códigos", "START": "Iniciar",
     "BACKING_UP": "Fazendo Backup",
     "BACKUP": "Backup",

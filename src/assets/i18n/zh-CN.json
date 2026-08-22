@@ -28,6 +28,7 @@
     "BATCH_SAVED": "个批量扫描已保存",
     "SAVE_ALL": "全部保存",
     "SAVE_SELECTION": "保存所选项",
+    "CREATE_GROUP": "创建组", "DELETE_GROUP": "删除组", "GROUP_DELETE_INFO": "其中的代码将移至未分组。", "EXPORT_SCOPE": "要导出什么？", "CURRENT_FILTER": "当前视图", "SELECT_GROUPS": "选择组", "SELECT_CODES": "选择代码", "CONTINUE": "继续",
     "GROUP": "组", "GROUP_NAME": "组名", "ALL_GROUPS": "所有组", "UNGROUPED": "未分组", "FULL_DETAILS": "完整数据", "CODES_ONLY": "仅代码", "COPY_CODES": "复制代码", "START": "开始",
     "BACKING_UP": "备份中",
     "BACKUP": "备份",

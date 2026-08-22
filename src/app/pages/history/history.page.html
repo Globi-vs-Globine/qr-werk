@@ -44,7 +44,7 @@
     </ng-container>
   </ion-segment>
 
-  <ion-item *ngIf="segmentModel === 'history' && env.scanRecords.length > 0" lines="full">
+  <ion-item *ngIf="segmentModel === 'history'" lines="full">
     <ion-icon name="folder-outline" slot="start" color="primary"></ion-icon>
     <ion-select [(ngModel)]="groupFilter" (ionChange)="groupFilterChanged()" [label]="'GROUP' | translate"
       label-placement="stacked" interface="action-sheet">
@@ -52,6 +52,13 @@
       <ion-select-option value="__ungrouped__">{{ 'UNGROUPED' | translate }}</ion-select-option>
       <ion-select-option *ngFor="let group of groupNames" [value]="group">{{ group }}</ion-select-option>
     </ion-select>
+    <ion-button slot="end" fill="clear" (click)="createGroup()">
+      <ion-icon slot="icon-only" name="folder-open-outline"></ion-icon>
+    </ion-button>
+    <ion-button *ngIf="groupFilter !== '__all__' && groupFilter !== '__ungrouped__'" slot="end" fill="clear"
+      color="danger" (click)="deleteSelectedGroup()">
+      <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+    </ion-button>
   </ion-item>
 
   <!-- When loading -->
@@ -131,7 +138,7 @@
 
         <ng-container *ngIf="!isGroupCollapsed(group.key)">
           <ng-container *ngFor="let record of group.records; trackBy: scanRecordsTrackByFn; index as i;">
-            <ion-item-sliding #slidingItem [@fastInAnimation] [@flyOut]>
+            <ion-item-sliding #slidingItem>
               <ion-item class="ion-no-padding ripple-parent" detail="false"
                 [lines]="i === group.records.length - 1? 'none' : 'full'"
                 (click)="viewRecord(record.text, 'view-log')">
