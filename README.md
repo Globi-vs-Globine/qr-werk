@@ -119,6 +119,10 @@ You are welcomed to help translate the app into more languages (refer to this <a
 1. Run ```npm install``` to install all dependencies.
 2. Run ```npm run build```
 
+### iOS fork development
+
+This fork contains an iOS preparation branch with portable code-signing settings and native CSV/TXT sharing for the complete scan history. See [docs/ios-development.md](docs/ios-development.md) for prerequisites, build steps, known hurdles and GPL notes.
+
 ### Contributors
 
 Thank you the following contributors who have made the app better!
