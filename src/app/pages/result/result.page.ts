@@ -163,6 +163,7 @@ export class ResultPage {
     }
     if (
       this.env.scanRecordLogging == 'on' &&
+      this.env.recordSource !== 'view' &&
       this.qrCodeContent != null &&
       this.qrCodeContent != ''
     ) {
