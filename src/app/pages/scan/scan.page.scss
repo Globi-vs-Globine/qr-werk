@@ -57,10 +57,12 @@ ion-fab {
     height: 100%;
 }
 
-.native-scanner-launcher ion-icon {
-    color: #00a5aa;
-    font-size: 112px;
-    opacity: 0.8;
+.qrwerk-launcher-logo {
+    display: block;
+    width: min(210px, 52vw);
+    height: auto;
+    max-height: 260px;
+    object-fit: contain;
 }
 
 .native-scanner-actions {
