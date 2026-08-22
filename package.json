@@ -3,6 +3,7 @@
   "version": "5.1.1",
   "author": "Tom Fong",
   "scripts": {
+    "postinstall": "node scripts/patch-mlkit-ios-scanner.js",
     "ng": "ng",
     "build:an": "ionic cap build android --prod --no-open",
     "build:ios": "ionic cap build ios --prod --no-open",
