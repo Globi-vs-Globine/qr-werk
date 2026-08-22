@@ -174,6 +174,11 @@ export class ScanPage {
   }
 
   async scanQrUsingMlkitModule(): Promise<void> {
+    if (this.platform.is('ios')) {
+      await this.scanQrUsingNativeInterface();
+      return;
+    }
+
     await this.stopScannerUsingMlkitModule();
     document.querySelector('body')?.classList.add('barcode-scanning-active');
 
@@ -348,6 +353,45 @@ export class ScanPage {
       BarcodeScanner.getMaxZoomRatio().then((result) => {
         this.maxZoomRatio = result.zoomRatio;
       });
+    }
+  }
+
+  private async scanQrUsingNativeInterface(): Promise<void> {
+    try {
+      const { barcodes } = await BarcodeScanner.scan({
+        formats: [
+          BarcodeFormat.Aztec,
+          BarcodeFormat.Codabar,
+          BarcodeFormat.Code128,
+          BarcodeFormat.Code39,
+          BarcodeFormat.Code93,
+          BarcodeFormat.DataMatrix,
+          BarcodeFormat.Ean13,
+          BarcodeFormat.Ean8,
+          BarcodeFormat.Itf,
+          BarcodeFormat.Pdf417,
+          BarcodeFormat.QrCode,
+          BarcodeFormat.UpcA,
+          BarcodeFormat.UpcE,
+        ],
+      });
+      const firstBarcode = barcodes[0];
+      const text = firstBarcode?.rawValue;
+      if (!firstBarcode || !text?.trim()) {
+        return;
+      }
+      if (this.env.vibration === 'on' || this.env.vibration === 'on-scanned') {
+        await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
+      }
+      this.processQrCode(text, firstBarcode.format);
+    } catch (err) {
+      if (this.env.debugMode === 'on') {
+        await Toast.show({
+          text: `Scanner error: ${JSON.stringify(err)}`,
+          position: 'top',
+          duration: 'long',
+        });
+      }
     }
   }
 
