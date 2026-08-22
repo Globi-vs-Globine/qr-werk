@@ -27,6 +27,7 @@
     "BATCH_SCAN": "Batch scan",
     "BATCH_SAVED": "batch scans saved",
     "SAVE_ALL": "Save all",
+    "SAVE_SELECTION": "Save selection",
     "GROUP": "Group",
     "GROUP_NAME": "Group name",
     "ALL_GROUPS": "All groups",

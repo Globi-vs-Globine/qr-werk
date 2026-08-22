@@ -27,6 +27,7 @@
     "BATCH_SCAN": "批量掃描",
     "BATCH_SAVED": "個批量掃描已儲存",
     "SAVE_ALL": "全部儲存",
+    "SAVE_SELECTION": "儲存所選項",
     "GROUP": "群組", "GROUP_NAME": "群組名稱", "ALL_GROUPS": "所有群組", "UNGROUPED": "未分組", "FULL_DETAILS": "完整資料", "CODES_ONLY": "僅代碼", "COPY_CODES": "複製代碼", "START": "開始",
     "BACKING_UP": "備份中",
     "BACKUP": "備份",

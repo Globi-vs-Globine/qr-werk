@@ -27,6 +27,7 @@
     "BATCH_SCAN": "Scansione in serie",
     "BATCH_SAVED": "scansioni in serie salvate",
     "SAVE_ALL": "Salva tutto",
+    "SAVE_SELECTION": "Salva selezione",
     "GROUP": "Gruppo", "GROUP_NAME": "Nome gruppo", "ALL_GROUPS": "Tutti i gruppi", "UNGROUPED": "Senza gruppo", "FULL_DETAILS": "Dettagli completi", "CODES_ONLY": "Solo codici", "COPY_CODES": "Copia codici", "START": "Avvia",
     "BACKING_UP": "Eseguendo il backup",
     "BACKUP": "Backup",

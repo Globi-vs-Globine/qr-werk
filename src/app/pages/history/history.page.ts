@@ -30,6 +30,7 @@ export class HistoryPage {
 
   isLoading: boolean = false;
   groupFilter: string = '__all__';
+  collapsedGroups = new Set<string>();
 
   get groupNames(): string[] {
     return [...new Set(this.env.scanRecords.map(record => record.group).filter((group): group is string => !!group))]
@@ -40,6 +41,39 @@ export class HistoryPage {
     if (this.groupFilter === '__all__') return this.env.scanRecords;
     if (this.groupFilter === '__ungrouped__') return this.env.scanRecords.filter(record => !record.group);
     return this.env.scanRecords.filter(record => record.group === this.groupFilter);
+  }
+
+  get groupedScanRecords(): Array<{ key: string; name: string; records: ScanRecord[] }> {
+    const groups = new Map<string, ScanRecord[]>();
+    for (const record of this.filteredScanRecords) {
+      const key = record.group || '__ungrouped__';
+      const records = groups.get(key) ?? [];
+      records.push(record);
+      groups.set(key, records);
+    }
+    return [...groups.entries()]
+      .map(([key, records]) => ({
+        key,
+        name: key === '__ungrouped__' ? this.translate.instant('UNGROUPED') : key,
+        records,
+      }))
+      .sort((a, b) => {
+        if (a.key === '__ungrouped__') return 1;
+        if (b.key === '__ungrouped__') return -1;
+        return a.name.localeCompare(b.name);
+      });
+  }
+
+  toggleGroup(key: string): void {
+    if (this.collapsedGroups.has(key)) {
+      this.collapsedGroups.delete(key);
+    } else {
+      this.collapsedGroups.add(key);
+    }
+  }
+
+  isGroupCollapsed(key: string): boolean {
+    return this.collapsedGroups.has(key);
   }
 
   constructor(

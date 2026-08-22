@@ -697,36 +697,49 @@ export class ScanPage {
 
     const alert = await this.alertController.create({
       header: `${barcodes.length} ${this.translate.instant('SCANNED')}`,
+      inputs: barcodes.map((barcode, index) => ({
+        type: 'checkbox',
+        label: barcode.displayValue || barcode.rawValue,
+        value: String(index),
+        checked: true,
+      })),
       buttons: [
         {
           text: this.translate.instant('SAVE_ALL'),
-          handler: async () => {
-            for (const barcode of barcodes) {
-              this.env.recordSource = 'scan';
-              this.env.detailedRecordSource = 'scan-image';
-              this.env.resultContentFormat = barcode.format;
-              await this.env.saveScanRecord(barcode.rawValue);
-            }
-            delete this.env.recordSource;
-            delete this.env.detailedRecordSource;
-            await this.presentToast(
-              `${barcodes.length} ${this.translate.instant('SAVED')}`,
-              'short',
-              'bottom',
-            );
+          handler: async () => this.saveImportedBarcodes(barcodes),
+        },
+        {
+          text: this.translate.instant('SAVE_SELECTION'),
+          handler: async (selectedIndexes: string[]) => {
+            const selected = selectedIndexes
+              .map(index => barcodes[Number(index)])
+              .filter((barcode): barcode is Barcode => !!barcode);
+            if (!selected.length) return false;
+            await this.saveImportedBarcodes(selected);
+            return true;
           },
         },
-        ...barcodes.map((barcode) => ({
-          text: barcode.displayValue || barcode.rawValue,
-          handler: () => {
-            this.processQrCode(barcode.rawValue, barcode.format, 'scan-image');
-          },
-        })),
-        { text: this.translate.instant('CLOSE'), role: 'cancel' },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
       ],
       cssClass: ['alert-can-copy'],
     });
     await alert.present();
+  }
+
+  private async saveImportedBarcodes(barcodes: Barcode[]): Promise<void> {
+    for (const barcode of barcodes) {
+      this.env.recordSource = 'scan';
+      this.env.detailedRecordSource = 'scan-image';
+      this.env.resultContentFormat = barcode.format;
+      await this.env.saveScanRecord(barcode.rawValue);
+    }
+    delete this.env.recordSource;
+    delete this.env.detailedRecordSource;
+    await this.presentToast(
+      `${barcodes.length} ${this.translate.instant('SAVED')}`,
+      'short',
+      'bottom',
+    );
   }
 
   private async convertDataUrlToImageData(
