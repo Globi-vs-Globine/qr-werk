@@ -1,7 +1,7 @@
 {
   "name": "qr-werk",
   "version": "5.1.1",
-  "author": "Tom Fong",
+  "author": "Tom Fong; QR Werk fork maintained by Globi-vs-Globine",
   "scripts": {
     "postinstall": "node scripts/patch-mlkit-ios-scanner.js",
     "ng": "ng",

@@ -1,0 +1,22 @@
+QR Werk
+=======
+
+QR Werk is a modified iOS-focused fork of Simple QR.
+
+Original project:
+  Simple QR
+  Copyright (C) 2022 Tom Fong
+  https://github.com/tomfong/simple-qr
+
+Fork and material modifications:
+  Copyright (C) 2026 Globi-vs-Globine contributors
+  https://github.com/Globi-vs-Globine/qr-werk
+
+Material modifications include the iOS and Capacitor setup, native scanner
+workflow, batch scanning, image import, scan filters, history grouping and
+export, QR Werk branding, documentation, translations and user-interface
+changes. The Git history contains the detailed modification dates and authors.
+
+QR Werk is distributed under the GNU General Public License version 3. The
+complete license text is provided in the LICENSE file. Existing copyright and
+attribution notices for the original project and its contributors are retained.
