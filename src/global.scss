@@ -27,6 +27,16 @@
 
 @import "~material-design-icons/iconfont/material-icons.css";
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body,
+ion-app {
+  font-family: var(--ion-font-family);
+}
+
 .text-center-toast {
     text-align: center;
     --max-width: 320px;

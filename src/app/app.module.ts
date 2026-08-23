@@ -21,7 +21,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { DatePipe } from '@angular/common';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EnvService } from './services/env.service';
 import { FormsModule } from '@angular/forms';
 import { QrCodePageModule } from './modals/qr-code/qr-code.module';
@@ -53,7 +52,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         MatFormFieldModule,
         MatSlideToggleModule,
         MatButtonModule,
-        NgbModule,
     ], providers: [
         { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
         EnvService,

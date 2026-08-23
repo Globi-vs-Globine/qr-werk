@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar [color]="env.colorTheme === 'black'? 'black' : 'dark'">
     <ion-buttons slot="start" *ngIf="env.viewResultFrom">
-      <ion-button (click)="tapHaptic(); goBackToOverview()" fill="clear">
+      <ion-button (click)="tapHaptic(); goBackToOverview()" fill="clear" [attr.aria-label]="'BACK' | translate">
         <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -240,11 +240,12 @@
       <div class="d-flex justify-content-between detailed-action-button-container">
         <ion-button
           *ngIf="!resultSaved && this.env.scanRecordLogging == 'off' && this.qrCodeContent != null && this.qrCodeContent != '' "
-          (click)="tapHaptic(); saveRecord()" [color]="env.colorTheme === 'light'? 'dark' : 'light'" fill="clear">
+          (click)="tapHaptic(); saveRecord()" [color]="env.colorTheme === 'light'? 'dark' : 'light'" fill="clear"
+          [attr.aria-label]="'SAVE' | translate">
           <ion-icon slot="icon-only" src="assets/icon/history.svg"></ion-icon>
         </ion-button>
         <ion-button *ngIf="env.showSearchButton === 'on'" (click)="tapHaptic(); webSearch()"
-          [color]="env.colorTheme === 'light'? 'dark' : 'light'" fill="clear"
+          [color]="env.colorTheme === 'light'? 'dark' : 'light'" fill="clear" [attr.aria-label]="'SEARCH' | translate"
           [disabled]="!qrCodeContent || (qrCodeContent && qrCodeContent.trim().length <= 0)">
           <ion-icon *ngIf="env.searchEngine === 'google'" slot="icon-only" name="logo-google">
           </ion-icon>
@@ -262,22 +263,23 @@
           </ion-icon>
         </ion-button>
         <ion-button *ngIf="env.showCopyButton === 'on'" (click)="tapHaptic(); copyText()"
-          [color]="env.colorTheme === 'light'? 'dark' : 'light'" fill="clear"
+          [color]="env.colorTheme === 'light'? 'dark' : 'light'" fill="clear" [attr.aria-label]="'COPY' | translate"
           [disabled]="!qrCodeContent || (qrCodeContent && qrCodeContent.trim().length <= 0)">
           <ion-icon slot="icon-only" name="copy"></ion-icon>
         </ion-button>
         <ion-button *ngIf="env.showBase64Button === 'on'" (click)="tapHaptic(); base64()"
-          [color]="env.colorTheme === 'light'? 'dark' : 'light'" fill="clear"
+          [color]="env.colorTheme === 'light'? 'dark' : 'light'" fill="clear" [attr.aria-label]="'BASE64' | translate"
           [disabled]="!qrCodeContent || (qrCodeContent && qrCodeContent.trim().length <= 0)">
           <ion-icon slot="icon-only" name="code-working"></ion-icon>
         </ion-button>
         <ion-button *ngIf="env.showEnlargeButton === 'on'" (click)="tapHaptic(); enlarge()"
-          [color]="env.colorTheme === 'light'? 'dark' : 'light'" fill="clear"
+          [color]="env.colorTheme === 'light'? 'dark' : 'light'" fill="clear" [attr.aria-label]="'SHOW_QR_CODE' | translate"
           [disabled]="!qrCodeContent || (qrCodeContent && qrCodeContent.trim().length <= 0)">
           <ion-icon slot="icon-only" name="qr-code-sharp"></ion-icon>
         </ion-button>
         <ion-button *ngIf="env.showBookmarkButton === 'on'" (click)="tapHaptic(); handleBookmark()"
           [color]="!bookmarked? (env.colorTheme === 'light'? 'dark' : 'light') : 'warning'" fill="clear"
+          [attr.aria-label]="'BOOKMARK' | translate"
           [disabled]="!qrCodeContent || (qrCodeContent && qrCodeContent.trim().length <= 0)">
           <ion-icon slot="icon-only" name="bookmark"></ion-icon>
         </ion-button>

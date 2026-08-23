@@ -1,2 +1,0 @@
-* Support Open Food Facts
-* Bug fix

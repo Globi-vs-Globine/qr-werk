@@ -1,4 +1,0 @@
-* Support opening app from external share 
-* Improve QR code detection
-* Improve app startup speed
-* UI adjustment

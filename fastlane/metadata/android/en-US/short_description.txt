@@ -1,1 +1,0 @@
-Scan, create and store QR codes with a simple UI and experience

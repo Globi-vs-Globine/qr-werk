@@ -8,29 +8,34 @@ $app-primary: mat.m2-define-palette(mat.$m2-cyan-palette, 600);
 $app-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
 // Define light and dark themes
+$app-typography: mat.m2-define-typography-config(
+  $font-family: (-apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif)
+);
+
 $app-light-theme: mat.m2-define-light-theme((color: (primary: $app-primary,
         accent: $app-primary,
         warn: $app-warn,
       ),
-      typography: mat.m2-define-typography-config(),
+      typography: $app-typography,
       density: 0));
 
 $app-dark-theme: mat.m2-define-dark-theme((color: (primary: $app-primary,
         accent: $app-primary,
         warn: $app-warn,
       ),
-      typography: mat.m2-define-typography-config(),
+      typography: $app-typography,
       density: 0));
 
 $app-black-theme: mat.m2-define-dark-theme((color: (primary: $app-primary,
         accent: $app-primary,
         warn: $app-warn,
       ),
-      typography: mat.m2-define-typography-config(),
+      typography: $app-typography,
       density: 0));
 
 // Apply themes using CSS custom properties
 :root {
+  --ion-font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
   @include mat.all-component-themes($app-light-theme);
   @include mat.core-theme($app-light-theme);
   @include mat.button-theme($app-light-theme);
@@ -133,28 +138,28 @@ html[theme="black"] {
   --ion-background-color-step-950: #0d0d0d;
 
   /** primary **/
-  --ion-color-primary: #00a5aa;
-  --ion-color-primary-rgb: 0, 172, 193;
+  --ion-color-primary: #007f83;
+  --ion-color-primary-rgb: 0, 127, 131;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #00a5aa;
-  --ion-color-primary-tint: #00a5aa;
+  --ion-color-primary-shade: #007074;
+  --ion-color-primary-tint: #1a8c90;
 
   /** secondary **/
-  --ion-color-secondary: #00a5aa;
-  --ion-color-secondary-rgb: 0, 172, 193;
+  --ion-color-secondary: #007f83;
+  --ion-color-secondary-rgb: 0, 127, 131;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #00a5aa;
-  --ion-color-secondary-tint: #00a5aa;
+  --ion-color-secondary-shade: #007074;
+  --ion-color-secondary-tint: #1a8c90;
 
   /** tertiary **/
-  --ion-color-tertiary: #00a5aa;
-  --ion-color-tertiary-rgb: 0, 172, 193;
+  --ion-color-tertiary: #007f83;
+  --ion-color-tertiary-rgb: 0, 127, 131;
   --ion-color-tertiary-contrast: #ffffff;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-  --ion-color-tertiary-shade: #00a5aa;
-  --ion-color-tertiary-tint: #00a5aa;
+  --ion-color-tertiary-shade: #007074;
+  --ion-color-tertiary-tint: #1a8c90;
 
   /** success **/
   --ion-color-success: #2a9a55;
@@ -302,26 +307,26 @@ html[theme="black"] {
 }
 
 body.dark {
-  --ion-color-primary: #00a5aa;
-  --ion-color-primary-rgb: 0, 172, 193;
+  --ion-color-primary: #007f83;
+  --ion-color-primary-rgb: 0, 127, 131;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;
-  --ion-color-primary-shade: #00a5aa;
-  --ion-color-primary-tint: #00a5aa;
+  --ion-color-primary-shade: #007074;
+  --ion-color-primary-tint: #1a8c90;
 
-  --ion-color-secondary: #00a5aa;
-  --ion-color-secondary-rgb: 0, 172, 193;
+  --ion-color-secondary: #007f83;
+  --ion-color-secondary-rgb: 0, 127, 131;
   --ion-color-secondary-contrast: #ffffff;
   --ion-color-secondary-contrast-rgb: 255, 255, 255;
-  --ion-color-secondary-shade: #00a5aa;
-  --ion-color-secondary-tint: #00a5aa;
+  --ion-color-secondary-shade: #007074;
+  --ion-color-secondary-tint: #1a8c90;
 
-  --ion-color-tertiary: #00a5aa;
-  --ion-color-tertiary-rgb: 0, 172, 193;
+  --ion-color-tertiary: #007f83;
+  --ion-color-tertiary-rgb: 0, 127, 131;
   --ion-color-tertiary-contrast: #ffffff;
   --ion-color-tertiary-contrast-rgb: 255, 255, 255;
-  --ion-color-tertiary-shade: #00a5aa;
-  --ion-color-tertiary-tint: #00a5aa;
+  --ion-color-tertiary-shade: #007074;
+  --ion-color-tertiary-tint: #1a8c90;
 
   --ion-color-success: #2a9a55;
   --ion-color-success-rgb: 42, 154, 85;
@@ -851,7 +856,8 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: var(--ion-font-family);
+  font: -apple-system-body;
 }
 
 /* Importing Bootstrap SCSS file. */
