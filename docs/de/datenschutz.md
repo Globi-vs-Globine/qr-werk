@@ -2,7 +2,9 @@
 
 ## Lokale Verarbeitung
 
-QR Werk ist darauf ausgelegt, Scan-Historie, Gruppen und Einstellungen grundsätzlich lokal auf dem Gerät zu verarbeiten. Es gibt kein QR Werk-Benutzerkonto, keine Werbung und keine automatische Übertragung deiner Scan-Historie an einen QR Werk-Server.
+QR Werk verarbeitet Scan-Protokoll, Gruppen, Lesezeichen und Einstellungen lokal auf dem Gerät. Es gibt kein QR-Werk-Benutzerkonto und keine Werbung. Die App überträgt keine Code-Inhalte, kein Scan-Protokoll, keine Gruppen, keine Lesezeichen und keine Einstellungen an den Betreiber des Forks. Sie enthält keinen Analyse-, Tracking- oder Absturzberichtsdienst.
+
+Eine optionale iCloud-Synchronisation ist in der aktuellen Version noch nicht enthalten. Falls sie später ergänzt wird, bleibt sie standardmässig ausgeschaltet und wird vor der Veröffentlichung in der Datenschutzerklärung beschrieben.
 
 ## Berechtigungen
 
@@ -16,7 +18,7 @@ Eine Berechtigung wird für die jeweilige Funktion benötigt und kann in den iOS
 
 ## Internetverbindungen
 
-Eine Internetverbindung kann entstehen, wenn du selbst eine externe Aktion auslöst, beispielsweise eine Internetadresse öffnest, eine Suche startest, GitHub aufrufst oder Inhalte über einen Onlinedienst teilst. Die Verarbeitung durch die gewählte externe App oder Website unterliegt deren Datenschutzbestimmungen.
+Eine Internetverbindung entsteht nur, wenn du selbst eine externe Aktion auslöst oder eine entsprechende Option aktivierst. Das gilt beispielsweise beim Öffnen einer Internetadresse, beim Starten einer Suche, beim Aufrufen von GitHub oder beim Teilen über einen Onlinedienst. Bei einer Websuche wird der ausgewählte Suchtext an den gewählten Suchanbieter übertragen. Für die Verarbeitung durch die externe App, Website oder den Dienst gelten deren eigene Datenschutzbestimmungen. Dabei können gewöhnliche technische Verbindungsdaten wie die IP-Adresse sichtbar sein.
 
 ## Exporte und Zwischenablage
 
