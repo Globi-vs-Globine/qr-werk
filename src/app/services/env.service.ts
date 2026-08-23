@@ -1,7 +1,6 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Injectable } from '@angular/core';
 import { Device, DeviceInfo } from '@capacitor/device';
-import { ThemeDetection, ThemeDetectionResponse } from '@awesome-cordova-plugins/theme-detection/ngx';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage-angular';
@@ -180,13 +179,18 @@ export class EnvService {
 
   private _criticalInitPromise: Promise<void> | undefined;
   private _fullInitPromise: Promise<void> | undefined;
+  private systemDarkModeQuery: MediaQueryList | undefined;
+  private readonly systemDarkModeChanged = (event: MediaQueryListEvent): void => {
+    if (this.selectedColorTheme === 'default') {
+      void this.applyColorTheme(event.matches ? 'dark' : 'light');
+    }
+  };
 
   constructor(
     private platform: Platform,
     private ionicStorage: Storage,
     public translate: TranslateService,
     private overlayContainer: OverlayContainer,
-    private themeDetection: ThemeDetection,
     private screenOrientation: ScreenOrientation,
     private iCloudSync: ICloudSyncService,
   ) {
@@ -1333,92 +1337,33 @@ export class EnvService {
   }
 
   async toggleColorTheme(): Promise<void> {
+    this.stopWatchingSystemColorTheme();
     if (this.selectedColorTheme === 'default') {
-      const version = Number(this._deviceInfo?.osVersion.split(".")[0] ?? 0);
-      if (this.platform.is("android") && version <= 9) {  // Android 9 or below
-        this.colorTheme = 'light';
-        document.body.classList.toggle('dark', false);
-        document.body.classList.toggle('black', false);
-        this.overlayContainer.getContainerElement().classList.remove('ng-mat-dark');
-        this.overlayContainer.getContainerElement().classList.remove('ng-mat-black');
-        this.overlayContainer.getContainerElement().classList.add('ng-mat-light');
-      } else {
-        await this.themeDetection.isAvailable().then( // Android 10 or above, iOS
-          async (res: ThemeDetectionResponse) => {
-            if (res.value) {
-              await this.themeDetection.isDarkModeEnabled().then(async (res: ThemeDetectionResponse) => {
-                if (res.value) {
-                  this.colorTheme = 'dark';
-                  document.body.classList.toggle('dark', true);
-                  document.body.classList.toggle('black', false);
-                  this.overlayContainer.getContainerElement().classList.remove('ng-mat-light');
-                  this.overlayContainer.getContainerElement().classList.remove('ng-mat-black');
-                  this.overlayContainer.getContainerElement().classList.add('ng-mat-dark');
-                  if (this.platform.is('android')) {
-                    await EdgeToEdge.setBackgroundColor({ color: '#1f1f1f' });
-                    await StatusBar.setStyle({ style: Style.Dark });
-                  }
-                } else {
-                  this.colorTheme = 'light';
-                  document.body.classList.toggle('dark', false);
-                  document.body.classList.toggle('black', false);
-                  this.overlayContainer.getContainerElement().classList.remove('ng-mat-dark');
-                  this.overlayContainer.getContainerElement().classList.remove('ng-mat-black');
-                  this.overlayContainer.getContainerElement().classList.add('ng-mat-light');
-                  if (this.platform.is('android')) {
-                    await EdgeToEdge.setBackgroundColor({ color: '#000000' });
-                    await StatusBar.setStyle({ style: Style.Dark });
-                  }
-                }
-              }).catch((error: any) => console.error(error));
-            } else {
-              this.colorTheme = 'light';
-              document.body.classList.toggle('dark', false);
-              document.body.classList.toggle('black', false);
-              this.overlayContainer.getContainerElement().classList.remove('ng-mat-dark');
-              this.overlayContainer.getContainerElement().classList.remove('ng-mat-black');
-              this.overlayContainer.getContainerElement().classList.add('ng-mat-light');
-              if (this.platform.is('android')) {
-                await EdgeToEdge.setBackgroundColor({ color: '#000000' });
-                await StatusBar.setStyle({ style: Style.Dark });
-              }
-            }
-          }
-        )
-      }
-    } else if (this.selectedColorTheme === 'light') {
-      this.colorTheme = 'light';
-      document.body.classList.toggle('dark', false);
-      document.body.classList.toggle('black', false);
-      this.overlayContainer.getContainerElement().classList.remove('ng-mat-dark');
-      this.overlayContainer.getContainerElement().classList.remove('ng-mat-black');
-      this.overlayContainer.getContainerElement().classList.add('ng-mat-light');
-      if (this.platform.is('android')) {
-        await EdgeToEdge.setBackgroundColor({ color: '#000000' });
-        await StatusBar.setStyle({ style: Style.Dark });
-      }
-    } else if (this.selectedColorTheme === 'dark') {
-      this.colorTheme = 'dark';
-      document.body.classList.toggle('dark', true);
-      document.body.classList.toggle('black', false);
-      this.overlayContainer.getContainerElement().classList.remove('ng-mat-light');
-      this.overlayContainer.getContainerElement().classList.remove('ng-mat-black');
-      this.overlayContainer.getContainerElement().classList.add('ng-mat-dark');
-      if (this.platform.is('android')) {
-        await EdgeToEdge.setBackgroundColor({ color: '#1f1f1f' });
-        await StatusBar.setStyle({ style: Style.Dark });
-      }
-    } else if (this.selectedColorTheme === 'black') {
-      this.colorTheme = 'black';
-      document.body.classList.toggle('black', true);
-      document.body.classList.toggle('dark', false);
-      this.overlayContainer.getContainerElement().classList.remove('ng-mat-light');
-      this.overlayContainer.getContainerElement().classList.remove('ng-mat-dark');
-      this.overlayContainer.getContainerElement().classList.add('ng-mat-black');
-      if (this.platform.is('android')) {
-        await EdgeToEdge.setBackgroundColor({ color: '#000000' });
-        await StatusBar.setStyle({ style: Style.Dark });
-      }
+      this.systemDarkModeQuery = window.matchMedia?.('(prefers-color-scheme: dark)');
+      this.systemDarkModeQuery?.addEventListener('change', this.systemDarkModeChanged);
+      await this.applyColorTheme(this.systemDarkModeQuery?.matches ? 'dark' : 'light');
+      return;
+    }
+    await this.applyColorTheme(this.selectedColorTheme);
+  }
+
+  private stopWatchingSystemColorTheme(): void {
+    this.systemDarkModeQuery?.removeEventListener('change', this.systemDarkModeChanged);
+    this.systemDarkModeQuery = undefined;
+  }
+
+  private async applyColorTheme(theme: ColorThemeType): Promise<void> {
+    this.colorTheme = theme;
+    document.body.classList.toggle('dark', theme === 'dark');
+    document.body.classList.toggle('black', theme === 'black');
+
+    const overlayClasses = this.overlayContainer.getContainerElement().classList;
+    overlayClasses.remove('ng-mat-light', 'ng-mat-dark', 'ng-mat-black');
+    overlayClasses.add(`ng-mat-${theme}`);
+
+    if (this.platform.is('android')) {
+      await EdgeToEdge.setBackgroundColor({ color: theme === 'dark' ? '#1f1f1f' : '#000000' });
+      await StatusBar.setStyle({ style: Style.Dark });
     }
   }
 

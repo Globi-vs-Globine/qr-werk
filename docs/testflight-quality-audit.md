@@ -24,7 +24,7 @@ This document records the technical checks performed before the first internal T
 3. Test first launch, denied permissions, camera scanning, batch scanning, image import, exports and iCloud on real iPhone and iPad hardware.
 4. Test nearly simultaneous changes on two devices. QR Werk merges individual records by their modification time, but CloudKit currently stores a shared snapshot rather than a server-side record for every scan.
 5. The detailed in-app guide chapters are currently German. English, French and Italian display translated navigation and a clear language notice, but the full chapter content still needs professional translation.
-6. QR-code and backup sharing now use Capacitor Share; the legacy Cordova social-sharing dependency has been removed. The remaining Cordova dependencies (file chooser, screen orientation, theme detection and SMS) still build successfully but produce deprecation warnings in current Xcode. Replace them gradually and verify each affected workflow on real devices.
+6. QR-code and backup sharing now use Capacitor Share, and automatic light/dark appearance uses the standard system color-scheme API. The corresponding legacy Cordova dependencies have been removed. The remaining Cordova dependencies (file chooser, screen orientation and SMS) still build successfully but produce deprecation warnings in current Xcode. Replace them gradually and verify each affected workflow on real devices.
 7. Configure a maintained linting setup. The existing `npm run lint` command has no Angular lint target.
 
 ## Internal TestFlight recommendation
