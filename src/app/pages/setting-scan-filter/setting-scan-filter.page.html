@@ -6,35 +6,38 @@
 </ion-header>
 
 <ion-content>
-  <ion-list-header><ion-text>{{ 'SCAN_FILTER' | translate }}</ion-text></ion-list-header>
-  <ion-item lines="full">
+  <div class="filter-heading ion-padding-horizontal">
+    <div>
+      <h1>{{ 'SCAN_FILTER' | translate }}</h1>
+      <p>{{ 'SCAN_FILTER_SHORT' | translate }}</p>
+    </div>
+    <ion-button fill="clear" size="small" (click)="showFilterInfo()"
+      [attr.aria-label]="'MORE_INFO' | translate">
+      <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>
+    </ion-button>
+  </div>
+  <ion-item class="filter-toggle" lines="none">
     <ion-label>
       <h2>{{ 'ENABLE_SCAN_FILTER' | translate }}</h2>
-      <p>{{ 'SCAN_FILTER_SCOPE' | translate }}</p>
     </ion-label>
     <ion-toggle slot="end" color="primary" [(ngModel)]="settings.enabled"></ion-toggle>
   </ion-item>
 
-  <div class="ion-padding">
+  <div class="filter-fields ion-padding-horizontal">
     <ion-input label="{{ 'STARTS_WITH' | translate }}" labelPlacement="stacked" fill="outline"
       [(ngModel)]="settings.prefix" (ngModelChange)="onRuleChange()" autocapitalize="off" autocomplete="off"
       placeholder="{{ 'OPTIONAL' | translate }}"></ion-input>
-    <p class="field-help">{{ 'PREFIX_HELP' | translate }}</p>
-    <ion-input class="ion-margin-top" label="{{ 'ENDS_WITH' | translate }}" labelPlacement="stacked" fill="outline"
+    <ion-input label="{{ 'ENDS_WITH' | translate }}" labelPlacement="stacked" fill="outline"
       [(ngModel)]="settings.suffix" (ngModelChange)="onRuleChange()" autocapitalize="off" autocomplete="off"
       placeholder="{{ 'OPTIONAL' | translate }}"></ion-input>
-    <p class="field-help">{{ 'SUFFIX_HELP' | translate }}</p>
-    <ion-input class="ion-margin-top" label="{{ 'EXACT_CHARACTER_COUNT' | translate }}" labelPlacement="stacked"
+    <ion-input label="{{ 'EXACT_CHARACTER_COUNT' | translate }}" labelPlacement="stacked"
       fill="outline" type="number" min="1" inputmode="numeric" [(ngModel)]="settings.exactLength"
       (ngModelChange)="onRuleChange()"
       placeholder="{{ 'OPTIONAL' | translate }}"></ion-input>
-    <p class="field-help">{{ 'CHARACTER_COUNT_HELP' | translate }}</p>
-    <p class="filter-note">{{ 'SCAN_FILTER_RULES_COMBINE' | translate }}</p>
-    <p class="filter-purpose">{{ 'SCAN_FILTER_NOT_CONTROL_MODE' | translate }}</p>
   </div>
 
-  <ion-list-header><ion-text>{{ 'TEST_FILTER' | translate }}</ion-text></ion-list-header>
-  <div class="ion-padding test-area">
+  <div class="section-title ion-padding-horizontal">{{ 'TEST_FILTER' | translate }}</div>
+  <div class="ion-padding-horizontal test-area">
     <ion-input label="{{ 'TEST_CODE' | translate }}" labelPlacement="stacked" fill="outline"
       [(ngModel)]="testValue" autocapitalize="off" autocomplete="off"></ion-input>
     <ion-chip *ngIf="testValue" [color]="testMatches ? 'success' : 'danger'">
@@ -46,7 +49,9 @@
 
 <ion-footer>
   <ion-toolbar>
-    <ion-buttons slot="start"><ion-button color="danger" (click)="reset()">{{ 'RESET_DEFAULT' | translate }}</ion-button></ion-buttons>
-    <ion-buttons slot="end"><ion-button [disabled]="!hasRule" (click)="save()">{{ 'SAVE' | translate }}</ion-button></ion-buttons>
+    <div class="footer-actions">
+      <ion-button expand="block" fill="outline" color="danger" (click)="reset()">{{ 'RESET_DEFAULT' | translate }}</ion-button>
+      <ion-button expand="block" [disabled]="!hasRule" (click)="save()">{{ 'SAVE' | translate }}</ion-button>
+    </div>
   </ion-toolbar>
 </ion-footer>

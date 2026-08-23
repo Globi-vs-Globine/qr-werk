@@ -3,6 +3,7 @@ import { Toast } from '@capacitor/toast';
 import { EnvService } from 'src/app/services/env.service';
 import { ScanFilterService, ScanFilterSettings } from 'src/app/services/scan-filter.service';
 import { TranslateService } from '@ngx-translate/core';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-setting-scan-filter',
@@ -19,6 +20,7 @@ export class SettingScanFilterPage {
     public env: EnvService,
     public scanFilter: ScanFilterService,
     private translate: TranslateService,
+    private alertController: AlertController,
   ) {}
 
   async ionViewWillEnter(): Promise<void> {
@@ -32,6 +34,22 @@ export class SettingScanFilterPage {
 
   get testMatches(): boolean {
     return !!this.testValue && this.scanFilter.matches(this.testValue, { ...this.settings, enabled: true });
+  }
+
+  async showFilterInfo(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('SCAN_FILTER_INFO_TITLE'),
+      message: `
+        <p>${this.translate.instant('SCAN_FILTER_SCOPE')}</p>
+        <p><strong>${this.translate.instant('STARTS_WITH')}</strong><br>${this.translate.instant('PREFIX_HELP')}</p>
+        <p><strong>${this.translate.instant('ENDS_WITH')}</strong><br>${this.translate.instant('SUFFIX_HELP')}</p>
+        <p><strong>${this.translate.instant('EXACT_CHARACTER_COUNT')}</strong><br>${this.translate.instant('CHARACTER_COUNT_HELP')}</p>
+        <p>${this.translate.instant('SCAN_FILTER_RULES_COMBINE')}</p>
+        <p>${this.translate.instant('SCAN_FILTER_NOT_CONTROL_MODE')}</p>
+      `,
+      buttons: [this.translate.instant('OK')],
+    });
+    await alert.present();
   }
 
   onRuleChange(): void {
