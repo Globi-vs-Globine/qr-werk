@@ -12,8 +12,19 @@
 
 .native-color-input {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    inset: 0;
+    width: 100%;
+    height: 100%;
     opacity: 0;
-    pointer-events: none;
+    cursor: pointer;
+    z-index: 2;
+}
+
+.native-color-row {
+    min-height: 52px;
+}
+
+.info-accordion::part(toggle-icon) {
+    color: var(--ion-color-primary);
+    font-size: 24px;
 }

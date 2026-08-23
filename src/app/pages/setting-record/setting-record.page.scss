@@ -10,3 +10,13 @@ mat-form-field {
 .restore-file-input {
     display: none;
 }
+
+.info-accordion::part(toggle-icon) {
+    color: var(--ion-color-primary);
+    font-size: 24px;
+}
+
+.info-accordion ion-item[slot="content"] {
+    --padding-start: 32px;
+    --padding-end: 24px;
+}

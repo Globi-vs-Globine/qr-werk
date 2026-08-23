@@ -43,7 +43,7 @@
 
   <div class="ion-padding-bottom">
     <ion-accordion-group>
-      <ion-accordion>
+      <ion-accordion toggle-icon="information-circle-outline" class="info-accordion">
         <ion-item [ngClass]="isAndroid? ['ion-no-padding', 'ion-margin-end'] : 'ion-no-padding'" lines="none"
           slot="header" style="--ripple-color: transparent;">
           <ion-list-header class="ion-padding-start ion-margin-start align-items-center">
@@ -121,12 +121,12 @@
         </span>
       </div>
     </ion-list-header>
-    <ion-item button="true" detail="false" lines="none" (click)="qrDarkInput.click()">
+    <ion-item detail="false" lines="none" class="native-color-row">
       <span slot="start" class="color-preview" [style.background]="qrColorDark"></span>
       <ion-label>{{ qrColorDark }}</ion-label>
       <ion-icon slot="end" name="color-palette-outline" color="primary"></ion-icon>
-      <input #qrDarkInput class="native-color-input" type="color" [value]="qrColorDark"
-        (click)="$event.stopPropagation()" (input)="chooseQrColor($event, 'dark')">
+      <input class="native-color-input" type="color" [value]="qrColorDark"
+        (input)="chooseQrColor($event, 'dark')" [attr.aria-label]="'COLOR' | translate">
     </ion-item>
   </div>
 
@@ -140,12 +140,12 @@
         </span>
       </div>
     </ion-list-header>
-    <ion-item button="true" detail="false" lines="none" (click)="qrLightInput.click()">
+    <ion-item detail="false" lines="none" class="native-color-row">
       <span slot="start" class="color-preview" [style.background]="qrColorLight"></span>
       <ion-label>{{ qrColorLight }}</ion-label>
       <ion-icon slot="end" name="color-palette-outline" color="primary"></ion-icon>
-      <input #qrLightInput class="native-color-input" type="color" [value]="qrColorLight"
-        (click)="$event.stopPropagation()" (input)="chooseQrColor($event, 'light')">
+      <input class="native-color-input" type="color" [value]="qrColorLight"
+        (input)="chooseQrColor($event, 'light')" [attr.aria-label]="'BACKGROUND_COLOR' | translate">
     </ion-item>
   </div>
 
