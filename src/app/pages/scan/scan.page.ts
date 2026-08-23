@@ -6,7 +6,7 @@ import {
   BarcodeFormat,
   LensFacing,
   StartScanOptions,
-} from '@capacitor-mlkit/barcode-scanning';
+} from 'src/app/services/apple-barcode-scanner';
 import { SplashScreen } from '@capacitor/splash-screen';
 import {
   AlertController,

@@ -35,7 +35,6 @@
 	"packageClassList": [
 		"ContactsPlugin",
 		"ScreenBrightnessPlugin",
-		"BarcodeScannerPlugin",
 		"AppPlugin",
 		"CAPCameraPlugin",
 		"ClipboardPlugin",

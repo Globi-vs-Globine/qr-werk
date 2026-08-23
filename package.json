@@ -3,7 +3,6 @@
   "version": "5.1.1",
   "author": "Tom Fong; QR Werk fork maintained by Globi-vs-Globine",
   "scripts": {
-    "postinstall": "node scripts/patch-mlkit-ios-scanner.js",
     "ng": "ng",
     "build:an": "ionic cap build android --prod --no-open",
     "build:ios": "ionic cap build ios --prod --no-open",
@@ -36,7 +35,6 @@
     "@awesome-cordova-plugins/theme-detection": "^6.6.0",
     "@capacitor-community/contacts": "^7.0.0",
     "@capacitor-community/screen-brightness": "^7.0.0",
-    "@capacitor-mlkit/barcode-scanning": "^7.3.0",
     "@capacitor/android": "^7.0.0",
     "@capacitor/app": "^7.0.0",
     "@capacitor/camera": "^7.0.0",
