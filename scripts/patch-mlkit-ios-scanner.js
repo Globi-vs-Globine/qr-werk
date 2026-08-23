@@ -27,8 +27,9 @@ const autofocusPatchMarker = 'QRWerk: respect the batch autofocus preference.';
 const manualInputPatchMarker = 'QRWerk: allow manual input without leaving the scanner.';
 const accentColorPatchMarker = 'QRWerk: use the selected accent color for the scanner guide.';
 const scanFilterPatchMarker = 'QRWerk: configure the persistent scan filter inside the scanner.';
+const scanAreaPatchMarker = 'QRWerk: support adaptive and selectable scanner areas.';
 
-if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker) && source.includes(manualInputPatchMarker) && source.includes(accentColorPatchMarker) && source.includes(scanFilterPatchMarker) && implementationSource.includes(manualInputPatchMarker)) {
+if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker) && source.includes(manualInputPatchMarker) && source.includes(accentColorPatchMarker) && source.includes(scanFilterPatchMarker) && source.includes(scanAreaPatchMarker) && implementationSource.includes(manualInputPatchMarker)) {
   console.log('QRWerk ML Kit iOS scanner UI patch already applied.');
   process.exit(0);
 }
@@ -454,6 +455,111 @@ replaceOnce(
     `    }\n\n` +
     `    private func addCancelButton() {\n`,
   'scan filter control',
+);
+}
+
+if (!source.includes(scanAreaPatchMarker)) {
+replaceOnce(
+  `        if let detectionAreaViewFrame = self.detectionAreaViewFrame {\n` +
+    `            barcodes = filterBarcodesOutsideTheDetectionArea(barcodes, imageSize: imageSize,\n` +
+    `                                                             detectionArea: detectionAreaViewFrame, videoOrientation: videoOrientation)\n` +
+    `            if barcodes.isEmpty {\n` +
+    `                return\n` +
+    `            }\n` +
+    `        }\n`,
+  `        // QRWerk: support adaptive and selectable scanner areas.\n` +
+    `        let allDetectedBarcodes = barcodes\n` +
+    `        if self.qrwerkScanAreaMode() != "full", let detectionAreaViewFrame = self.detectionAreaViewFrame {\n` +
+    `            let barcodesInsideArea = filterBarcodesOutsideTheDetectionArea(barcodes, imageSize: imageSize,\n` +
+    `                                                                          detectionArea: detectionAreaViewFrame, videoOrientation: videoOrientation)\n` +
+    `            if !barcodesInsideArea.isEmpty {\n` +
+    `                barcodes = barcodesInsideArea\n` +
+    `            } else if allDetectedBarcodes.count == 1 {\n` +
+    `                // A single unambiguous code may extend beyond the visual guide.\n` +
+    `                barcodes = allDetectedBarcodes\n` +
+    `            } else {\n` +
+    `                return\n` +
+    `            }\n` +
+    `        }\n`,
+  'adaptive scan area fallback',
+);
+
+replaceOnce(
+  `    @objc private func onScanFilter() {\n` +
+    `        let defaults = UserDefaults.standard\n` +
+    `        let isGerman = Locale.preferredLanguages.first?.hasPrefix("de") == true\n` +
+    `        let alert = UIAlertController(title: isGerman ? "Scanfilter" : "Scan filter", message: isGerman ? "Alle ausgefüllten Bedingungen müssen passen." : "All entered conditions must match.", preferredStyle: .alert)\n`,
+  `    @objc private func onScanFilter() {\n` +
+    `        let isGerman = Locale.preferredLanguages.first?.hasPrefix("de") == true\n` +
+    `        let menu = UIAlertController(title: isGerman ? "Scan-Optionen" : "Scan options", message: nil, preferredStyle: .actionSheet)\n` +
+    `        menu.addAction(UIAlertAction(title: isGerman ? "Scanbereich" : "Scan area", style: .default) { _ in self.presentScanAreaOptions() })\n` +
+    `        menu.addAction(UIAlertAction(title: isGerman ? "Scanfilter" : "Scan filter", style: .default) { _ in self.presentScanFilterOptions() })\n` +
+    `        menu.addAction(UIAlertAction(title: isGerman ? "Abbrechen" : "Cancel", style: .cancel))\n` +
+    `        if let popover = menu.popoverPresentationController, let button = self.scanFilterButton {\n` +
+    `            popover.sourceView = button\n` +
+    `            popover.sourceRect = button.bounds\n` +
+    `        }\n` +
+    `        self.window?.rootViewController?.present(menu, animated: true)\n` +
+    `    }\n\n` +
+    `    private func presentScanFilterOptions() {\n` +
+    `        let defaults = UserDefaults.standard\n` +
+    `        let isGerman = Locale.preferredLanguages.first?.hasPrefix("de") == true\n` +
+    `        let alert = UIAlertController(title: isGerman ? "Scanfilter" : "Scan filter", message: isGerman ? "Alle ausgefüllten Bedingungen müssen passen." : "All entered conditions must match.", preferredStyle: .alert)\n`,
+  'scan options parent menu',
+);
+
+replaceOnce(
+  `    private func addCancelButton() {\n`,
+  `    private func qrwerkScanAreaMode() -> String {\n` +
+    `        return UserDefaults.standard.string(forKey: "CapacitorStorage.qrwerk-scan-area") ?? "standard"\n` +
+    `    }\n\n` +
+    `    private func presentScanAreaOptions() {\n` +
+    `        let isGerman = Locale.preferredLanguages.first?.hasPrefix("de") == true\n` +
+    `        let current = self.qrwerkScanAreaMode()\n` +
+    `        let alert = UIAlertController(title: isGerman ? "Scanbereich" : "Scan area", message: isGerman ? "Ein einzelner eindeutig erkannter Code wird auch ausserhalb des Rahmens erfasst." : "A single unambiguous code is also detected outside the guide.", preferredStyle: .actionSheet)\n` +
+    `        let options = [("standard", isGerman ? "Standard" : "Standard"), ("wide", isGerman ? "Breit" : "Wide"), ("full", isGerman ? "Ganzes Bild" : "Full image")]\n` +
+    `        for (value, title) in options {\n` +
+    `            alert.addAction(UIAlertAction(title: (value == current ? "✓ " : "") + title, style: .default) { _ in\n` +
+    `                UserDefaults.standard.set(value, forKey: "CapacitorStorage.qrwerk-scan-area")\n` +
+    `                self.removeDetectionAreaView()\n` +
+    `                self.addDetectionAreaView()\n` +
+    `            })\n` +
+    `        }\n` +
+    `        alert.addAction(UIAlertAction(title: isGerman ? "Abbrechen" : "Cancel", style: .cancel))\n` +
+    `        if let popover = alert.popoverPresentationController, let button = self.scanFilterButton {\n` +
+    `            popover.sourceView = button\n` +
+    `            popover.sourceRect = button.bounds\n` +
+    `        }\n` +
+    `        self.window?.rootViewController?.present(alert, animated: true)\n` +
+    `    }\n\n` +
+    `    private func addCancelButton() {\n`,
+  'scan area options',
+);
+
+replaceOnce(
+  `    private func addDetectionAreaView() {\n` +
+    `        let halfScreenWidth = UIScreen.main.bounds.width / 2\n` +
+    `        let halfScreenHeight = UIScreen.main.bounds.height / 2\n` +
+    `        let width = halfScreenWidth > halfScreenHeight ? halfScreenHeight : halfScreenWidth\n` +
+    `        let topLeft = CGPoint(x: self.center.x - (width / 2), y: self.center.y - (width / 2))\n` +
+    `        let view = UIView(frame: CGRect(x: topLeft.x, y: topLeft.y, width: width, height: width))\n`,
+  `    private func addDetectionAreaView() {\n` +
+    `        let availableWidth = self.bounds.width\n` +
+    `        let availableHeight = max(120, self.bounds.height - 150)\n` +
+    `        let mode = self.qrwerkScanAreaMode()\n` +
+    `        let size: CGSize\n` +
+    `        switch mode {\n` +
+    `        case "wide":\n` +
+    `            size = CGSize(width: availableWidth * 0.86, height: min(availableHeight * 0.38, availableWidth * 0.48))\n` +
+    `        case "full":\n` +
+    `            size = CGSize(width: availableWidth - 32, height: availableHeight - 32)\n` +
+    `        default:\n` +
+    `            let edge = min(availableWidth * 0.68, availableHeight * 0.58)\n` +
+    `            size = CGSize(width: edge, height: edge)\n` +
+    `        }\n` +
+    `        let frame = CGRect(x: (self.bounds.width - size.width) / 2, y: (availableHeight - size.height) / 2 + 8, width: size.width, height: size.height)\n` +
+    `        let view = UIView(frame: frame)\n`,
+  'selectable guide geometry',
 );
 }
 
