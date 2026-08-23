@@ -8,4 +8,10 @@ export class ScanRecord {
     duplicateCount?: number;
     lastDuplicateAt?: Date;
     duplicateDetectedAt?: Date[];
+    originDeviceId?: string;
+    originDeviceType?: string;
+    lastModifiedDeviceId?: string;
+    lastModifiedDeviceType?: string;
+    modifiedAt?: Date;
+    lastSyncedAt?: Date;
 }

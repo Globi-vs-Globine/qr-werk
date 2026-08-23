@@ -79,6 +79,7 @@
     "BLOCK_IN_HISTORY": "Auch frühere Protokolleinträge sperren",
     "RECORD_TIMELINE": "Protokollverlauf",
     "FIRST_DETECTED": "Erstmals erfasst",
+    "ORIGIN_DEVICE": "Erfasst auf", "LAST_EDITED_ON": "Zuletzt bearbeitet auf", "SYNCED_VIA_ICLOUD": "Über iCloud synchronisiert",
     "DUPLICATE_DETECTED": "Doppelt erkannt",
     "SAVE_ALL": "Alle speichern",
     "SAVE_SELECTION": "Auswahl speichern",

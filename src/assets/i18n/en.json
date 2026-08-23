@@ -79,6 +79,7 @@
     "BLOCK_IN_HISTORY": "Also block earlier history entries",
     "RECORD_TIMELINE": "Record timeline",
     "FIRST_DETECTED": "First detected",
+    "ORIGIN_DEVICE": "Captured on", "LAST_EDITED_ON": "Last edited on", "SYNCED_VIA_ICLOUD": "Synced via iCloud",
     "DUPLICATE_DETECTED": "Duplicate detected",
     "SAVE_ALL": "Save all",
     "SAVE_SELECTION": "Save selection",

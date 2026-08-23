@@ -45,6 +45,21 @@
       <ion-label>
         <h3>{{ 'FIRST_DETECTED' | translate }}</h3>
         <p>{{ record.createdAt | date:'medium' }}</p>
+        <p *ngIf="record.originDeviceType">{{ 'ORIGIN_DEVICE' | translate }}: {{ record.originDeviceType }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="record.lastModifiedDeviceType && record.modifiedAt" lines="full">
+      <ion-icon slot="start" name="create-outline" color="primary"></ion-icon>
+      <ion-label>
+        <h3>{{ 'LAST_EDITED_ON' | translate }}: {{ record.lastModifiedDeviceType }}</h3>
+        <p>{{ record.modifiedAt | date:'medium' }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="record.lastSyncedAt" lines="full">
+      <ion-icon slot="start" name="cloud-done-outline" color="primary"></ion-icon>
+      <ion-label>
+        <h3>{{ 'SYNCED_VIA_ICLOUD' | translate }}</h3>
+        <p>{{ record.lastSyncedAt | date:'medium' }}</p>
       </ion-label>
     </ion-item>
     <ion-item *ngFor="let timestamp of duplicateTimestamps; index as i" lines="full">

@@ -164,6 +164,8 @@ export class EnvService {
   viewingScanRecords: ScanRecord[] = [];
   viewingBookmarks: Bookmark[] = [];
   private _deviceInfo: DeviceInfo | undefined = undefined;
+  public deviceId = '';
+  public deviceType = 'Gerät';
 
   recordSource: 'create' | 'view' | 'scan' | 'external-share' | undefined;
   detailedRecordSource: 'create' | 'view-log' | 'view-bookmark' | 'scan-camera' | 'scan-image' | 'external-share' | undefined;
@@ -210,6 +212,10 @@ export class EnvService {
       await this.platform.ready();
       try {
         this._deviceInfo = await Device.getInfo();
+        this.deviceType = this._deviceInfo.platform === 'ios'
+          ? (this._deviceInfo.model?.toLowerCase().includes('ipad') ? 'iPad' : 'iPhone')
+          : this._deviceInfo.platform;
+        this.deviceId = (await Device.getId()).identifier;
       } catch {
         // Ignore
       }
@@ -317,6 +323,10 @@ export class EnvService {
               r => {
                 const tCreatedAt = r.createdAt;
                 r.createdAt = new Date(tCreatedAt);
+                if (r.modifiedAt) r.modifiedAt = new Date(r.modifiedAt);
+                if (r.lastSyncedAt) r.lastSyncedAt = new Date(r.lastSyncedAt);
+                if (r.lastDuplicateAt) r.lastDuplicateAt = new Date(r.lastDuplicateAt);
+                if (r.duplicateDetectedAt) r.duplicateDetectedAt = r.duplicateDetectedAt.map(value => new Date(value));
               }
             );
             this.scanRecords.sort((r1, r2) => {
@@ -971,6 +981,11 @@ export class EnvService {
     record.id = uuidv4();
     record.text = value;
     record.createdAt = date;
+    record.modifiedAt = date;
+    record.originDeviceId = this.deviceId;
+    record.originDeviceType = this.deviceType;
+    record.lastModifiedDeviceId = this.deviceId;
+    record.lastModifiedDeviceType = this.deviceType;
     record.group = group?.trim() || undefined;
     if (this.recordSource != null) {
       record.source = this.recordSource;
@@ -999,12 +1014,19 @@ export class EnvService {
     }
   }
 
+  private markRecordModified(record: ScanRecord): void {
+    record.modifiedAt = new Date();
+    record.lastModifiedDeviceId = this.deviceId;
+    record.lastModifiedDeviceType = this.deviceType;
+  }
+
   async recordDuplicateScan(value: string): Promise<boolean> {
     const record = this.scanRecords.find(item => item.text.trim() === value.trim());
     if (!record) return false;
     record.duplicateCount = (record.duplicateCount ?? 0) + 1;
     record.lastDuplicateAt = new Date();
     record.duplicateDetectedAt = [...(record.duplicateDetectedAt ?? []), record.lastDuplicateAt];
+    this.markRecordModified(record);
     await Preferences.set({
       key: this.KEY_SCAN_RECORDS,
       value: JSON.stringify(this.scanRecords),
@@ -1016,6 +1038,7 @@ export class EnvService {
     const record = this.scanRecords.find(item => item.id === id);
     if (!record) return;
     record.group = group?.trim() || undefined;
+    this.markRecordModified(record);
     await Preferences.set({
       key: this.KEY_SCAN_RECORDS,
       value: JSON.stringify(this.scanRecords),
@@ -1145,6 +1168,11 @@ export class EnvService {
       bookmark.id = uuidv4();
       bookmark.text = value;
       bookmark.createdAt = date;
+      bookmark.modifiedAt = date;
+      bookmark.originDeviceId = this.deviceId;
+      bookmark.originDeviceType = this.deviceType;
+      bookmark.lastModifiedDeviceId = this.deviceId;
+      bookmark.lastModifiedDeviceType = this.deviceType;
       bookmark.tag = tag;
       this.bookmarks.unshift(bookmark);
       this.bookmarks.sort((a, b) => {
