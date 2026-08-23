@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvService } from 'src/app/services/env.service';
 import { Toast } from '@capacitor/toast';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { format } from 'date-fns';
-import { Chooser, ChooserResult } from '@awesome-cordova-plugins/chooser/ngx';
 import { ScanRecord } from 'src/app/models/scan-record';
 import { Bookmark } from 'src/app/models/bookmark';
 import { Share } from '@capacitor/share';
@@ -23,6 +22,8 @@ import { ICloudSyncService } from 'src/app/services/icloud-sync.service';
 })
 export class SettingRecordPage {
 
+  @ViewChild('restoreFileInput') restoreFileInput?: ElementRef<HTMLInputElement>;
+
   preventRecordsLimitToast: boolean = true;
   iCloudEnabled = false;
   iCloudBusy = false;
@@ -35,7 +36,6 @@ export class SettingRecordPage {
     // private encryptService: EncryptService,
     private alertController: AlertController,
     private loadingController: LoadingController,
-    private chooser: Chooser,
     private platform: Platform,
     private modalController: ModalController,
     private historyExportService: HistoryExportService,
@@ -240,51 +240,34 @@ export class SettingRecordPage {
   }
 
   async onRestore() {
-    const loading1 = await this.presentLoading(this.translate.instant("PLEASE_WAIT"));
-    await this.chooser.getFile().then(
-      async (value: ChooserResult) => {
-        loading1.dismiss();
-        if (value == null) {
-          return;
-        }
-        if (!value.name.toLowerCase().endsWith(".txt")) {
-          this.presentToast(this.translate.instant("MSG.INVALID_BK_FILE"), "short", "bottom");
-          return;
-        }
-        const loading2 = await this.presentLoading(this.translate.instant("PLEASE_WAIT"));
-        await Filesystem.readFile({
-          path: value['uri'],
-          encoding: Encoding.UTF8
-        }).then(
-          async value => {
-            loading2.dismiss();
-            if ((typeof value.data) == 'string') {
-              await this.restore(value.data as string);
-            } else {
-              this.presentToast(this.translate.instant("MSG.RESTORE_FAILED"), "short", "bottom");
-            }
-          }
-        ).catch(
-          err => {
-            loading2.dismiss();
-            if (this.env.debugMode === 'on') {
-              this.presentToast('Failed to read file', "long", "bottom");
-            } else {
-              this.presentToast(this.translate.instant("MSG.RESTORE_FAILED"), "short", "bottom");
-            }
-          }
-        )
+    const input = this.restoreFileInput?.nativeElement;
+    if (!input) return;
+    input.value = '';
+    input.click();
+  }
+
+  async onRestoreFileSelected(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.item(0);
+    if (!file) return;
+    if (!file.name.toLowerCase().endsWith('.txt')) {
+      this.presentToast(this.translate.instant('MSG.INVALID_BK_FILE'), 'short', 'bottom');
+      return;
+    }
+
+    const loading = await this.presentLoading(this.translate.instant('PLEASE_WAIT'));
+    try {
+      await this.restore(await file.text());
+    } catch (err) {
+      if (this.env.isDebugging) {
+        this.presentToast(`Failed to read backup: ${JSON.stringify(err)}`, 'long', 'bottom');
+      } else {
+        this.presentToast(this.translate.instant('MSG.RESTORE_FAILED'), 'short', 'bottom');
       }
-    ).catch(
-      err => {
-        loading1.dismiss();
-        if (this.env.isDebugging) {
-          this.presentToast("Error when call Chooser.getFile: " + JSON.stringify(err), "long", "top");
-        } else {
-          this.presentToast(this.translate.instant("MSG.RESTORE_FAILED"), "short", "bottom");
-        }
-      }
-    )
+    } finally {
+      await loading.dismiss();
+      input.value = '';
+    }
   }
 
   async restore(value: string) {

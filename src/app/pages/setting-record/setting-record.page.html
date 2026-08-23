@@ -212,6 +212,8 @@
       </ion-label>
     </ion-item>
     <div class="ion-padding-horizontal d-flex justify-content-center align-content-start flex-column">
+      <input #restoreFileInput class="restore-file-input" type="file" accept=".txt,text/plain"
+        (change)="onRestoreFileSelected($event)" tabindex="-1" aria-hidden="true">
       <ion-button class="ion-padding-horizontal" color="primary" (click)="onRestore()">
         {{ 'RESTORE' | translate }}
       </ion-button>

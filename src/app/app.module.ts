@@ -11,7 +11,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
 import { SMS } from '@awesome-cordova-plugins/sms/ngx';
-import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -55,7 +54,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         EnvService,
         DatePipe,
         SMS,
-        Chooser,
         ScreenOrientation,
         provideHttpClient(withInterceptorsFromDi())
     ]
