@@ -32,6 +32,7 @@ import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 import { StatusBar } from '@capacitor/status-bar';
 import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
 import { Preferences } from '@capacitor/preferences';
+import { ScanFilterService } from 'src/app/services/scan-filter.service';
 
 type BatchDuplicateMode = 'allow' | 'batch' | 'history';
 interface BatchScanOptions {
@@ -75,6 +76,7 @@ export class ScanPage {
     public translate: TranslateService,
     private readonly ngZone: NgZone,
     private platform: Platform,
+    private scanFilter: ScanFilterService,
   ) {}
 
   ionViewWillEnter() {
@@ -365,6 +367,10 @@ export class ScanPage {
               }
             });
           }
+          if (!(await this.acceptScannedValue(text))) {
+            await this.scanQrUsingMlkitModule();
+            return;
+          }
           this.processQrCode(text, firstBarcode.format);
         });
       },
@@ -410,6 +416,10 @@ export class ScanPage {
       if (!barcode?.rawValue?.trim()) {
         return;
       }
+      if (!(await this.acceptScannedValue(barcode.rawValue))) {
+        await this.scanUsingNativeInterface();
+        return;
+      }
       if (
         this.env.vibration === 'on' ||
         this.env.vibration === 'on-scanned'
@@ -420,6 +430,10 @@ export class ScanPage {
     } catch (err) {
       const manualValue = this.manualCodeFromScannerError(err);
       if (manualValue) {
+        if (!(await this.acceptScannedValue(manualValue))) {
+          await this.scanUsingNativeInterface();
+          return;
+        }
         await this.processQrCode(manualValue, '' as BarcodeFormat);
         return;
       }
@@ -489,6 +503,11 @@ export class ScanPage {
           value = manualValue;
         }
         if (!value) {
+          continue;
+        }
+
+        if (!(await this.acceptScannedValue(value))) {
+          await this.waitBetweenBatchScans(batchOptions.pauseMs);
           continue;
         }
 
@@ -708,14 +727,16 @@ export class ScanPage {
           await decodingLoading.dismiss();
         }
 
+        const filterSettings = await this.scanFilter.load();
         const unique = detected.filter(
           (barcode, index, all) =>
             !!barcode.rawValue?.trim() &&
-            all.findIndex(item => item.rawValue === barcode.rawValue) === index,
+            all.findIndex(item => item.rawValue === barcode.rawValue) === index &&
+            this.scanFilter.matches(barcode.rawValue, filterSettings),
         );
         if (!unique.length) {
           await this.presentToast(
-            this.translate.instant('MSG.NO_QR_CODE'),
+            this.translate.instant(detected.length ? 'CODE_DOES_NOT_MATCH_FILTER' : 'MSG.NO_QR_CODE'),
             'short',
             'center',
           );
@@ -745,7 +766,9 @@ export class ScanPage {
             ).then(
               async (qrValue) => {
                 decodingLoading.dismiss();
-                this.processQrCode(qrValue, 'QR_CODE');
+                if (await this.acceptScannedValue(qrValue)) {
+                  this.processQrCode(qrValue, 'QR_CODE');
+                }
               },
               async (_) => {
                 decodingLoading.dismiss();
@@ -908,6 +931,19 @@ export class ScanPage {
     this.env.detailedRecordSource = detailedSource;
     this.env.viewResultFrom = '/tabs/scan';
     this.router.navigate(['tabs/result']);
+  }
+
+  private async acceptScannedValue(value: string): Promise<boolean> {
+    const settings = await this.scanFilter.load();
+    const accepted = this.scanFilter.matches(value, settings);
+    if (!accepted) {
+      await this.presentToast(
+        this.translate.instant('CODE_DOES_NOT_MATCH_FILTER'),
+        'short',
+        'top',
+      );
+    }
+    return accepted;
   }
 
   async toggleFlash(): Promise<void> {

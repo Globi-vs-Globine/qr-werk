@@ -43,6 +43,20 @@ Unter **Pause zwischen Scans** stellst du 0,5 bis 3 Sekunden ein. Standardmässi
 
 Mit **Autofokus** lässt du die Kamera während des Scannens automatisch scharfstellen. Für den normalen Einsatz sollte diese Option eingeschaltet bleiben. Schalte sie nur testweise aus, wenn die Kamera bei gleichbleibendem Abstand ständig neu fokussiert und dadurch unruhig wird.
 
+### Scanfilter
+
+Den Scanfilter findest du unter **Einstellungen → QR-Code- und Scan-Einstellungen → Scan-Einstellungen → Scanfilter**. Während der Kamerascanner geöffnet ist, erreichst du dieselben Regeln direkt über das Filtersymbol. Ein farbiges Filtersymbol zeigt an, dass der Filter aktiv ist.
+
+Du kannst folgende Bedingungen einzeln oder gemeinsam verwenden:
+
+- **Beginnt mit (Präfix):** akzeptiert nur Werte mit dem angegebenen Anfang, beispielsweise `CF`.
+- **Endet mit (Suffix):** akzeptiert nur Werte mit dem angegebenen Ende.
+- **Genaue Zeichenanzahl:** akzeptiert nur Werte mit exakt dieser Länge.
+
+Alle ausgefüllten Bedingungen müssen gleichzeitig passen. Der Filter unterscheidet Gross- und Kleinschreibung. Beispiel: Mit Präfix `CF` und Zeichenanzahl `20` akzeptiert QRWerk nur 20-stellige Werte, die mit `CF` beginnen. Nicht passende Codes werden kurz gemeldet, aber weder geöffnet noch gespeichert.
+
+Der Filter gilt für normalen Kamerascan, Batch-Scan, Bildimport und manuelle Eingabe. Auf der Einstellungsseite kannst du vor dem Scannen mit einem Testcode kontrollieren, ob deine Regeln wie erwartet funktionieren. Schalte den Filter nach einem Arbeitsauftrag wieder aus, wenn anschliessend andere Codearten erfasst werden sollen.
+
 Die gespeicherten Batch-Einträge landen zunächst unter **Ohne Gruppe** und können im Protokoll gemeinsam einer Gruppe zugewiesen werden.
 
 ## Bild importieren

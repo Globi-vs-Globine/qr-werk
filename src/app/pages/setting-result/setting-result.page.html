@@ -79,6 +79,13 @@
     <ion-label>{{ 'AUTOFOCUS' | translate }}</ion-label>
     <ion-toggle slot="end" color="primary" [(ngModel)]="autofocus" (ionChange)="autofocusChanged()"></ion-toggle>
   </ion-item>
+  <ion-item button="true" detail="true" lines="full" (click)="setScanFilter()">
+    <ion-icon slot="start" color="primary" name="filter-outline"></ion-icon>
+    <ion-label>
+      <h2>{{ 'SCAN_FILTER' | translate }}</h2>
+      <p>{{ 'SCAN_FILTER_SHORT' | translate }}</p>
+    </ion-label>
+  </ion-item>
 
   <ion-list-header class="ion-margin-start ion-padding-horizontal mt-1"><ion-text
       [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'TASK' | translate }}</ion-text></ion-list-header>

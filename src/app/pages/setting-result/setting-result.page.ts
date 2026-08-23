@@ -104,6 +104,10 @@ export class SettingResultPage {
     this.router.navigate(['setting-qr']);
   }
 
+  setScanFilter() {
+    this.router.navigate(['setting-scan-filter']);
+  }
+
   setSearchEngine() {
     this.router.navigate(['setting-search-engine']);
   }

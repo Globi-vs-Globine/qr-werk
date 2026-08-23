@@ -65,6 +65,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/setting-result/setting-result.module').then(m => m.SettingResultPageModule)
   },
   {
+    path: 'setting-scan-filter',
+    loadChildren: () => import('./pages/setting-scan-filter/setting-scan-filter.module').then(m => m.SettingScanFilterPageModule)
+  },
+  {
     path: 'setting-result-buttons',
     loadChildren: () => import('./pages/setting-result-buttons/setting-result-buttons.module').then(m => m.SettingResultButtonsPageModule)
   },

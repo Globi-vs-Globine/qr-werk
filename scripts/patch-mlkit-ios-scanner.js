@@ -26,8 +26,9 @@ const scannerPolishPatchMarker = 'QRWerk: keep all scanner controls within easy 
 const autofocusPatchMarker = 'QRWerk: respect the batch autofocus preference.';
 const manualInputPatchMarker = 'QRWerk: allow manual input without leaving the scanner.';
 const accentColorPatchMarker = 'QRWerk: use the selected accent color for the scanner guide.';
+const scanFilterPatchMarker = 'QRWerk: configure the persistent scan filter inside the scanner.';
 
-if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker) && source.includes(manualInputPatchMarker) && source.includes(accentColorPatchMarker) && implementationSource.includes(manualInputPatchMarker)) {
+if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker) && source.includes(manualInputPatchMarker) && source.includes(accentColorPatchMarker) && source.includes(scanFilterPatchMarker) && implementationSource.includes(manualInputPatchMarker)) {
   console.log('QRWerk ML Kit iOS scanner UI patch already applied.');
   process.exit(0);
 }
@@ -356,6 +357,103 @@ replaceImplementationOnce(
     `    }\n\n` +
     `    public func onCancel() {\n`,
   'manual input completion',
+);
+}
+
+if (!source.includes(scanFilterPatchMarker)) {
+replaceOnce(
+  `    private var manualInputButton: UIButton?\n`,
+  `    private var manualInputButton: UIButton?\n` +
+    `    // QRWerk: configure the persistent scan filter inside the scanner.\n` +
+    `    private var scanFilterButton: UIButton?\n`,
+  'scan filter state',
+);
+
+replaceOnce(
+  `                self.addManualInputButton()\n`,
+  `                self.addManualInputButton()\n` +
+    `                self.addScanFilterButton()\n`,
+  'initial scan filter button',
+);
+
+replaceOnce(
+  `        self.removeManualInputButton()\n        self.removeVideoPreviewLayer()\n`,
+  `        self.removeManualInputButton()\n        self.removeScanFilterButton()\n        self.removeVideoPreviewLayer()\n`,
+  'scan filter cleanup',
+);
+
+replaceOnce(
+  `            self.removeManualInputButton()\n            self.addManualInputButton()\n`,
+  `            self.removeManualInputButton()\n            self.addManualInputButton()\n            self.removeScanFilterButton()\n            self.addScanFilterButton()\n`,
+  'scan filter layout',
+);
+
+replaceOnce(
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 142.5, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 154, y: self.bounds.size.height - 82, width: 52, height: 52)\n`,
+  'five-control cancel position',
+);
+replaceOnce(
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 67.5, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 90, y: self.bounds.size.height - 82, width: 52, height: 52)\n`,
+  'five-control manual position',
+);
+replaceOnce(
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) + 7.5, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) - 26, y: self.bounds.size.height - 82, width: 52, height: 52)\n`,
+  'five-control torch position',
+);
+replaceOnce(
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) + 82.5, y: self.bounds.size.height - 86, width: 60, height: 60)\n`,
+  `        button.frame = CGRect(x: (self.bounds.size.width / 2) + 38, y: self.bounds.size.height - 82, width: 52, height: 52)\n`,
+  'five-control zoom position',
+);
+
+replaceOnce(
+  `    private func addCancelButton() {\n`,
+  `    private func addScanFilterButton() {\n` +
+    `        let enabled = UserDefaults.standard.string(forKey: "CapacitorStorage.scan-filter-enabled") == "on"\n` +
+    `        let image = UIImage(systemName: enabled ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")?.withTintColor(enabled ? self.qrwerkAccentColor() : .white, renderingMode: .alwaysOriginal)\n` +
+    `        let button = UIButton(type: .custom)\n` +
+    `        button.frame = CGRect(x: (self.bounds.size.width / 2) + 102, y: self.bounds.size.height - 82, width: 52, height: 52)\n` +
+    `        button.backgroundColor = .black.withAlphaComponent(0.5)\n` +
+    `        button.setImage(image, for: .normal)\n` +
+    `        button.layer.cornerRadius = button.bounds.size.width / 2\n` +
+    `        button.accessibilityLabel = "Scan filter"\n` +
+    `        button.addTarget(self, action: #selector(onScanFilter), for: .touchUpInside)\n` +
+    `        self.addSubview(button)\n` +
+    `        self.scanFilterButton = button\n` +
+    `    }\n\n` +
+    `    private func removeScanFilterButton() {\n` +
+    `        self.scanFilterButton?.removeFromSuperview()\n` +
+    `        self.scanFilterButton = nil\n` +
+    `    }\n\n` +
+    `    @objc private func onScanFilter() {\n` +
+    `        let defaults = UserDefaults.standard\n` +
+    `        let isGerman = Locale.preferredLanguages.first?.hasPrefix("de") == true\n` +
+    `        let alert = UIAlertController(title: isGerman ? "Scanfilter" : "Scan filter", message: isGerman ? "Alle ausgefüllten Bedingungen müssen passen." : "All entered conditions must match.", preferredStyle: .alert)\n` +
+    `        alert.addTextField { field in field.placeholder = isGerman ? "Beginnt mit (Präfix)" : "Starts with (prefix)"; field.text = defaults.string(forKey: "CapacitorStorage.scan-filter-prefix") }\n` +
+    `        alert.addTextField { field in field.placeholder = isGerman ? "Endet mit (Suffix)" : "Ends with (suffix)"; field.text = defaults.string(forKey: "CapacitorStorage.scan-filter-suffix") }\n` +
+    `        alert.addTextField { field in field.placeholder = isGerman ? "Genaue Zeichenanzahl" : "Exact character count"; field.keyboardType = .numberPad; field.text = defaults.string(forKey: "CapacitorStorage.scan-filter-length") }\n` +
+    `        alert.addAction(UIAlertAction(title: isGerman ? "Abbrechen" : "Cancel", style: .cancel))\n` +
+    `        alert.addAction(UIAlertAction(title: isGerman ? "Ausschalten" : "Turn off", style: .destructive) { _ in\n` +
+    `            defaults.set("off", forKey: "CapacitorStorage.scan-filter-enabled")\n` +
+    `            self.removeScanFilterButton(); self.addScanFilterButton()\n` +
+    `        })\n` +
+    `        alert.addAction(UIAlertAction(title: isGerman ? "Übernehmen" : "Apply", style: .default) { _ in\n` +
+    `            let prefix = alert.textFields?[0].text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""\n` +
+    `            let suffix = alert.textFields?[1].text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""\n` +
+    `            let length = alert.textFields?[2].text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""\n` +
+    `            defaults.set(prefix, forKey: "CapacitorStorage.scan-filter-prefix")\n` +
+    `            defaults.set(suffix, forKey: "CapacitorStorage.scan-filter-suffix")\n` +
+    `            defaults.set(length, forKey: "CapacitorStorage.scan-filter-length")\n` +
+    `            defaults.set((!prefix.isEmpty || !suffix.isEmpty || (Int(length) ?? 0) > 0) ? "on" : "off", forKey: "CapacitorStorage.scan-filter-enabled")\n` +
+    `            self.removeScanFilterButton(); self.addScanFilterButton()\n` +
+    `        })\n` +
+    `        self.window?.rootViewController?.present(alert, animated: true)\n` +
+    `    }\n\n` +
+    `    private func addCancelButton() {\n`,
+  'scan filter control',
 );
 }
 

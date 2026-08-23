@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar [color]="env.colorTheme === 'black' ? 'black' : 'dark'">
+    <ion-buttons slot="start"><ion-back-button text="" defaultHref="setting-result"></ion-back-button></ion-buttons>
+    <ion-title>{{ 'SCAN_FILTER' | translate }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list-header><ion-text>{{ 'SCAN_FILTER' | translate }}</ion-text></ion-list-header>
+  <ion-item lines="full">
+    <ion-label>
+      <h2>{{ 'ENABLE_SCAN_FILTER' | translate }}</h2>
+      <p>{{ 'SCAN_FILTER_SCOPE' | translate }}</p>
+    </ion-label>
+    <ion-toggle slot="end" color="primary" [(ngModel)]="settings.enabled" [disabled]="!hasRule"></ion-toggle>
+  </ion-item>
+
+  <div class="ion-padding">
+    <ion-input label="{{ 'STARTS_WITH' | translate }}" labelPlacement="stacked" fill="outline"
+      [(ngModel)]="settings.prefix" autocapitalize="off" autocomplete="off"
+      placeholder="{{ 'OPTIONAL' | translate }}"></ion-input>
+    <ion-input class="ion-margin-top" label="{{ 'ENDS_WITH' | translate }}" labelPlacement="stacked" fill="outline"
+      [(ngModel)]="settings.suffix" autocapitalize="off" autocomplete="off"
+      placeholder="{{ 'OPTIONAL' | translate }}"></ion-input>
+    <ion-input class="ion-margin-top" label="{{ 'EXACT_CHARACTER_COUNT' | translate }}" labelPlacement="stacked"
+      fill="outline" type="number" min="1" inputmode="numeric" [(ngModel)]="settings.exactLength"
+      placeholder="{{ 'OPTIONAL' | translate }}"></ion-input>
+    <p class="filter-note">{{ 'SCAN_FILTER_RULES_COMBINE' | translate }}</p>
+  </div>
+
+  <ion-list-header><ion-text>{{ 'TEST_FILTER' | translate }}</ion-text></ion-list-header>
+  <div class="ion-padding test-area">
+    <ion-input label="{{ 'TEST_CODE' | translate }}" labelPlacement="stacked" fill="outline"
+      [(ngModel)]="testValue" autocapitalize="off" autocomplete="off"></ion-input>
+    <ion-chip *ngIf="testValue" [color]="testMatches ? 'success' : 'danger'">
+      <ion-icon [name]="testMatches ? 'checkmark-circle' : 'close-circle'"></ion-icon>
+      <ion-label>{{ (testMatches ? 'CODE_ACCEPTED' : 'CODE_REJECTED') | translate }}</ion-label>
+    </ion-chip>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="start"><ion-button color="danger" (click)="reset()">{{ 'RESET_DEFAULT' | translate }}</ion-button></ion-buttons>
+    <ion-buttons slot="end"><ion-button [disabled]="!hasRule" (click)="save()">{{ 'SAVE' | translate }}</ion-button></ion-buttons>
+  </ion-toolbar>
+</ion-footer>

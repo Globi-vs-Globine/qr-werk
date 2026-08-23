@@ -25,6 +25,7 @@ Die Verarbeitung und die Historie bleiben grundsätzlich lokal auf dem Gerät. E
 - Supported formats include QR Code, EAN-8, EAN-13, UPC-A, UPC-E, Code 39, Code 93, Code 128, Codabar, ITF, Aztec, Data Matrix and PDF417.
 - Batch scan multiple codes consecutively and save them directly to a group.
 - Configure duplicate handling, scan pause and autofocus for batch scanning.
+- Filter scans by prefix, suffix and exact character count, with a built-in test field.
 - Enter a code manually when a damaged label cannot be read reliably.
 - Switch between 1× and 2× zoom in the native iOS scanner.
 - Import one or multiple images from the photo library.

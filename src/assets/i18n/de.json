@@ -72,6 +72,7 @@
     "CODE": "Code",
     "MANUAL_CODE_SAVED": "Code wurde gespeichert",
     "SCAN_SETTINGS": "Scan-Einstellungen",
+    "SCAN_FILTER": "Scanfilter", "SCAN_FILTER_SHORT": "Präfix, Suffix und Zeichenanzahl", "ENABLE_SCAN_FILTER": "Scanfilter aktivieren", "SCAN_FILTER_SCOPE": "Gilt für Kamera, Batch-Scan, Bildimport und manuelle Eingabe", "STARTS_WITH": "Beginnt mit (Präfix)", "ENDS_WITH": "Endet mit (Suffix)", "EXACT_CHARACTER_COUNT": "Genaue Zeichenanzahl", "OPTIONAL": "Optional", "SCAN_FILTER_RULES_COMBINE": "Alle ausgefüllten Bedingungen müssen gleichzeitig erfüllt sein. Gross- und Kleinschreibung werden unterschieden.", "TEST_FILTER": "Filter testen", "TEST_CODE": "Testcode", "CODE_ACCEPTED": "Code wird akzeptiert", "CODE_REJECTED": "Code wird abgewiesen", "CODE_DOES_NOT_MATCH_FILTER": "Code entspricht nicht dem Scanfilter",
     "ALLOW": "Zulassen",
     "BLOCK_IN_SCAN_SESSION": "Im selben Scanlauf sperren",
     "BLOCK_IN_HISTORY": "Auch frühere Protokolleinträge sperren",

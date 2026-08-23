@@ -72,6 +72,7 @@
     "CODE": "Code",
     "MANUAL_CODE_SAVED": "Code saved",
     "SCAN_SETTINGS": "Scan settings",
+    "SCAN_FILTER": "Scan filter", "SCAN_FILTER_SHORT": "Prefix, suffix and character count", "ENABLE_SCAN_FILTER": "Enable scan filter", "SCAN_FILTER_SCOPE": "Applies to camera, batch scanning, image import and manual input", "STARTS_WITH": "Starts with (prefix)", "ENDS_WITH": "Ends with (suffix)", "EXACT_CHARACTER_COUNT": "Exact character count", "OPTIONAL": "Optional", "SCAN_FILTER_RULES_COMBINE": "All entered conditions must match. Uppercase and lowercase characters are distinguished.", "TEST_FILTER": "Test filter", "TEST_CODE": "Test code", "CODE_ACCEPTED": "Code will be accepted", "CODE_REJECTED": "Code will be rejected", "CODE_DOES_NOT_MATCH_FILTER": "Code does not match the scan filter",
     "ALLOW": "Allow",
     "BLOCK_IN_SCAN_SESSION": "Block in the same scan session",
     "BLOCK_IN_HISTORY": "Also block earlier history entries",
