@@ -16,10 +16,13 @@
   <div class="d-flex align-items-center justify-content-top flex-column" style="height: 100%;">
     <ion-row>
       <ion-col class="ion-text-center ion-padding" style="max-width: 100% !important;">
-        <qrcode [elementType]="qrElementType" [qrdata]="qrCodeContent" [width]="defaultWidth"
-          [errorCorrectionLevel]="errorCorrectionLevel" [colorDark]="qrColorDark" [colorLight]="qrColorLight"
-          [margin]="env.qrCodeMargin" #qrcode [hidden]="isSharing">
-        </qrcode>
+        <div class="qr-frame" [style.padding.px]="env.qrCodeFrameWidth" [style.background]="qrFrameColor"
+          [hidden]="isSharing">
+          <qrcode [elementType]="qrElementType" [qrdata]="qrCodeContent" [width]="defaultWidth"
+            [errorCorrectionLevel]="errorCorrectionLevel" [colorDark]="qrColorDark" [colorLight]="qrColorLight"
+            [margin]="env.qrCodeMargin" #qrcode>
+          </qrcode>
+        </div>
         <div class="d-flex flex-column align-items-center" *ngIf="isSharing">
           <ion-spinner class="my-3"></ion-spinner>
         </div>
@@ -32,63 +35,22 @@
         </span>
       </ion-col>
     </ion-row>
+    <div class="correction-picker px-4">
+      <div class="correction-heading">
+        <ion-text>{{ 'ERROR_CORRECTION_LEVEL' | translate }}</ion-text>
+        <ion-button fill="clear" size="small" (click)="showErrorCorrectionInfo()"
+          [attr.aria-label]="'MORE_INFO' | translate">
+          <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>
+        </ion-button>
+      </div>
+      <ion-segment [(ngModel)]="env.errorCorrectionLevel" (ionChange)="onErrorCorrectionLevelChange()" mode="ios">
+        <ion-segment-button value="L"><ion-label>L</ion-label></ion-segment-button>
+        <ion-segment-button value="M"><ion-label>M</ion-label></ion-segment-button>
+        <ion-segment-button value="Q"><ion-label>Q</ion-label></ion-segment-button>
+        <ion-segment-button value="H"><ion-label>H</ion-label></ion-segment-button>
+      </ion-segment>
+    </div>
     <ion-row class="pt-3 px-4" style="width: 100%;">
-      <ion-item class="ion-no-padding" lines="none" [color]="color" style="width: 100%;">
-        <ion-label>
-          <p class="ion-padding-horizontal">
-            <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-              {{ 'ERROR_CORRECTION_LEVEL' | translate }}
-            </ion-text>
-          </p>
-        </ion-label>
-      </ion-item>
-      <ion-radio-group [(ngModel)]="env.errorCorrectionLevel" (ionChange)="onErrorCorrectionLevelChange()"
-        style="width: 100%;">
-        <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" [color]="color">
-          <ion-label>
-            <p class="ion-padding-horizontal">
-              <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-                {{ 'LEVEL_L' | translate }}
-              </ion-text>
-            </p>
-          </ion-label>
-          <ion-radio slot="end" [value]="'L'" [color]="'primary'">
-          </ion-radio>
-        </ion-item>
-        <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" [color]="color">
-          <ion-label>
-            <p class="ion-padding-horizontal">
-              <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-                {{ 'LEVEL_M' | translate }}
-              </ion-text>
-            </p>
-          </ion-label>
-          <ion-radio slot="end" [value]="'M'" [color]="'primary'">
-          </ion-radio>
-        </ion-item>
-        <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" [color]="color">
-          <ion-label>
-            <p class="ion-padding-horizontal">
-              <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-                {{ 'LEVEL_Q' | translate }}
-              </ion-text>
-            </p>
-          </ion-label>
-          <ion-radio slot="end" [value]="'Q'" [color]="'primary'">
-          </ion-radio>
-        </ion-item>
-        <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" [color]="color">
-          <ion-label>
-            <p class="ion-padding-horizontal">
-              <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-                {{ 'LEVEL_H' | translate }}
-              </ion-text>
-            </p>
-          </ion-label>
-          <ion-radio slot="end" [value]="'H'" [color]="'primary'">
-          </ion-radio>
-        </ion-item>
-      </ion-radio-group>
       <ion-button class="pt-2 ion-margin-bottom" fill="clear" (click)="goQrSetting()" color="primary">
         {{ 'QR_CODE_STYLE' | translate }}
       </ion-button>

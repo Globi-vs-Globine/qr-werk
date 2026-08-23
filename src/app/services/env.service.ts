@@ -61,6 +61,9 @@ export class EnvService {
   public qrCodeDarkG: number = 36;
   public qrCodeDarkB: number = 40;
   public qrCodeMargin: number = 3;
+  public qrCodeFrameColor: string = '#007f83';
+  public qrCodeFrameOpacity: number = 100;
+  public qrCodeFrameWidth: number = 0;
   public vibration: VibrationType = 'on';
   public orientation: 'default' | OrientationType = 'default';
   public searchEngine: SearchEngineType = 'google';
@@ -112,6 +115,9 @@ export class EnvService {
   public readonly KEY_QR_CODE_DARK_G = "qrCodeDarkG";
   public readonly KEY_QR_CODE_DARK_B = "qrCodeDarkB";
   public readonly KEY_QR_CODE_MARGIN = "qrCodeMargin";
+  public readonly KEY_QR_CODE_FRAME_COLOR = "qrCodeFrameColor";
+  public readonly KEY_QR_CODE_FRAME_OPACITY = "qrCodeFrameOpacity";
+  public readonly KEY_QR_CODE_FRAME_WIDTH = "qrCodeFrameWidth";
   public readonly KEY_AUTO_MAX_BRIGHTNESS = "auto-max-brightness";
   public readonly KEY_AUTO_OPEN_URL = "auto-open-url";
   public readonly KEY_SEARCH_ENGINE = "search-engine";
@@ -538,6 +544,15 @@ export class EnvService {
         }
       }
     );
+    const loadPromise22b = Preferences.get({ key: this.KEY_QR_CODE_FRAME_COLOR }).then(result => {
+      this.qrCodeFrameColor = this.normalizeHexColor(result.value, '#007f83');
+    });
+    const loadPromise22c = Preferences.get({ key: this.KEY_QR_CODE_FRAME_OPACITY }).then(result => {
+      this.qrCodeFrameOpacity = result.value == null ? 100 : Math.max(0, Math.min(100, JSON.parse(result.value)));
+    });
+    const loadPromise22d = Preferences.get({ key: this.KEY_QR_CODE_FRAME_WIDTH }).then(result => {
+      this.qrCodeFrameWidth = result.value == null ? 0 : Math.max(0, Math.min(24, JSON.parse(result.value)));
+    });
     const loadPromise23 = Preferences.get({ key: this.KEY_AUTO_MAX_BRIGHTNESS }).then(
       async result => {
         if (result.value != null) {
@@ -771,6 +786,9 @@ export class EnvService {
       loadPromise20,
       loadPromise21,
       loadPromise22,
+      loadPromise22b,
+      loadPromise22c,
+      loadPromise22d,
       loadPromise23,
       loadPromise24,
       loadPromise25,
@@ -918,6 +936,12 @@ export class EnvService {
 
     this.qrCodeMargin = 3;
     await Preferences.set({ key: this.KEY_QR_CODE_MARGIN, value: JSON.stringify(this.qrCodeMargin) });
+    this.qrCodeFrameColor = '#007f83';
+    this.qrCodeFrameOpacity = 100;
+    this.qrCodeFrameWidth = 0;
+    await Preferences.set({ key: this.KEY_QR_CODE_FRAME_COLOR, value: this.qrCodeFrameColor });
+    await Preferences.set({ key: this.KEY_QR_CODE_FRAME_OPACITY, value: JSON.stringify(this.qrCodeFrameOpacity) });
+    await Preferences.set({ key: this.KEY_QR_CODE_FRAME_WIDTH, value: JSON.stringify(this.qrCodeFrameWidth) });
     this.vibration = 'on';
     await Preferences.set({ key: this.KEY_VIBRATION, value: this.vibration });
 
@@ -1022,6 +1046,12 @@ export class EnvService {
 
     this.qrCodeMargin = 3;
     await Preferences.set({ key: this.KEY_QR_CODE_MARGIN, value: JSON.stringify(this.qrCodeMargin) });
+    this.qrCodeFrameColor = '#007f83';
+    this.qrCodeFrameOpacity = 100;
+    this.qrCodeFrameWidth = 0;
+    await Preferences.set({ key: this.KEY_QR_CODE_FRAME_COLOR, value: this.qrCodeFrameColor });
+    await Preferences.set({ key: this.KEY_QR_CODE_FRAME_OPACITY, value: JSON.stringify(this.qrCodeFrameOpacity) });
+    await Preferences.set({ key: this.KEY_QR_CODE_FRAME_WIDTH, value: JSON.stringify(this.qrCodeFrameWidth) });
   }
 
   async saveScanRecord(value: string, group?: string): Promise<void> {

@@ -21,10 +21,12 @@
       <div class="d-flex align-items-center justify-content-top flex-column ion-padding-bottom" slot="content">
         <ion-row class="ion-padding-vertical">
           <ion-col class="ion-text-center" style="max-width: 100% !important;">
-            <qrcode [elementType]="qrElementType" [qrdata]="qrCodeContent" [width]="defaultWidth"
-              [errorCorrectionLevel]="errorCorrectionLevel" [colorDark]="qrColorDark" [colorLight]="qrColorLight"
-              [margin]="env.qrCodeMargin" #qrcode>
-            </qrcode>
+            <div class="qr-frame" [style.padding.px]="env.qrCodeFrameWidth" [style.background]="qrFrameColor">
+              <qrcode [elementType]="qrElementType" [qrdata]="qrCodeContent" [width]="defaultWidth"
+                [errorCorrectionLevel]="errorCorrectionLevel" [colorDark]="qrColorDark" [colorLight]="qrColorLight"
+                [margin]="env.qrCodeMargin" #qrcode>
+              </qrcode>
+            </div>
           </ion-col>
         </ion-row>
         <ion-row>
@@ -122,7 +124,9 @@
       </div>
     </ion-list-header>
     <ion-item detail="false" lines="none" class="native-color-row">
-      <span slot="start" class="color-preview" [style.background]="qrColorDark"></span>
+      <label slot="start" class="color-preview" [style.background]="qrColorDark">
+        <input class="color-dot-input" type="color" [value]="qrColorDark" (input)="chooseQrColor($event, 'dark')">
+      </label>
       <ion-label>{{ qrColorDark }}</ion-label>
       <ion-icon slot="end" name="color-palette-outline" color="primary"></ion-icon>
       <input class="native-color-input" type="color" [value]="qrColorDark"
@@ -141,12 +145,42 @@
       </div>
     </ion-list-header>
     <ion-item detail="false" lines="none" class="native-color-row">
-      <span slot="start" class="color-preview" [style.background]="qrColorLight"></span>
+      <label slot="start" class="color-preview" [style.background]="qrColorLight">
+        <input class="color-dot-input" type="color" [value]="qrColorLight" (input)="chooseQrColor($event, 'light')">
+      </label>
       <ion-label>{{ qrColorLight }}</ion-label>
       <ion-icon slot="end" name="color-palette-outline" color="primary"></ion-icon>
       <input class="native-color-input" type="color" [value]="qrColorLight"
         (input)="chooseQrColor($event, 'light')" [attr.aria-label]="'BACKGROUND_COLOR' | translate">
     </ion-item>
+  </div>
+
+  <div class="ion-padding-bottom">
+    <ion-list-header class="ion-margin-start ion-padding-horizontal" mode="md">
+      <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'QR_FRAME' | translate }}</ion-text>
+    </ion-list-header>
+    <ion-item detail="false" lines="none" class="native-color-row">
+      <label slot="start" class="color-preview" [style.background]="qrFrameColor">
+        <input class="color-dot-input" type="color" [value]="env.qrCodeFrameColor" (input)="chooseFrameColor($event)">
+      </label>
+      <ion-label>{{ env.qrCodeFrameColor }}</ion-label>
+      <ion-icon slot="end" name="color-palette-outline" color="primary"></ion-icon>
+      <input class="native-color-input" type="color" [value]="env.qrCodeFrameColor"
+        (input)="chooseFrameColor($event)" [attr.aria-label]="'QR_FRAME_COLOR' | translate">
+    </ion-item>
+    <ion-item lines="none">
+      <ion-range min="0" max="24" step="1" [(ngModel)]="env.qrCodeFrameWidth" (ionChange)="saveFrameWidth()">
+        <ion-label slot="start">{{ 'FRAME_WIDTH' | translate }}</ion-label>
+        <ion-label slot="end">{{ env.qrCodeFrameWidth }}</ion-label>
+      </ion-range>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-range min="0" max="100" step="5" [(ngModel)]="env.qrCodeFrameOpacity" (ionChange)="saveFrameOpacity()">
+        <ion-label slot="start">{{ 'OPACITY' | translate }}</ion-label>
+        <ion-label slot="end">{{ env.qrCodeFrameOpacity }} %</ion-label>
+      </ion-range>
+    </ion-item>
+    <ion-note class="ion-padding-horizontal ion-margin-horizontal">{{ 'MSG.QR_FRAME_EXPLAIN' | translate }}</ion-note>
   </div>
 
   <div class="ion-padding-bottom">

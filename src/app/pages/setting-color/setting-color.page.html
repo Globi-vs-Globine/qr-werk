@@ -94,7 +94,10 @@
       <ion-radio slot="end" [value]="accent.value" color="primary"></ion-radio>
     </ion-item>
     <ion-item detail="false" lines="none" class="custom-color-row">
-      <span slot="start" class="accent-swatch" [style.background]="env.customAccentColor" aria-hidden="true"></span>
+      <label slot="start" class="accent-swatch" [style.background]="env.customAccentColor">
+        <input class="color-dot-input" type="color" [value]="env.customAccentColor"
+          (input)="chooseCustomAccentColor($event)" [attr.aria-label]="'CHOOSE_CUSTOM_COLOR' | translate">
+      </label>
       <ion-label>{{ 'CHOOSE_CUSTOM_COLOR' | translate }}</ion-label>
       <ion-radio slot="end" value="custom" color="primary"></ion-radio>
       <input class="native-color-input" type="color" [value]="env.customAccentColor"

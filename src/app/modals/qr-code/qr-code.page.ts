@@ -5,7 +5,7 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Toast } from '@capacitor/toast';
 import { Share } from '@capacitor/share';
 import { Directory, Filesystem } from '@capacitor/filesystem';
-import { LoadingController, ModalController, Platform } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvService } from 'src/app/services/env.service';
 import { ScreenBrightness } from '@capacitor-community/screen-brightness';
@@ -42,6 +42,7 @@ export class QrCodePage {
     private translate: TranslateService,
     public env: EnvService,
     private loadingController: LoadingController,
+    private alertController: AlertController,
     private modalController: ModalController,
     private router: Router,
     private platform: Platform,
@@ -159,6 +160,16 @@ export class QrCodePage {
     }
   }
 
+  async showErrorCorrectionInfo(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('ERROR_CORRECTION_LEVEL'),
+      message: this.translate.instant('MSG.ERROR_CORRECTION_LEVEL_EXPLAIN'),
+      cssClass: ['alert-bg'],
+      buttons: [this.translate.instant('CLOSE')]
+    });
+    await alert.present();
+  }
+
   goQrSetting() {
     this.modalController.dismiss();
     this.router.navigate(['setting-qr']);
@@ -179,7 +190,23 @@ export class QrCodePage {
       if (this.qrImageDataUrl) {
         delete this.qrImageDataUrl;
       }
-      this.qrImageDataUrl = canvas.toDataURL("image/png", 1);
+      const framePixels = Math.round(this.env.qrCodeFrameWidth * 3);
+      if (framePixels > 0) {
+        const exportCanvas = document.createElement('canvas');
+        exportCanvas.width = canvas.width + framePixels * 2;
+        exportCanvas.height = canvas.height + framePixels * 2;
+        const context = exportCanvas.getContext('2d');
+        if (context) {
+          context.fillStyle = this.qrFrameColor;
+          context.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+          context.drawImage(canvas, framePixels, framePixels);
+          this.qrImageDataUrl = exportCanvas.toDataURL("image/png", 1);
+        } else {
+          this.qrImageDataUrl = canvas.toDataURL("image/png", 1);
+        }
+      } else {
+        this.qrImageDataUrl = canvas.toDataURL("image/png", 1);
+      }
       loading.dismiss();
       const loading2 = await this.presentLoading(this.translate.instant('SHARING'));
       const filename = `qr-werk-${Date.now()}.png`;
@@ -215,6 +242,15 @@ export class QrCodePage {
 
   get qrColorLight(): string {
     return rgbToHex(this.env.qrCodeLightR, this.env.qrCodeLightG, this.env.qrCodeLightB);
+  }
+
+  get qrFrameColor(): string {
+    const hex = this.env.normalizeHexColor(this.env.qrCodeFrameColor, '#007f83');
+    const alpha = Math.max(0, Math.min(100, this.env.qrCodeFrameOpacity)) / 100;
+    const red = parseInt(hex.slice(1, 3), 16);
+    const green = parseInt(hex.slice(3, 5), 16);
+    const blue = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
   }
 
   async presentLoading(msg: string): Promise<HTMLIonLoadingElement> {

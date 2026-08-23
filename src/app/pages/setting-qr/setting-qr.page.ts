@@ -45,6 +45,15 @@ export class SettingQrPage {
     return rgbToHex(this.env.qrCodeLightR, this.env.qrCodeLightG, this.env.qrCodeLightB);
   }
 
+  get qrFrameColor(): string {
+    const hex = this.env.normalizeHexColor(this.env.qrCodeFrameColor, '#007f83');
+    const alpha = Math.max(0, Math.min(100, this.env.qrCodeFrameOpacity)) / 100;
+    const red = parseInt(hex.slice(1, 3), 16);
+    const green = parseInt(hex.slice(3, 5), 16);
+    const blue = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+  }
+
   async chooseQrColor(event: Event, target: 'dark' | 'light'): Promise<void> {
     const hex = (event.target as HTMLInputElement).value;
     const red = parseInt(hex.slice(1, 3), 16);
@@ -57,6 +66,19 @@ export class SettingQrPage {
       [this.env.qrCodeLightR, this.env.qrCodeLightG, this.env.qrCodeLightB] = [red, green, blue];
       await Promise.all([this.saveQrCodeLightR(), this.saveQrCodeLightG(), this.saveQrCodeLightB()]);
     }
+  }
+
+  async chooseFrameColor(event: Event): Promise<void> {
+    this.env.qrCodeFrameColor = this.env.normalizeHexColor((event.target as HTMLInputElement).value, '#007f83');
+    await Preferences.set({ key: this.env.KEY_QR_CODE_FRAME_COLOR, value: this.env.qrCodeFrameColor });
+  }
+
+  async saveFrameOpacity(): Promise<void> {
+    await Preferences.set({ key: this.env.KEY_QR_CODE_FRAME_OPACITY, value: JSON.stringify(this.env.qrCodeFrameOpacity) });
+  }
+
+  async saveFrameWidth(): Promise<void> {
+    await Preferences.set({ key: this.env.KEY_QR_CODE_FRAME_WIDTH, value: JSON.stringify(this.env.qrCodeFrameWidth) });
   }
 
   setErrorCorrectionLevel() {

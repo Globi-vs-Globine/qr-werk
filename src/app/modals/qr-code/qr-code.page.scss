@@ -9,3 +9,24 @@
 ion-toolbar:first-of-type {
     --border-width: 0 !important;
 }
+
+.qr-frame {
+    display: inline-flex;
+    line-height: 0;
+}
+
+.correction-picker {
+    width: 100%;
+    max-width: 390px;
+}
+
+.correction-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 40px;
+}
+
+.correction-heading ion-button {
+    margin: 0;
+}
