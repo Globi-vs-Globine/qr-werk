@@ -11,7 +11,7 @@ This document records the technical checks performed before the first internal T
 - TypeScript type checking succeeds.
 - All German, English, French and Italian translation files contain the same set of keys and valid JSON.
 - The iOS app, privacy manifest, entitlements, project file and localized permission descriptions are valid property lists.
-- Automated tests cover scan-filter matching and the core iCloud item-merge behaviour.
+- Automated tests cover scan-filter matching, the core iCloud item-merge behaviour and empty-group creation/deletion metadata.
 - Camera, Contacts and photo-library permission descriptions explain the user action that triggers access.
 - No analytics, advertising, tracking or third-party scanning backend is configured. Explicit actions such as opening a scanned URL, starting a web search, opening Open Food Facts or sharing content can transfer the selected content to that external service.
 - Interactive settings rows use full-row button behaviour, and the smallest tab label was raised to 11 pt.
@@ -23,10 +23,9 @@ This document records the technical checks performed before the first internal T
 2. Validate an Archive build in Xcode and review App Store Connect privacy answers against `PRIVACY.md`.
 3. Test first launch, denied permissions, camera scanning, batch scanning, image import, exports and iCloud on real iPhone and iPad hardware.
 4. Test nearly simultaneous changes on two devices. QR Werk merges individual records by their modification time, but CloudKit currently stores a shared snapshot rather than a server-side record for every scan.
-5. Empty group names are stored locally. Group assignments attached to records synchronize, but a completely empty group does not yet synchronize independently.
-6. The detailed in-app guide chapters are currently German. English, French and Italian display translated navigation and a clear language notice, but the full chapter content still needs professional translation.
-7. The legacy Cordova dependencies build successfully but produce deprecation warnings in current Xcode. Replace them gradually instead of changing them immediately before the first internal test.
-8. Configure a maintained linting setup. The existing `npm run lint` command has no Angular lint target.
+5. The detailed in-app guide chapters are currently German. English, French and Italian display translated navigation and a clear language notice, but the full chapter content still needs professional translation.
+6. The legacy Cordova dependencies build successfully but produce deprecation warnings in current Xcode. Replace them gradually instead of changing them immediately before the first internal test.
+7. Configure a maintained linting setup. The existing `npm run lint` command has no Angular lint target.
 
 ## Internal TestFlight recommendation
 

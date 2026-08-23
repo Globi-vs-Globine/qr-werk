@@ -13,15 +13,18 @@ interface CloudPlugin {
 const Cloud = registerPlugin<CloudPlugin>('QRWerkCloudSync');
 
 export interface CloudSnapshot {
-  schemaVersion: 1 | 2;
+  schemaVersion: 1 | 2 | 3;
   records: ScanRecord[];
   bookmarks: Bookmark[];
   deletedRecords?: DeletionMarker[];
   deletedBookmarks?: DeletionMarker[];
+  groups?: CloudGroup[];
+  deletedGroups?: DeletionMarker[];
   savedAt: string;
 }
 
 export interface DeletionMarker { id: string; deletedAt: string; }
+export interface CloudGroup { id: string; name: string; modifiedAt: string; }
 
 @Injectable({ providedIn: 'root' })
 export class ICloudSyncService {
@@ -29,16 +32,19 @@ export class ICloudSyncService {
   readonly lastSyncKey = 'icloud-sync-last-success';
   readonly deletedRecordsKey = 'icloud-deleted-records';
   readonly deletedBookmarksKey = 'icloud-deleted-bookmarks';
+  readonly groupsKey = 'history-groups';
+  readonly groupMetadataKey = 'icloud-group-metadata';
+  readonly deletedGroupsKey = 'icloud-deleted-groups';
 
   get supported(): boolean { return Capacitor.getPlatform() === 'ios'; }
   accountStatus() { return Cloud.accountStatus(); }
   download() { return Cloud.download(); }
-  upload(records: ScanRecord[], bookmarks: Bookmark[], deletedRecords: DeletionMarker[], deletedBookmarks: DeletionMarker[]) {
-    const snapshot: CloudSnapshot = { schemaVersion: 2, records, bookmarks, deletedRecords, deletedBookmarks, savedAt: new Date().toISOString() };
+  upload(records: ScanRecord[], bookmarks: Bookmark[], deletedRecords: DeletionMarker[], deletedBookmarks: DeletionMarker[], groups: CloudGroup[], deletedGroups: DeletionMarker[]) {
+    const snapshot: CloudSnapshot = { schemaVersion: 3, records, bookmarks, deletedRecords, deletedBookmarks, groups, deletedGroups, savedAt: new Date().toISOString() };
     return Cloud.upload({ payload: JSON.stringify(snapshot) });
   }
 
-  merge<T extends { id?: string; modifiedAt?: Date }>(local: T[], remote: T[]): T[] {
+  merge<T extends { id?: string; modifiedAt?: Date | string }>(local: T[], remote: T[]): T[] {
     const items = new Map<string, T>();
     for (const item of [...remote, ...local]) {
       const key = item.id || JSON.stringify(item);
@@ -74,6 +80,46 @@ export class ICloudSyncService {
   async undoRecordDeletion(id: string): Promise<void> { await this.removeDeletionMarker(this.deletedRecordsKey, id); }
   async undoBookmarkDeletion(id: string): Promise<void> { await this.removeDeletionMarker(this.deletedBookmarksKey, id); }
 
+  /** Records locally created, renamed and deleted groups for the next cloud sync. */
+  async saveLocalGroups(names: string[], modifiedAtByName: Map<string, Date | string> = new Map()): Promise<void> {
+    const existing = await this.loadGroups();
+    const deleted = await this.loadMarkers(this.deletedGroupsKey);
+    const now = new Date().toISOString();
+    const reconciled = this.reconcileGroups(names, existing, deleted, now, modifiedAtByName);
+    await Promise.all([
+      this.saveGroups([...reconciled.groups.values()]),
+      this.saveMarkers(this.deletedGroupsKey, [...reconciled.deleted.values()]),
+    ]);
+  }
+
+  reconcileGroups(
+    names: string[],
+    existing: Map<string, CloudGroup>,
+    deleted: Map<string, DeletionMarker>,
+    now: string,
+    modifiedAtByName: Map<string, Date | string> = new Map(),
+  ): { groups: Map<string, CloudGroup>; deleted: Map<string, DeletionMarker> } {
+    const currentNames = [...new Set(names.map(name => name.trim()).filter(Boolean))];
+    const groups = new Map(existing);
+    const deletionMarkers = new Map(deleted);
+    const current = new Set(currentNames);
+
+    for (const name of currentNames) {
+      if (!groups.has(name)) {
+        const knownDate = modifiedAtByName.get(name);
+        groups.set(name, { id: name, name, modifiedAt: knownDate ? new Date(knownDate).toISOString() : now });
+      }
+      deletionMarkers.delete(name);
+    }
+    for (const name of [...groups.keys()]) {
+      if (!current.has(name)) {
+        groups.delete(name);
+        deletionMarkers.set(name, { id: name, deletedAt: now });
+      }
+    }
+    return { groups, deleted: deletionMarkers };
+  }
+
   private async addDeletionMarkers(key: string, ids: string[]): Promise<void> {
     const markers = await this.loadMarkers(key);
     const now = new Date().toISOString();
@@ -96,6 +142,17 @@ export class ICloudSyncService {
 
   private async saveMarkers(key: string, markers: DeletionMarker[]): Promise<void> {
     await Preferences.set({ key, value: JSON.stringify(markers) });
+  }
+
+  private async loadGroups(): Promise<Map<string, CloudGroup>> {
+    const value = (await Preferences.get({ key: this.groupMetadataKey })).value;
+    let groups: CloudGroup[] = [];
+    try { groups = value ? JSON.parse(value) : []; } catch { groups = []; }
+    return new Map(groups.filter(group => group?.name).map(group => [group.name, { ...group, id: group.name }]));
+  }
+
+  private async saveGroups(groups: CloudGroup[]): Promise<void> {
+    await Preferences.set({ key: this.groupMetadataKey, value: JSON.stringify(groups) });
   }
 
   private mergeMarkers(local: DeletionMarker[], remote: DeletionMarker[]): DeletionMarker[] {
@@ -121,8 +178,23 @@ export class ICloudSyncService {
 
     const localDeletedRecords = [...(await this.loadMarkers(this.deletedRecordsKey)).values()];
     const localDeletedBookmarks = [...(await this.loadMarkers(this.deletedBookmarksKey)).values()];
+    const storedGroupNames = await Preferences.get({ key: this.groupsKey });
+    let localGroupNames: string[] = [];
+    try { localGroupNames = storedGroupNames.value ? JSON.parse(storedGroupNames.value) : []; } catch { localGroupNames = []; }
+    localGroupNames.push(...localRecords.map(record => record.group).filter((group): group is string => !!group));
+    const groupDates = new Map<string, Date | string>();
+    for (const record of localRecords) {
+      if (!record.group) continue;
+      const candidate = record.modifiedAt || record.createdAt;
+      const current = groupDates.get(record.group);
+      if (candidate && (!current || new Date(candidate) > new Date(current))) groupDates.set(record.group, candidate);
+    }
+    await this.saveLocalGroups(localGroupNames, groupDates);
+    const localGroups = [...(await this.loadGroups()).values()];
+    const localDeletedGroups = [...(await this.loadMarkers(this.deletedGroupsKey)).values()];
     const deletedRecords = this.mergeMarkers(localDeletedRecords, remote?.deletedRecords ?? []);
     const deletedBookmarks = this.mergeMarkers(localDeletedBookmarks, remote?.deletedBookmarks ?? []);
+    const deletedGroups = this.mergeMarkers(localDeletedGroups, remote?.deletedGroups ?? []);
     const recordDeletions = new Map(deletedRecords.map(marker => [marker.id, new Date(marker.deletedAt).getTime()]));
     const bookmarkDeletions = new Map(deletedBookmarks.map(marker => [marker.id, new Date(marker.deletedAt).getTime()]));
     const records = this.merge(localRecords, remote?.records ?? []).filter(record => {
@@ -133,12 +205,20 @@ export class ICloudSyncService {
       const deletedAt = bookmark.id ? bookmarkDeletions.get(bookmark.id) : undefined;
       return deletedAt == null || deletedAt < new Date(bookmark.modifiedAt || bookmark.createdAt || 0).getTime();
     });
+    const groupDeletions = new Map(deletedGroups.map(marker => [marker.id, new Date(marker.deletedAt).getTime()]));
+    const groups = this.merge(localGroups, remote?.groups ?? []).filter(group => {
+      const deletedAt = groupDeletions.get(group.name);
+      return deletedAt == null || deletedAt < new Date(group.modifiedAt || 0).getTime();
+    }).sort((a, b) => a.name.localeCompare(b.name));
     const syncedAt = new Date();
     records.forEach(record => record.lastSyncedAt = syncedAt);
-    await this.upload(records, bookmarks, deletedRecords, deletedBookmarks);
+    await this.upload(records, bookmarks, deletedRecords, deletedBookmarks, groups, deletedGroups);
     await Promise.all([
       this.saveMarkers(this.deletedRecordsKey, deletedRecords),
       this.saveMarkers(this.deletedBookmarksKey, deletedBookmarks),
+      this.saveMarkers(this.deletedGroupsKey, deletedGroups),
+      this.saveGroups(groups),
+      Preferences.set({ key: this.groupsKey, value: JSON.stringify(groups.map(group => group.name)) }),
     ]);
     await Preferences.set({ key: this.lastSyncKey, value: syncedAt.toISOString() });
     return { records, bookmarks, syncedAt };

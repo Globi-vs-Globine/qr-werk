@@ -209,6 +209,14 @@ export class HistoryPage {
       key: this.groupsStorageKey,
       value: JSON.stringify(this.managedGroups),
     });
+    const groupDates = new Map<string, Date | string>();
+    for (const record of this.env.scanRecords) {
+      if (!record.group) continue;
+      const candidate = record.modifiedAt || record.createdAt;
+      const current = groupDates.get(record.group);
+      if (candidate && (!current || new Date(candidate) > new Date(current))) groupDates.set(record.group, candidate);
+    }
+    await this.iCloudSync.saveLocalGroups(this.managedGroups, groupDates);
   }
 
   async createGroup(): Promise<void> {
