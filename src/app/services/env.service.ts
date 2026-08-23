@@ -135,7 +135,7 @@ export class EnvService {
   public readonly KEY_SHOW_CONNECT_WIFI_BUTTON = "showConnectWifiButton";
   public readonly KEY_AUTO_EXIT_MIN = "autoExitAppMin";
 
-  public readonly APP_FOLDER_NAME: string = 'SimpleQR';
+  public readonly APP_FOLDER_NAME: string = 'QRWerk';
 
   public readonly GOOGLE_SEARCH_URL: string = "https://www.google.com/search?q=";
   public readonly BING_SEARCH_URL: string = "https://www.bing.com/search?q=";
@@ -145,12 +145,12 @@ export class EnvService {
   public readonly ECOSIA_SEARCH_URL: string = "https://www.ecosia.org/search?method=index&q=";
   public readonly BRAVE_SEARCH_URL: string = "https://search.brave.com/search?q=";
 
-  public readonly GITHUB_REPO_URL: string = "https://github.com/Globi-vs-Globine/simple-qr";
+  public readonly GITHUB_REPO_URL: string = "https://github.com/Globi-vs-Globine/qr-werk";
   public readonly UPSTREAM_REPO_URL: string = "https://github.com/tomfong/simple-qr";
   public readonly GOOGLE_PLAY_URL: string = "https://play.google.com/store/apps/details?id=com.tomfong.simpleqr";
   public readonly APP_STORE_URL: string = "https://apps.apple.com/us/app/simple-qr-by-tom-fong/id1621121553";
-  public readonly GITHUB_RELEASE_URL: string = "https://github.com/Globi-vs-Globine/simple-qr/commits/dev/ios-history-export";
-  public readonly PRIVACY_POLICY: string = "https://github.com/Globi-vs-Globine/simple-qr/blob/dev/ios-history-export/PRIVACY.md";
+  public readonly GITHUB_RELEASE_URL: string = "https://github.com/Globi-vs-Globine/qr-werk/commits/dev/ios-history-export";
+  public readonly PRIVACY_POLICY: string = "https://github.com/Globi-vs-Globine/qr-werk/blob/dev/ios-history-export/PRIVACY.md";
 
   resultContent: string = '';
   editingContent: boolean = false;

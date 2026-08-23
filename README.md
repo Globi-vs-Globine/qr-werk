@@ -1,7 +1,7 @@
 # QR Werk
 
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-orange.svg)](LICENSE)
-[![Status: Development](https://img.shields.io/badge/status-development-blue.svg)](https://github.com/Globi-vs-Globine/simple-qr/tree/dev/ios-history-export)
+[![Status: Development](https://img.shields.io/badge/status-development-blue.svg)](https://github.com/Globi-vs-Globine/qr-werk/tree/dev/ios-history-export)
 
 <p align="center">
   <img src="src/assets/img/round_icon.png" alt="QR Werk App-Logo" width="160">
@@ -81,16 +81,16 @@ Then open `ios/App/QRWerk.xcworkspace` in Xcode. A unique bundle identifier and 
 
 ## Project status and releases / Projektstatus und Versionen
 
-- Active development takes place on [`dev/ios-history-export`](https://github.com/Globi-vs-Globine/simple-qr/tree/dev/ios-history-export).
+- Active development takes place on [`dev/ios-history-export`](https://github.com/Globi-vs-Globine/qr-werk/tree/dev/ios-history-export).
 - Changes are reviewed through pull requests before they are merged into `main`.
 - QR Werk currently provides no official App Store or packaged GitHub release.
-- Bugs and feature requests for this fork belong in its [GitHub Issues](https://github.com/Globi-vs-Globine/simple-qr/issues).
+- Bugs and feature requests for this fork belong in its [GitHub Issues](https://github.com/Globi-vs-Globine/qr-werk/issues).
 
 ## Origin and attribution / Herkunft und Namensnennung
 
 The original Simple QR project was created by **Tom Fong** and is available at [tomfong/simple-qr](https://github.com/tomfong/simple-qr). The original contributors and their work remain documented through the Git history and the upstream repository.
 
-This fork is maintained independently at [Globi-vs-Globine/simple-qr](https://github.com/Globi-vs-Globine/simple-qr). Upstream store publications, personal profiles, sponsorship pages and demonstrations are not presented as publications or endorsements of this fork.
+This fork is maintained independently at [Globi-vs-Globine/qr-werk](https://github.com/Globi-vs-Globine/qr-werk). Upstream store publications, personal profiles, sponsorship pages and demonstrations are not presented as publications or endorsements of this fork.
 
 ## Technology / Technik
 

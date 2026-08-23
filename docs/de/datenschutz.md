@@ -24,7 +24,7 @@ Exportierte Dateien und kopierte Codes verlassen den geschützten App-Bereich. A
 
 ## Open Source und Lizenz
 
-QR Werk basiert auf dem ursprünglichen Projekt **Simple QR** von Tom Fong. Der Fork wird im Repository `Globi-vs-Globine/simple-qr` weiterentwickelt.
+QR Werk basiert auf dem ursprünglichen Projekt **Simple QR** von Tom Fong. Der Fork wird im Repository `Globi-vs-Globine/qr-werk` weiterentwickelt.
 
 Das Projekt bleibt unter der **GNU General Public License Version 3 (GPL-3.0)**. Lizenz, Urheberhinweise, Git-Historie, Zuordnung zum ursprünglichen Projekt und der entsprechende Quellcode müssen bei einer Weitergabe erhalten bleiben.
 
