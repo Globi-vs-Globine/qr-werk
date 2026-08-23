@@ -312,7 +312,8 @@ export class ResultPage {
     this.router.navigate(['tabs/generate'], { replaceUrl: true });
   }
 
-  searchOpenFoodFacts() {
+  async searchOpenFoodFacts(): Promise<void> {
+    if (!(await this.confirmExternalTransfer('Open Food Facts'))) return;
     window.open(
       `https://world.openfoodfacts.org/product/${this.qrCodeContent}`,
       '_system',
@@ -320,11 +321,13 @@ export class ResultPage {
     );
   }
 
-  browseWebsite() {
+  async browseWebsite(): Promise<void> {
+    if (!(await this.confirmExternalTransfer(this.translate.instant('WEBSITE')))) return;
     window.open(this.qrCodeContent, '_system', 'location=yes');
   }
 
   async openLink(): Promise<void> {
+    if (!(await this.confirmExternalTransfer(this.translate.instant('WEBSITE')))) return;
     window.open(this.qrCodeContent);
   }
 
@@ -655,6 +658,7 @@ export class ResultPage {
         searchUrl = this.env.GOOGLE_SEARCH_URL;
         break;
     }
+    if (!(await this.confirmExternalTransfer(this.translate.instant('SEARCH_ENGINE')))) return;
     let url: string;
     if (this.base64Decoded) {
       const alert = await this.alertController.create({
@@ -685,6 +689,22 @@ export class ResultPage {
       url = searchUrl + encodeURIComponent(this.qrCodeContent ?? '');
       window.open(url, '_system');
     }
+  }
+
+  private async confirmExternalTransfer(service: string): Promise<boolean> {
+    return await new Promise(async resolve => {
+      const alert = await this.alertController.create({
+        header: this.translate.instant('EXTERNAL_TRANSFER_TITLE'),
+        message: this.translate.instant('EXTERNAL_TRANSFER_MESSAGE', { service }),
+        buttons: [
+          { text: this.translate.instant('CANCEL'), role: 'cancel', handler: () => resolve(false) },
+          { text: this.translate.instant('CONTINUE'), handler: () => resolve(true) },
+        ],
+        backdropDismiss: false,
+        cssClass: ['alert-bg'],
+      });
+      await alert.present();
+    });
   }
 
   async copyText(): Promise<void> {
