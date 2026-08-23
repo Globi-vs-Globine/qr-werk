@@ -20,6 +20,8 @@
     "FILTER_GROUPS": "Filtrer les groupes",
     "CURRENT_SELECTION": "Affichage",
     "DELETE_ALL_ENTRIES": "Supprimer toutes les entrées",
+    "DELETE_ON_ALL_DEVICES": "Supprimer sur tous les appareils",
+    "DELETE_ONLY_THIS_DEVICE": "Supprimer uniquement sur cet appareil",
     "NO_ENTRIES_TO_MANAGE": "Il n’y a aucune entrée à gérer.",
     "MANAGE_ENTRIES": "Gérer les entrées", "MANAGE_GROUPS": "Gérer les groupes", "TRANSFER_DATA": "Transférer des données", "ADD_ENTRIES": "Ajouter des entrées", "RENAME_GROUP": "Renommer le groupe", "NO_ENTRIES_AVAILABLE": "Aucune autre entrée disponible",
     "MOVE_ENTRIES": "Déplacer des entrées", "SELECT_ENTRIES": "Sélectionner des entrées", "MOVE_TO_GROUP": "Déplacer vers quel groupe ?", "ENTRIES_MOVED": "entrées déplacées",
@@ -268,6 +270,8 @@
     "YANDEX": "Yandex",
     "YES": "Oui",
     "MSG": {
+        "REMOVE_ALL_RECORD_ICLOUD": "Supprimer toutes les entrées de votre iCloud privé et donc de tous les appareils connectés ? Le choix de cet appareil uniquement désactive ici la synchronisation iCloud.",
+        "REMOVE_ALL_BOOKMARKS_ICLOUD": "Supprimer tous les favoris de votre iCloud privé et donc de tous les appareils connectés ? Le choix de cet appareil uniquement désactive ici la synchronisation iCloud.",
         "ICLOUD_SYNC_EXPLAIN": "Facultatif : synchronise l’historique, les groupes, les favoris et les détections multiples via votre iCloud privé entre vos appareils Apple. Les réglages restent sur cet appareil.",
         "ICLOUD_SYNC_CONFIRM": "La première synchronisation fusionne les entrées de cet appareil avec les données de votre iCloud privé. Les noms personnels des appareils ne sont pas enregistrés.",
         "ICLOUD_DEVICE_NAME_EXPLAIN": "Vous pouvez saisir un libellé pour distinguer plusieurs iPhone ou iPad. Sans modification, seul iPhone ou iPad est utilisé.",

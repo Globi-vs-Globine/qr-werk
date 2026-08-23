@@ -20,6 +20,8 @@
     "FILTER_GROUPS": "Gruppen filtern",
     "CURRENT_SELECTION": "Angezeigt",
     "DELETE_ALL_ENTRIES": "Alle Einträge löschen",
+    "DELETE_ON_ALL_DEVICES": "Auf allen Geräten löschen",
+    "DELETE_ONLY_THIS_DEVICE": "Nur auf diesem Gerät löschen",
     "NO_ENTRIES_TO_MANAGE": "Es gibt keine Einträge zu verwalten.",
     "MANAGE_ENTRIES": "Einträge verwalten",
     "MANAGE_GROUPS": "Gruppen verwalten",
@@ -319,6 +321,8 @@
     "YANDEX": "Yandex",
     "YES": "Ja",
     "MSG": {
+        "REMOVE_ALL_RECORD_ICLOUD": "Sollen alle Protokolleinträge aus deiner privaten iCloud und damit von allen verbundenen Geräten gelöscht werden? Wenn du nur dieses Gerät wählst, wird die iCloud-Synchronisierung hier ausgeschaltet.",
+        "REMOVE_ALL_BOOKMARKS_ICLOUD": "Sollen alle Lesezeichen aus deiner privaten iCloud und damit von allen verbundenen Geräten gelöscht werden? Wenn du nur dieses Gerät wählst, wird die iCloud-Synchronisierung hier ausgeschaltet.",
         "ICLOUD_SYNC_EXPLAIN": "Optional: Gleicht Protokolle, Gruppen, Lesezeichen und Mehrfacherkennungen über deine private iCloud zwischen deinen Apple-Geräten ab. App-Einstellungen bleiben auf diesem Gerät.",
         "ICLOUD_SYNC_CONFIRM": "Beim ersten Abgleich werden die Einträge dieses Geräts und deiner privaten iCloud zusammengeführt. Es werden keine persönlichen Gerätenamen gespeichert.",
         "ICLOUD_DEVICE_NAME_EXPLAIN": "Damit du mehrere iPhones oder iPads unterscheiden kannst, kannst du eine eigene Bezeichnung eingeben. Lässt du das Feld unverändert, wird nur iPhone oder iPad verwendet.",

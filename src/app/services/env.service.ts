@@ -16,6 +16,7 @@ import { Preferences } from '@capacitor/preferences';
 import { Observable } from 'rxjs';
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { ICloudSyncService } from './icloud-sync.service';
 
 export declare type LanguageType = 'de' | 'en' | 'fr' | 'it';
 export declare type TabPageType = "/tabs/scan" | "/tabs/generate" | "/tabs/history" | "/tabs/setting";
@@ -189,6 +190,7 @@ export class EnvService {
     private overlayContainer: OverlayContainer,
     private themeDetection: ThemeDetection,
     private screenOrientation: ScreenOrientation,
+    private iCloudSync: ICloudSyncService,
   ) {
     // Keep the original contract: pages can subscribe and get a single `true`
     // once the minimal startup preferences are ready (e.g. `startPage`).
@@ -347,6 +349,10 @@ export class EnvService {
     const normalized = (value ?? '').trim().replace(/\s+/g, ' ').slice(0, 30);
     this.deviceLabel = normalized || this.deviceType;
     await Preferences.set({ key: this.KEY_ICLOUD_DEVICE_LABEL, value: this.deviceLabel });
+  }
+
+  private notifyCloudDataChanged(): void {
+    window.dispatchEvent(new CustomEvent('qrwerk:sync-data-changed'));
   }
 
   private async _loadStorageDeferred(): Promise<void> {
@@ -1043,6 +1049,7 @@ export class EnvService {
     try {
       const stringified = JSON.stringify(this.scanRecords);
       await Preferences.set({ key: this.KEY_SCAN_RECORDS, value: stringified });
+      this.notifyCloudDataChanged();
     } catch (e) {
       if (this.isDebugging) {
         this.presentToast("Err when stringify scanRecords: " + JSON.stringify(e), "long", "top");
@@ -1067,6 +1074,7 @@ export class EnvService {
       key: this.KEY_SCAN_RECORDS,
       value: JSON.stringify(this.scanRecords),
     });
+    this.notifyCloudDataChanged();
     return true;
   }
 
@@ -1079,26 +1087,29 @@ export class EnvService {
       key: this.KEY_SCAN_RECORDS,
       value: JSON.stringify(this.scanRecords),
     });
+    this.notifyCloudDataChanged();
   }
 
   async removeScanRecordGroup(group: string): Promise<void> {
     this.scanRecords
       .filter(record => record.group === group)
-      .forEach(record => delete record.group);
+      .forEach(record => { delete record.group; this.markRecordModified(record); });
     await Preferences.set({
       key: this.KEY_SCAN_RECORDS,
       value: JSON.stringify(this.scanRecords),
     });
+    this.notifyCloudDataChanged();
   }
 
   async renameScanRecordGroup(previousGroup: string, newGroup: string): Promise<void> {
     this.scanRecords
       .filter(record => record.group === previousGroup)
-      .forEach(record => record.group = newGroup.trim());
+      .forEach(record => { record.group = newGroup.trim(); this.markRecordModified(record); });
     await Preferences.set({
       key: this.KEY_SCAN_RECORDS,
       value: JSON.stringify(this.scanRecords),
     });
+    this.notifyCloudDataChanged();
   }
 
   async saveRestoredScanRecords(records: ScanRecord[]): Promise<void> {
@@ -1119,6 +1130,7 @@ export class EnvService {
     try {
       const stringified = JSON.stringify(this.scanRecords);
       await Preferences.set({ key: this.KEY_SCAN_RECORDS, value: stringified });
+      this.notifyCloudDataChanged();
     } catch (e) {
       if (this.isDebugging) {
         this.presentToast("Err when stringify scanRecords: " + JSON.stringify(e), "long", "top");
@@ -1147,6 +1159,7 @@ export class EnvService {
     try {
       const stringified = JSON.stringify(this.bookmarks);
       await Preferences.set({ key: this.KEY_BOOKMARKS, value: stringified });
+      this.notifyCloudDataChanged();
     } catch (e) {
       if (this.isDebugging) {
         this.presentToast("Err when stringify bookmarks: " + JSON.stringify(e), "long", "top");
@@ -1155,6 +1168,7 @@ export class EnvService {
   }
 
   async undoScanRecordDeletion(record: ScanRecord): Promise<void> {
+    await this.iCloudSync.undoRecordDeletion(record.id);
     this.scanRecords.push(record);
     this.scanRecords.sort((r1, r2) => {
       return r2.createdAt.getTime() - r1.createdAt.getTime();
@@ -1162,6 +1176,7 @@ export class EnvService {
     try {
       const stringified = JSON.stringify(this.scanRecords);
       await Preferences.set({ key: this.KEY_SCAN_RECORDS, value: stringified });
+      this.notifyCloudDataChanged();
     } catch (e) {
       if (this.isDebugging) {
         this.presentToast("Err when stringify scanRecords: " + JSON.stringify(e), "long", "top");
@@ -1169,13 +1184,15 @@ export class EnvService {
     }
   }
 
-  async deleteScanRecord(recordId: string): Promise<void> {
+  async deleteScanRecord(recordId: string, synchronizeDeletion = true): Promise<void> {
     const index = this.scanRecords.findIndex(r => r.id === recordId);
     if (index !== -1) {
+      if (synchronizeDeletion && await this.iCloudSync.isEnabled()) await this.iCloudSync.markRecordsDeleted([recordId]);
       this.scanRecords.splice(index, 1);
       try {
         const stringified = JSON.stringify(this.scanRecords);
         await Preferences.set({ key: this.KEY_SCAN_RECORDS, value: stringified });
+        this.notifyCloudDataChanged();
       } catch (e) {
         if (this.isDebugging) {
           this.presentToast("Err when stringify scanRecords: " + JSON.stringify(e), "long", "top");
@@ -1184,11 +1201,15 @@ export class EnvService {
     }
   }
 
-  async deleteAllScanRecords(): Promise<void> {
+  async deleteAllScanRecords(synchronizeDeletion = true): Promise<void> {
+    if (synchronizeDeletion && await this.iCloudSync.isEnabled()) {
+      await this.iCloudSync.markRecordsDeleted(this.scanRecords.map(record => record.id));
+    }
     this.scanRecords = [];
     try {
       const stringified = JSON.stringify(this.scanRecords);
       await Preferences.set({ key: this.KEY_SCAN_RECORDS, value: stringified });
+      this.notifyCloudDataChanged();
     } catch (e) {
       if (this.isDebugging) {
         this.presentToast("Err when stringify scanRecords: " + JSON.stringify(e), "long", "top");
@@ -1217,6 +1238,7 @@ export class EnvService {
       try {
         const stringified = JSON.stringify(this.bookmarks);
         await Preferences.set({ key: this.KEY_BOOKMARKS, value: stringified });
+        this.notifyCloudDataChanged();
       } catch (e) {
         if (this.isDebugging) {
           this.presentToast("Err when stringify bookmarks: " + JSON.stringify(e), "long", "top");
@@ -1229,6 +1251,7 @@ export class EnvService {
   }
 
   async undoBookmarkDeletion(bookmark: Bookmark): Promise<void> {
+    await this.iCloudSync.undoBookmarkDeletion(bookmark.id);
     this.bookmarks.push(bookmark);
     this.bookmarks.sort((a, b) => {
       return ('' + a.tag).localeCompare(b.tag ?? '');
@@ -1236,6 +1259,7 @@ export class EnvService {
     try {
       const stringified = JSON.stringify(this.bookmarks);
       await Preferences.set({ key: this.KEY_BOOKMARKS, value: stringified });
+      this.notifyCloudDataChanged();
     } catch (e) {
       if (this.isDebugging) {
         this.presentToast("Err when stringify bookmarks: " + JSON.stringify(e), "long", "top");
@@ -1243,13 +1267,16 @@ export class EnvService {
     }
   }
 
-  async deleteBookmark(text: string): Promise<void> {
+  async deleteBookmark(text: string, synchronizeDeletion = true): Promise<void> {
     const index = this.bookmarks.findIndex(t => t.text === text);
     if (index !== -1) {
+      const bookmarkId = this.bookmarks[index].id;
+      if (synchronizeDeletion && bookmarkId && await this.iCloudSync.isEnabled()) await this.iCloudSync.markBookmarksDeleted([bookmarkId]);
       this.bookmarks.splice(index, 1);
       try {
         const stringified = JSON.stringify(this.bookmarks);
         await Preferences.set({ key: this.KEY_BOOKMARKS, value: stringified });
+        this.notifyCloudDataChanged();
       } catch (e) {
         if (this.isDebugging) {
           this.presentToast("Err when stringify bookmarks: " + JSON.stringify(e), "long", "top");
@@ -1258,11 +1285,15 @@ export class EnvService {
     }
   }
 
-  async deleteAllBookmarks(): Promise<void> {
+  async deleteAllBookmarks(synchronizeDeletion = true): Promise<void> {
+    if (synchronizeDeletion && await this.iCloudSync.isEnabled()) {
+      await this.iCloudSync.markBookmarksDeleted(this.bookmarks.map(bookmark => bookmark.id).filter((id): id is string => !!id));
+    }
     this.bookmarks = [];
     try {
       const stringified = JSON.stringify(this.bookmarks);
       await Preferences.set({ key: this.KEY_BOOKMARKS, value: stringified });
+      this.notifyCloudDataChanged();
     } catch (e) {
       if (this.isDebugging) {
         this.presentToast("Err when stringify bookmarks: " + JSON.stringify(e), "long", "top");

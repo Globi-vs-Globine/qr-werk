@@ -25,9 +25,11 @@ Hier steuerst du die Protokollierung, Begrenzungen sowie Sicherungs- und Wiederh
 
 ### iCloud-Synchronisierung
 
-Unter **Einstellungen → Protokoll, Sicherung und Wiederherstellung** kannst du die iCloud-Synchronisierung freiwillig einschalten. Beim ersten Einschalten führt QR Werk die Einträge des Geräts mit vorhandenen Einträgen deiner privaten iCloud zusammen. Danach erfolgt der Abgleich beim Öffnen und Verlassen der App; mit **Jetzt synchronisieren** kannst du ihn zusätzlich sofort starten.
+Unter **Einstellungen → Protokoll, Sicherung und Wiederherstellung** kannst du die iCloud-Synchronisierung freiwillig einschalten. Beim ersten Einschalten führt QR Werk die Einträge des Geräts mit vorhandenen Einträgen deiner privaten iCloud zusammen. Danach erfolgt der Abgleich beim Öffnen und Verlassen der App sowie automatisch wenige Sekunden nach Änderungen. Mehrere rasche Scans werden gesammelt übertragen. Mit **Jetzt synchronisieren** kannst du den Abgleich zusätzlich sofort starten.
 
 Synchronisiert werden Protokolle, Gruppen, Lesezeichen, Mehrfacherkennungen sowie die in QR Werk gewählte Gerätebezeichnung. Beim Aktivieren kannst du beispielsweise „iPhone Lager“ oder „iPad Büro“ eintragen. Ohne eigene Eingabe verwendet QR Werk nur „iPhone“ beziehungsweise „iPad“. Der persönliche Apple-Gerätename wird nicht ausgelesen; die übrigen App-Einstellungen bleiben lokal. Für den Abgleich müssen auf allen Geräten derselbe iCloud-Account und eine Internetverbindung aktiv sein.
+
+Einzelne Einträge, die bei aktiver Synchronisierung gelöscht werden, verschwinden auch auf den anderen verbundenen Geräten. Bei **Alle Einträge löschen** kannst du wählen: **Auf allen Geräten löschen** überträgt die Löschung in die private iCloud. **Nur auf diesem Gerät löschen** schaltet auf diesem Gerät gleichzeitig die iCloud-Synchronisierung aus, damit die Einträge nicht beim nächsten Abgleich zurückkehren.
 
 ## Sprache
 

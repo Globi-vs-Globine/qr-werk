@@ -36,3 +36,5 @@ Lesezeichen markieren wichtige Einträge unabhängig von ihrer Gruppe. Sie erset
 ## Löschen
 
 Prüfe eine Auswahl vor dem endgültigen Löschen. Das Entfernen aller Datensätze ist eine weitreichende Aktion. Erstelle bei wichtigen Daten vorher einen Export oder eine Sicherung.
+
+Bei aktiver iCloud-Synchronisierung gelten einzelne Löschungen für alle verbundenen Geräte. Beim Löschen aller Einträge fragt QR Werk ausdrücklich, ob die Löschung überall gelten soll. Die Alternative **Nur auf diesem Gerät löschen** deaktiviert auf diesem Gerät zugleich die iCloud-Synchronisierung.

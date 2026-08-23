@@ -20,6 +20,8 @@
     "FILTER_GROUPS": "Filter groups",
     "CURRENT_SELECTION": "Showing",
     "DELETE_ALL_ENTRIES": "Delete all entries",
+    "DELETE_ON_ALL_DEVICES": "Delete on all devices",
+    "DELETE_ONLY_THIS_DEVICE": "Delete only on this device",
     "NO_ENTRIES_TO_MANAGE": "There are no entries to manage.",
     "MANAGE_ENTRIES": "Manage entries",
     "MANAGE_GROUPS": "Manage groups",
@@ -319,6 +321,8 @@
     "YANDEX": "Yandex",
     "YES": "Yes",
     "MSG": {
+        "REMOVE_ALL_RECORD_ICLOUD": "Delete all history entries from your private iCloud and therefore from every connected device? Choosing only this device disables iCloud Sync here.",
+        "REMOVE_ALL_BOOKMARKS_ICLOUD": "Delete all bookmarks from your private iCloud and therefore from every connected device? Choosing only this device disables iCloud Sync here.",
         "ICLOUD_SYNC_EXPLAIN": "Optional: Syncs history, groups, bookmarks and duplicate detections through your private iCloud across your Apple devices. App settings remain on this device.",
         "ICLOUD_SYNC_CONFIRM": "The first sync merges the entries on this device with your private iCloud data. Personal device names are not stored.",
         "ICLOUD_DEVICE_NAME_EXPLAIN": "You can enter your own label to distinguish multiple iPhones or iPads. If unchanged, only iPhone or iPad is used.",

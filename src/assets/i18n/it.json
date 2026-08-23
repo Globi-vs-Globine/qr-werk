@@ -20,6 +20,8 @@
     "FILTER_GROUPS": "Filtra gruppi",
     "CURRENT_SELECTION": "Visualizzazione",
     "DELETE_ALL_ENTRIES": "Elimina tutti gli elementi",
+    "DELETE_ON_ALL_DEVICES": "Elimina su tutti i dispositivi",
+    "DELETE_ONLY_THIS_DEVICE": "Elimina solo su questo dispositivo",
     "NO_ENTRIES_TO_MANAGE": "Non ci sono elementi da gestire.",
     "MANAGE_ENTRIES": "Gestisci elementi", "MANAGE_GROUPS": "Gestisci gruppi", "TRANSFER_DATA": "Trasferisci dati", "ADD_ENTRIES": "Aggiungi elementi", "RENAME_GROUP": "Rinomina gruppo", "NO_ENTRIES_AVAILABLE": "Nessun altro elemento disponibile",
     "MOVE_ENTRIES": "Sposta elementi", "SELECT_ENTRIES": "Seleziona elementi", "MOVE_TO_GROUP": "In quale gruppo spostare?", "ENTRIES_MOVED": "elementi spostati",
@@ -268,6 +270,8 @@
     "YANDEX": "Yandex",
     "YES": "SI",
     "MSG": {
+        "REMOVE_ALL_RECORD_ICLOUD": "Eliminare tutte le voci dal tuo iCloud privato e quindi da tutti i dispositivi collegati? Scegliendo solo questo dispositivo, qui la sincronizzazione iCloud viene disattivata.",
+        "REMOVE_ALL_BOOKMARKS_ICLOUD": "Eliminare tutti i preferiti dal tuo iCloud privato e quindi da tutti i dispositivi collegati? Scegliendo solo questo dispositivo, qui la sincronizzazione iCloud viene disattivata.",
         "ICLOUD_SYNC_EXPLAIN": "Opzionale: sincronizza cronologia, gruppi, preferiti e rilevamenti duplicati tramite il tuo iCloud privato tra i dispositivi Apple. Le impostazioni restano su questo dispositivo.",
         "ICLOUD_SYNC_CONFIRM": "La prima sincronizzazione unisce le voci di questo dispositivo con i dati del tuo iCloud privato. I nomi personali dei dispositivi non vengono memorizzati.",
         "ICLOUD_DEVICE_NAME_EXPLAIN": "Puoi inserire un’etichetta per distinguere più iPhone o iPad. Se non la modifichi, viene usato solo iPhone o iPad.",

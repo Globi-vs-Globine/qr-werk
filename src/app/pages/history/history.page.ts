@@ -13,6 +13,7 @@ import { fastFadeIn, flyOut } from 'src/app/utils/animations';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { HistoryExportContent, HistoryExportFormat, HistoryExportService } from 'src/app/services/history-export.service';
 import { Preferences } from '@capacitor/preferences';
+import { ICloudSyncService } from 'src/app/services/icloud-sync.service';
 
 @Component({
     selector: 'app-history',
@@ -124,7 +125,8 @@ export class HistoryPage {
     private route: ActivatedRoute,
     private changeDetectorRef: ChangeDetectorRef,
     private actionSheetController: ActionSheetController,
-    private historyExportService: HistoryExportService
+    private historyExportService: HistoryExportService,
+    private iCloudSync: ICloudSyncService,
   ) {
     this.route.params.subscribe(val => {
       setTimeout(() => this.firstLoadItems(), 200);
@@ -673,14 +675,16 @@ export class HistoryPage {
   }
 
   async removeAll() {
+    const iCloudEnabled = await this.iCloudSync.isEnabled();
     if (this.segmentModel === 'history') {
       const alert = await this.alertController.create({
         header: this.translate.instant('REMOVE_ALL'),
-        message: this.translate.instant('MSG.REMOVE_ALL_RECORD'),
+        message: this.translate.instant(iCloudEnabled ? 'MSG.REMOVE_ALL_RECORD_ICLOUD' : 'MSG.REMOVE_ALL_RECORD'),
         cssClass: ['alert-bg'],
         buttons: [
           {
-            text: this.translate.instant('YES'),
+            text: this.translate.instant(iCloudEnabled ? 'DELETE_ON_ALL_DEVICES' : 'YES'),
+            role: 'destructive',
             handler: async () => {
               await this.env.deleteAllScanRecords();
               this.isLoading = true;
@@ -688,6 +692,14 @@ export class HistoryPage {
               this.isLoading = false;
             }
           },
+          ...(iCloudEnabled ? [{
+            text: this.translate.instant('DELETE_ONLY_THIS_DEVICE'),
+            handler: async () => {
+              await this.iCloudSync.setEnabled(false);
+              await this.env.deleteAllScanRecords(false);
+              this.env.viewingScanRecords = [];
+            }
+          }] : []),
           {
             text: this.translate.instant('NO'),
             role: 'cancel'
@@ -698,11 +710,12 @@ export class HistoryPage {
     } else if (this.segmentModel === 'bookmarks') {
       const alert = await this.alertController.create({
         header: this.translate.instant('REMOVE_ALL'),
-        message: this.translate.instant('MSG.REMOVE_ALL_BOOKMARKS'),
+        message: this.translate.instant(iCloudEnabled ? 'MSG.REMOVE_ALL_BOOKMARKS_ICLOUD' : 'MSG.REMOVE_ALL_BOOKMARKS'),
         cssClass: ['alert-bg'],
         buttons: [
           {
-            text: this.translate.instant('YES'),
+            text: this.translate.instant(iCloudEnabled ? 'DELETE_ON_ALL_DEVICES' : 'YES'),
+            role: 'destructive',
             handler: async () => {
               await this.env.deleteAllBookmarks();
               this.isLoading = true;
@@ -710,6 +723,14 @@ export class HistoryPage {
               this.isLoading = false;
             }
           },
+          ...(iCloudEnabled ? [{
+            text: this.translate.instant('DELETE_ONLY_THIS_DEVICE'),
+            handler: async () => {
+              await this.iCloudSync.setEnabled(false);
+              await this.env.deleteAllBookmarks(false);
+              this.env.viewingBookmarks = [];
+            }
+          }] : []),
           {
             text: this.translate.instant('NO'),
             role: 'cancel'

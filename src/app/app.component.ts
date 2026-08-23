@@ -32,6 +32,7 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.initAppListeners();
       document.addEventListener('click', this.handleSettingRowClick);
+      window.addEventListener('qrwerk:sync-data-changed', this.scheduleAutomaticICloudSync);
       // With SplashScreen.launchAutoHide=false we must hide manually.
       // Do it globally so deep-link cold-starts (e.g. share -> result) don't get stuck.
       setTimeout(() => {
@@ -116,6 +117,12 @@ export class AppComponent {
   }
 
   private iCloudSyncRunning = false;
+  private iCloudSyncTimer?: ReturnType<typeof setTimeout>;
+
+  private readonly scheduleAutomaticICloudSync = (): void => {
+    if (this.iCloudSyncTimer) clearTimeout(this.iCloudSyncTimer);
+    this.iCloudSyncTimer = setTimeout(() => this.runAutomaticICloudSync(), 2500);
+  };
 
   private async runAutomaticICloudSync(): Promise<void> {
     if (!this.iCloudSync.supported || this.iCloudSyncRunning || !(await this.iCloudSync.isEnabled())) return;
