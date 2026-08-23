@@ -115,17 +115,6 @@
       </p>
     </ion-label>
   </ion-item>
-  <ion-item class="ion-no-padding" lines="full">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" src="assets/icon/history.svg">
-    </ion-icon>
-    <ion-select class="ion-padding-horizontal" label="{{ 'HISTORY_DEFAULT_VIEW' | translate }}"
-      label-placement="stacked" interface="popover" [(ngModel)]="env.historyPageStartSegment"
-      (ionChange)="saveHistoryPageStartSegment()">
-      <ion-select-option value="history">{{ 'LOG' | translate }}</ion-select-option>
-      <ion-select-option value="bookmarks">{{ 'BOOKMARKS' | translate }}</ion-select-option>
-    </ion-select>
-  </ion-item>
-
   <ion-list-header class="ion-margin-start ion-padding-horizontal mt-1">
     <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'OTHERS' | translate
       }}</ion-text></ion-list-header>

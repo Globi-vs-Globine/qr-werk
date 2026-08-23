@@ -5,7 +5,6 @@ import { AlertController, LoadingController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvService } from 'src/app/services/env.service';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { Preferences } from '@capacitor/preferences';
 
 @Component({
     selector: 'app-setting',
@@ -60,13 +59,6 @@ export class SettingPage {
 
   setVibration() {
     this.router.navigate(['setting-vibration']);
-  }
-
-  async saveHistoryPageStartSegment() {
-    await Preferences.set({
-      key: this.env.KEY_HISTORY_PAGE_START_SEGMENT,
-      value: this.env.historyPageStartSegment
-    });
   }
 
   setScanRecordLogging() {

@@ -34,4 +34,11 @@ export class SettingColorPage {
     await Preferences.set({ key: this.env.KEY_ACCENT_COLOR, value: this.env.accentColor });
   }
 
+  async saveHistoryPageStartSegment(): Promise<void> {
+    await Preferences.set({
+      key: this.env.KEY_HISTORY_PAGE_START_SEGMENT,
+      value: this.env.historyPageStartSegment
+    });
+  }
+
 }
