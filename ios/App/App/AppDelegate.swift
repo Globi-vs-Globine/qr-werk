@@ -81,7 +81,10 @@ class QRWerkCloudSyncPlugin: CAPPlugin, CAPBridgedPlugin {
 
 class QRWerkViewController: CAPBridgeViewController {
     override func capacitorDidLoad() {
-        bridge?.registerPluginType(QRWerkCloudSyncPlugin.self)
+        // QR Werk is compiled as a native app target, not as a separate CocoaPod.
+        // Capacitor 7 skips registerPluginType while automatic pod discovery is
+        // enabled, so a local plugin must be registered as an instance.
+        bridge?.registerPluginInstance(QRWerkCloudSyncPlugin())
     }
 }
 
