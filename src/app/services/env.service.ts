@@ -37,7 +37,7 @@ export declare type QrCreateContentTypeType = "freeText" | "url" | "contact" | "
 })
 export class EnvService {
 
-  public appVersionNumber: string = '5.1.1-ios-fork.1';
+  public appVersionNumber: string = '0.9.0 (1)';
 
   public startPage: TabPageType = "/tabs/scan";
   public historyPageStartSegment: HistoryPageSegmentType = 'history';

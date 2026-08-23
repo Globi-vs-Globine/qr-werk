@@ -282,9 +282,9 @@ final class QRWerkScannerViewController: UIViewController, AVCaptureMetadataOutp
     private func showFilterOptions() {
         let defaults = UserDefaults.standard
         let alert = UIAlertController(title: localized("Scan-Filter", "Scan filter"), message: localized("Optional: Nur Codes übernehmen, die alle ausgefüllten Bedingungen erfüllen.", "Optional: accept only codes matching every filled condition."), preferredStyle: .alert)
-        alert.addTextField { $0.placeholder = self.localized("Beginnt mit, z. B. CF", "Starts with, e.g. CF"); $0.text = defaults.string(forKey: "CapacitorStorage.scan-filter-prefix") }
-        alert.addTextField { $0.placeholder = self.localized("Endet mit, z. B. 99", "Ends with, e.g. 99"); $0.text = defaults.string(forKey: "CapacitorStorage.scan-filter-suffix") }
-        alert.addTextField { $0.placeholder = self.localized("Gesamte Zeichenanzahl, z. B. 20", "Total character count, e.g. 20"); $0.keyboardType = .numberPad; $0.text = defaults.string(forKey: "CapacitorStorage.scan-filter-length") }
+        alert.addTextField { $0.placeholder = self.localized("Präfix – beginnt mit, z. B. CF", "Prefix – starts with, e.g. CF"); $0.text = defaults.string(forKey: "CapacitorStorage.scan-filter-prefix") }
+        alert.addTextField { $0.placeholder = self.localized("Suffix – endet mit, z. B. 99", "Suffix – ends with, e.g. 99"); $0.text = defaults.string(forKey: "CapacitorStorage.scan-filter-suffix") }
+        alert.addTextField { $0.placeholder = self.localized("Zeichenlänge – genau, z. B. 20", "Character length – exact, e.g. 20"); $0.keyboardType = .numberPad; $0.text = defaults.string(forKey: "CapacitorStorage.scan-filter-length") }
         alert.addAction(UIAlertAction(title: localized("Filter ausschalten", "Disable filter"), style: .destructive) { _ in
             defaults.set("off", forKey: "CapacitorStorage.scan-filter-enabled")
         })

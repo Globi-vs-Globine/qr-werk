@@ -1,6 +1,6 @@
 {
   "name": "qr-werk",
-  "version": "5.1.1",
+  "version": "0.9.0",
   "author": "Tom Fong; QR Werk fork maintained by Globi-vs-Globine",
   "scripts": {
     "ng": "ng",
