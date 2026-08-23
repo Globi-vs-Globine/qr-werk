@@ -28,8 +28,9 @@ const manualInputPatchMarker = 'QRWerk: allow manual input without leaving the s
 const accentColorPatchMarker = 'QRWerk: use the selected accent color for the scanner guide.';
 const scanFilterPatchMarker = 'QRWerk: configure the persistent scan filter inside the scanner.';
 const scanAreaPatchMarker = 'QRWerk: support adaptive and selectable scanner areas.';
+const scanAreaSafeAreaPatchMarker = 'QRWerk: keep the full-image guide below the iOS status area.';
 
-if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker) && source.includes(manualInputPatchMarker) && source.includes(accentColorPatchMarker) && source.includes(scanFilterPatchMarker) && source.includes(scanAreaPatchMarker) && implementationSource.includes(manualInputPatchMarker)) {
+if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker) && source.includes(manualInputPatchMarker) && source.includes(accentColorPatchMarker) && source.includes(scanFilterPatchMarker) && source.includes(scanAreaPatchMarker) && source.includes(scanAreaSafeAreaPatchMarker) && implementationSource.includes(manualInputPatchMarker)) {
   console.log('QRWerk ML Kit iOS scanner UI patch already applied.');
   process.exit(0);
 }
@@ -560,6 +561,24 @@ replaceOnce(
     `        let frame = CGRect(x: (self.bounds.width - size.width) / 2, y: (availableHeight - size.height) / 2 + 8, width: size.width, height: size.height)\n` +
     `        let view = UIView(frame: frame)\n`,
   'selectable guide geometry',
+);
+}
+
+if (!source.includes(scanAreaSafeAreaPatchMarker)) {
+replaceOnce(
+  `        let frame = CGRect(x: (self.bounds.width - size.width) / 2, y: (availableHeight - size.height) / 2 + 8, width: size.width, height: size.height)\n` +
+    `        let view = UIView(frame: frame)\n`,
+  `        // QRWerk: keep the full-image guide below the iOS status area.\n` +
+    `        let frame: CGRect\n` +
+    `        if mode == "full" {\n` +
+    `            let topInset = max(self.safeAreaInsets.top + 14, 58)\n` +
+    `            let bottomInset: CGFloat = 126\n` +
+    `            frame = CGRect(x: 16, y: topInset, width: availableWidth - 32, height: max(120, self.bounds.height - topInset - bottomInset))\n` +
+    `        } else {\n` +
+    `            frame = CGRect(x: (self.bounds.width - size.width) / 2, y: (availableHeight - size.height) / 2 + 8, width: size.width, height: size.height)\n` +
+    `        }\n` +
+    `        let view = UIView(frame: frame)\n`,
+  'full-image guide safe area',
 );
 }
 
