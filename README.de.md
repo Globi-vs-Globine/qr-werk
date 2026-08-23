@@ -17,7 +17,7 @@ QR Werk ist eine datenschutzfreundliche App zum Scannen, Erstellen und Organisie
 
 Die ausführliche [Dokumentation zu QR Werk](docs/README.md) ist auf Deutsch verfügbar und zusätzlich in der App unter **Einstellungen → Anleitung** offline enthalten.
 
-Die Verarbeitung und das Protokoll bleiben standardmässig lokal auf dem Gerät. Eine Internetverbindung wird nur für Aktionen verwendet, die der Benutzer ausdrücklich auslöst, beispielsweise das Öffnen einer Internetadresse.
+Kamerabilder und importierte Fotos werden lokal mit Apples AVFoundation- und Vision-Technik erkannt und nicht zur Erkennung hochgeladen. Das Protokoll bleibt standardmässig auf dem Gerät. Eine Internetverbindung entsteht nur bei freiwilliger iCloud-Synchronisierung oder einer vom Benutzer bestätigten externen Aktion.
 
 ## Funktionen
 
@@ -94,7 +94,7 @@ Dieser Fork wird unabhängig unter [Globi-vs-Globine/qr-werk](https://github.com
 
 - Ionic und Angular
 - Capacitor 7
-- Capacitor ML Kit Barcode Scanning
+- Lokale Barcode-Erkennung mit Apple AVFoundation und Vision
 - Natives iOS-Projekt mit CocoaPods
 
 ## Lizenz

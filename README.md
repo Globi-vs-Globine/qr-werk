@@ -17,7 +17,7 @@ QR Werk is a privacy-friendly app for scanning, creating and organizing QR codes
 
 The detailed [QR Werk documentation](docs/README.md) is available in German and is also included offline in the app under **Settings → User Guide**.
 
-Processing and history remain on the device by default. An internet connection is used only for actions explicitly initiated by the user, such as opening a web address.
+Camera frames and imported images are recognized locally with Apple's AVFoundation and Vision frameworks. They are not uploaded for recognition. History remains on the device by default; internet access occurs only for optional iCloud sync or an external action confirmed by the user.
 
 ## Features
 
@@ -94,7 +94,7 @@ This fork is maintained independently at [Globi-vs-Globine/qr-werk](https://gith
 
 - Ionic and Angular
 - Capacitor 7
-- Capacitor ML Kit barcode scanning
+- Local Apple AVFoundation and Vision barcode recognition
 - Native iOS project with CocoaPods
 
 ## License
