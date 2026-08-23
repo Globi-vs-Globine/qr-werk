@@ -1,6 +1,6 @@
 # Einstellungen
 
-## Über QRWerk
+## Über QR Werk
 
 Hier findest du Versionsangaben, unterstützte Barcode-Typen, Hinweise zur Entwicklung, den Quellcode, die Datenschutzinformationen und die ursprüngliche Projektzuordnung.
 
@@ -10,7 +10,7 @@ Die integrierte Anleitung funktioniert offline. Sie verwendet dieselben Kapitel 
 
 ## QR-Code- und Scan-Einstellungen
 
-Hier legst du fest, wie QR-Codes und erkannte Inhalte dargestellt werden. Im Abschnitt **Scan-Einstellungen** bestimmst du ausserdem, wie QRWerk mit doppelten Codes umgeht, wie lange die Pause zwischen zwei Erkennungen dauert und ob der Autofokus verwendet wird.
+Hier legst du fest, wie QR-Codes und erkannte Inhalte dargestellt werden. Im Abschnitt **Scan-Einstellungen** bestimmst du ausserdem, wie QR Werk mit doppelten Codes umgeht, wie lange die Pause zwischen zwei Erkennungen dauert und ob der Autofokus verwendet wird.
 
 - **Doppelte Codes:** zulassen, nur im laufenden Scan sperren oder mit dem gesamten Protokoll vergleichen
 - **Pause zwischen Scans:** 0,5 bis 3 Sekunden; empfohlen und voreingestellt ist eine Sekunde
@@ -25,7 +25,7 @@ Hier steuerst du die Protokollierung, Begrenzungen sowie Sicherungs- und Wiederh
 
 ## Sprache
 
-QRWerk kann auf Deutsch, Englisch, Französisch und Italienisch verwendet werden. Mit **Systemeinstellung** übernimmt die App automatisch eine dieser Sprachen; bei einer anderen Gerätesprache wird Englisch verwendet. Tippe auf die gesamte gewünschte Zeile – du musst nicht genau den Haken am rechten Rand treffen.
+QR Werk kann auf Deutsch, Englisch, Französisch und Italienisch verwendet werden. Mit **Systemeinstellung** übernimmt die App automatisch eine dieser Sprachen; bei einer anderen Gerätesprache wird Englisch verwendet. Tippe auf die gesamte gewünschte Zeile – du musst nicht genau den Haken am rechten Rand treffen.
 
 ## Darstellung und Farben
 
@@ -33,7 +33,7 @@ Du kannst zwischen der hellen, dunklen und schwarzen Darstellung wählen oder di
 
 ## Ausrichtung
 
-Hier bestimmst du, ob QRWerk die Systemeinstellung verwendet oder im Hoch- beziehungsweise Querformat bleibt.
+Hier bestimmst du, ob QR Werk die Systemeinstellung verwendet oder im Hoch- beziehungsweise Querformat bleibt.
 
 ## Vibration und haptische Rückmeldung
 

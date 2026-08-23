@@ -1,6 +1,6 @@
-"CFBundleDisplayName" = "QRWerk";
-"CFBundleName" = "QRWerk";
-"NSCameraUsageDescription" = "QRWerk uses Camera to scan QR code and barcodes";
-"NSContactsUsageDescription" = "QRWerk uses Contacts to add contact";
-"NSPhotoLibraryAddUsageDescription" = "QRWerk uses Photo Library to save QR code image";
-"NSPhotoLibraryUsageDescription" = "QRWerk uses Photo Library to import image and scan QR code";
+"CFBundleDisplayName" = "QR Werk";
+"CFBundleName" = "QR Werk";
+"NSCameraUsageDescription" = "QR Werk uses Camera to scan QR code and barcodes";
+"NSContactsUsageDescription" = "QR Werk uses Contacts to add contact";
+"NSPhotoLibraryAddUsageDescription" = "QR Werk uses Photo Library to save QR code image";
+"NSPhotoLibraryUsageDescription" = "QR Werk uses Photo Library to import image and scan QR code";

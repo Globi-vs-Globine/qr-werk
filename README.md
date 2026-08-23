@@ -1,19 +1,23 @@
-# QRWerk – iOS fork
+# QR Werk
 
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-orange.svg)](LICENSE)
 [![Status: Development](https://img.shields.io/badge/status-development-blue.svg)](https://github.com/Globi-vs-Globine/simple-qr/tree/dev/ios-history-export)
 
-This repository is an iOS-focused fork of [tomfong/simple-qr](https://github.com/tomfong/simple-qr). It keeps the original project and its contributors visible while extending the app under the GNU General Public License v3.0.
+<p align="center">
+  <img src="src/assets/img/round_icon.png" alt="QR Werk App-Logo" width="160">
+</p>
+
+QR Werk is an iOS-focused fork of [Simple QR by Tom Fong](https://github.com/tomfong/simple-qr). The original project and its contributors remain clearly credited while this fork is developed independently under the GNU General Public License v3.0.
 
 > **Development status**
 >
-> This fork is currently being developed and tested. It has not been published by the fork owner in the Apple App Store or Google Play Store. Store download and rating links therefore are not available yet.
+> QR Werk is currently being developed and tested for iPhone and iPad. It has not yet been published in the Apple App Store. There is therefore no download or rating link at present.
 
 ## Deutsch
 
-QRWerk ist eine datenschutzfreundliche App zum Scannen, Erstellen und Organisieren von QR-Codes und Barcodes. Dieser Fork konzentriert sich insbesondere auf eine zuverlässige iOS-Version, Mehrfach-Scans, Bildimporte, Gruppen sowie den flexiblen Export der Scan-Historie.
+QR Werk ist eine datenschutzfreundliche App zum Scannen, Erstellen und Organisieren von QR-Codes und Barcodes. Im Mittelpunkt stehen eine zuverlässige iOS-Nutzung, Mehrfach-Scans, Bildimporte, Gruppen sowie der flexible Export der Scan-Historie.
 
-Die ausführliche Bedienungsanleitung findest du in der [QRWerk-Dokumentation](docs/README.md). Dieselben deutschen Kapitel sind in der App unter **Einstellungen → Anleitung** offline verfügbar.
+Die ausführliche Bedienungsanleitung findest du in der [Dokumentation zu QR Werk](docs/README.md). Dieselben deutschen Kapitel sind in der App unter **Einstellungen → Anleitung** offline verfügbar.
 
 Die Verarbeitung und die Historie bleiben grundsätzlich lokal auf dem Gerät. Eine Internetverbindung wird nur für Aktionen verwendet, die der Benutzer ausdrücklich auslöst, beispielsweise das Öffnen einer Internetadresse.
 
@@ -53,7 +57,7 @@ Die Verarbeitung und die Historie bleiben grundsätzlich lokal auf dem Gerät. E
 
 ## Languages / Sprachen
 
-QRWerk is available in German, English, French and Italian. If the iPhone or iPad uses another system language, QRWerk falls back to English.
+QR Werk is available in German, English, French and Italian. If the iPhone or iPad uses another system language, QR Werk falls back to English.
 
 ## Privacy / Datenschutz
 
@@ -73,13 +77,13 @@ npm run build
 npx cap sync ios
 ```
 
-Then open `ios/App/App.xcworkspace` in Xcode. A unique bundle identifier and a valid Apple development team are required to install the app on a physical iPhone or iPad.
+Then open `ios/App/QRWerk.xcworkspace` in Xcode. A unique bundle identifier and a valid Apple development team are required to install the app on a physical iPhone or iPad.
 
 ## Project status and releases / Projektstatus und Versionen
 
 - Active development takes place on [`dev/ios-history-export`](https://github.com/Globi-vs-Globine/simple-qr/tree/dev/ios-history-export).
 - Changes are reviewed through pull requests before they are merged into `main`.
-- This fork currently provides no official App Store, Google Play or packaged GitHub release.
+- QR Werk currently provides no official App Store or packaged GitHub release.
 - Bugs and feature requests for this fork belong in its [GitHub Issues](https://github.com/Globi-vs-Globine/simple-qr/issues).
 
 ## Origin and attribution / Herkunft und Namensnennung
@@ -97,4 +101,4 @@ This fork is maintained independently at [Globi-vs-Globine/simple-qr](https://gi
 
 ## License / Lizenz
 
-QRWerk and this fork are licensed under the [GNU General Public License v3.0](LICENSE). Copyright notices, Git history, attribution and the corresponding source code must remain available when the software is redistributed.
+QR Werk and this fork are licensed under the [GNU General Public License v3.0](LICENSE). Copyright notices, Git history, attribution and the corresponding source code must remain available when the software is redistributed.

@@ -22,12 +22,12 @@ export class GuidePage {
   loading = false;
 
   readonly chapters: GuideChapter[] = [
-    { title: 'Schnellstart', description: 'Die ersten Schritte mit QRWerk', icon: 'rocket-outline', file: 'schnellstart.md' },
+    { title: 'Schnellstart', description: 'Die ersten Schritte mit QR Werk', icon: 'rocket-outline', file: 'schnellstart.md' },
     { title: 'Scannen', description: 'Kamera, Batch-Scan und Bildimport', icon: 'scan-outline', file: 'scannen.md' },
     { title: 'Protokoll und Gruppen', description: 'Scans ordnen und verwalten', icon: 'folder-open-outline', file: 'protokoll-und-gruppen.md' },
     { title: 'Import und Export', description: 'Codes und vollständige Datensätze übertragen', icon: 'swap-vertical-outline', file: 'import-und-export.md' },
     { title: 'Codes erstellen', description: 'QR-Codes und Barcodes erzeugen', icon: 'create-outline', file: 'codes-erstellen.md' },
-    { title: 'Einstellungen', description: 'QRWerk an deine Arbeitsweise anpassen', icon: 'settings-outline', file: 'einstellungen.md' },
+    { title: 'Einstellungen', description: 'QR Werk an deine Arbeitsweise anpassen', icon: 'settings-outline', file: 'einstellungen.md' },
     { title: 'Häufige Fragen', description: 'Lösungen für typische Probleme', icon: 'help-circle-outline', file: 'fehlerbehebung.md' },
     { title: 'Datenschutz und Open Source', description: 'Berechtigungen, lokale Daten und GPL', icon: 'shield-checkmark-outline', file: 'datenschutz.md' },
   ];

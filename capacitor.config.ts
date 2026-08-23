@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'ch.qrwerk.app',
-  appName: 'QRWerk',
+  appName: 'QR Werk',
   webDir: 'www',
   android: {
     initialFocus: false,

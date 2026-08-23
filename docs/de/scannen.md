@@ -37,7 +37,7 @@ Erkannte Duplikate werden beim vorhandenen Protokolleintrag vermerkt. In dessen 
 
 ### Pause zwischen Scans
 
-Unter **Pause zwischen Scans** stellst du 0,5 bis 3 Sekunden ein. Standardmässig wartet QRWerk eine Sekunde, bevor der nächste Code angenommen wird. Dadurch wird derselbe Code nicht allein deshalb mehrfach erkannt, weil die Kamera noch darauf gerichtet ist. Eine längere Pause reduziert unbeabsichtigte Wiederholungen; eine kürzere Pause beschleunigt grosse Scanläufe.
+Unter **Pause zwischen Scans** stellst du 0,5 bis 3 Sekunden ein. Standardmässig wartet QR Werk eine Sekunde, bevor der nächste Code angenommen wird. Dadurch wird derselbe Code nicht allein deshalb mehrfach erkannt, weil die Kamera noch darauf gerichtet ist. Eine längere Pause reduziert unbeabsichtigte Wiederholungen; eine kürzere Pause beschleunigt grosse Scanläufe.
 
 ### Autofokus
 
@@ -53,7 +53,7 @@ Du kannst folgende Bedingungen einzeln oder gemeinsam verwenden:
 - **Endet mit (Suffix):** akzeptiert nur Werte mit dem angegebenen Ende.
 - **Genaue Zeichenanzahl:** akzeptiert nur Werte mit exakt dieser Länge.
 
-Alle ausgefüllten Bedingungen müssen gleichzeitig passen. Der Filter unterscheidet Gross- und Kleinschreibung. Beispiel: Mit Präfix `CF` und Zeichenanzahl `20` akzeptiert QRWerk nur 20-stellige Werte, die mit `CF` beginnen. Nicht passende Codes werden kurz gemeldet, aber weder geöffnet noch gespeichert.
+Alle ausgefüllten Bedingungen müssen gleichzeitig passen. Der Filter unterscheidet Gross- und Kleinschreibung. Beispiel: Mit Präfix `CF` und Zeichenanzahl `20` akzeptiert QR Werk nur 20-stellige Werte, die mit `CF` beginnen. Nicht passende Codes werden kurz gemeldet, aber weder geöffnet noch gespeichert.
 
 Der Filter gilt für normalen Kamerascan, Batch-Scan, Bildimport und manuelle Eingabe. Auf der Einstellungsseite kannst du vor dem Scannen mit einem Testcode kontrollieren, ob deine Regeln wie erwartet funktionieren. Schalte den Filter nach einem Arbeitsauftrag wieder aus, wenn anschliessend andere Codearten erfasst werden sollen.
 
@@ -63,11 +63,11 @@ Die gespeicherten Batch-Einträge landen zunächst unter **Ohne Gruppe** und kö
 
 Der Bildimport unterstützt einzelne und mehrere Bilder. Ein Bild kann ebenfalls mehrere erkennbare Codes enthalten.
 
-Nach der Analyse zeigt QRWerk alle gefundenen Werte an. Markiere nur die Codes, die gespeichert werden sollen, oder wähle **Alle speichern**. **Abbrechen** verwirft die noch nicht gespeicherte Auswahl.
+Nach der Analyse zeigt QR Werk alle gefundenen Werte an. Markiere nur die Codes, die gespeichert werden sollen, oder wähle **Alle speichern**. **Abbrechen** verwirft die noch nicht gespeicherte Auswahl.
 
 ## Unterstützte Formate
 
-QRWerk verarbeitet unter anderem:
+QR Werk verarbeitet unter anderem:
 
 - QR Code
 - Aztec

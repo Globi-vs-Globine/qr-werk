@@ -2,7 +2,7 @@
 
 ## Exportmöglichkeiten
 
-QRWerk kann das gesamte Protokoll, einzelne Gruppen oder eine eigene Auswahl ausgeben.
+QR Werk kann das gesamte Protokoll, einzelne Gruppen oder eine eigene Auswahl ausgeben.
 
 Verfügbare Formate:
 
@@ -31,6 +31,6 @@ Leere Zeilen werden ignoriert. Vor dem Speichern kannst du eine Zielgruppe wähl
 
 ## Datensicherung
 
-Die Sicherungsfunktion in den Einstellungen ist für eine spätere Wiederherstellung der QRWerk-Daten vorgesehen. Ältere kompatible Sicherungen aus dem ursprünglichen Simple-QR-Projekt können weiterhin eingelesen werden.
+Die Sicherungsfunktion in den Einstellungen ist für eine spätere Wiederherstellung der QR Werk-Daten vorgesehen. Ältere kompatible Sicherungen aus dem ursprünglichen Simple-QR-Projekt können weiterhin eingelesen werden.
 
 Ein CSV- oder TXT-Export ist keine vollständige App-Sicherung. Verwende für wichtige Bestände am besten zusätzlich die Sicherungsfunktion.

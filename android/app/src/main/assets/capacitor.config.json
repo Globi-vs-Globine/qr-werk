@@ -1,6 +1,6 @@
 {
 	"appId": "com.tomfong.simpleqr",
-	"appName": "Simple QR",
+	"appName": "QR Werk",
 	"webDir": "www",
 	"android": {
 		"initialFocus": false,

@@ -2,8 +2,8 @@
 
 ## Die Kamera bleibt schwarz
 
-- Prüfe unter **iOS-Einstellungen → Datenschutz & Sicherheit → Kamera**, ob QRWerk Zugriff hat.
-- Beende QRWerk vollständig und öffne die App erneut.
+- Prüfe unter **iOS-Einstellungen → Datenschutz & Sicherheit → Kamera**, ob QR Werk Zugriff hat.
+- Beende QR Werk vollständig und öffne die App erneut.
 - Prüfe, ob eine andere App die Kamera verwendet.
 - Installiere den aktuellen Entwicklungsstand erneut über Xcode.
 
@@ -19,7 +19,7 @@ Bei einer iPhone-Bildschirmübertragung auf den Mac kann das Kamerabild auf dem 
 
 ## Es werden mehrere Codes gefunden
 
-QRWerk zeigt die erkannten Werte als Auswahl. Markiere die gewünschten Ergebnisse oder wähle **Alle speichern**. **Abbrechen** verwirft die noch nicht gespeicherten Ergebnisse.
+QR Werk zeigt die erkannten Werte als Auswahl. Markiere die gewünschten Ergebnisse oder wähle **Alle speichern**. **Abbrechen** verwirft die noch nicht gespeicherten Ergebnisse.
 
 ## Wo sind meine Batch-Scans?
 

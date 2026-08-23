@@ -1,4 +1,4 @@
-<i>Simple QR</i> is an open-source app to scan, create and store QR codes with a simple UI and experience. No backend service connected. No data collected. No ads.
+<i>QR Werk</i> is an open-source app for scanning, creating and organizing QR codes and barcodes. No advertising backend, no account and no intentional collection of scanned content.
 
 English, French, German, Itanlian, Russian, Traditional Chinese and Simplified Chinese are supported.
 

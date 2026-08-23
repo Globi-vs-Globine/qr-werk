@@ -1,6 +1,6 @@
-# QRWerk-Dokumentation
+# QR Werk – Dokumentation
 
-Diese Dokumentation beschreibt die Bedienung der iOS-orientierten QRWerk-Version. Die deutschen Kapitel werden gleichzeitig auf GitHub und offline in der App unter **Einstellungen → Anleitung** verwendet.
+Diese Dokumentation beschreibt die Bedienung der iOS-orientierten Version von QR Werk. Die deutschen Kapitel werden gleichzeitig auf GitHub und offline in der App unter **Einstellungen → Anleitung** verwendet.
 
 ## Deutsch
 

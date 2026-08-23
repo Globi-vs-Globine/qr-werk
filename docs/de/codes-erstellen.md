@@ -6,7 +6,7 @@
 
 ## Unterstützte Inhalte
 
-QRWerk kann weit mehr als einfachen Text in einem QR-Code speichern. Du kannst gezielt einen passenden Inhaltstyp auswählen:
+QR Werk kann weit mehr als einfachen Text in einem QR-Code speichern. Du kannst gezielt einen passenden Inhaltstyp auswählen:
 
 - **Freier Text** – beispielsweise Nummern, Hinweise oder beliebige Informationen
 - **Internetadresse (URL)** – führt beim Scannen direkt zu einer Webseite
@@ -21,7 +21,7 @@ Damit erkennt die empfangende App den Zweck des QR-Codes und kann direkt die pas
 
 ## Inhalt kontrollieren
 
-Prüfe alle Angaben vor dem Teilen oder Drucken. Ein erzeugter QR-Code enthält genau die eingegebenen Informationen. QRWerk kann eine falsche Internetadresse oder ein fehlerhaftes Passwort nicht automatisch erkennen.
+Prüfe alle Angaben vor dem Teilen oder Drucken. Ein erzeugter QR-Code enthält genau die eingegebenen Informationen. QR Werk kann eine falsche Internetadresse oder ein fehlerhaftes Passwort nicht automatisch erkennen.
 
 ## Speichern und teilen
 

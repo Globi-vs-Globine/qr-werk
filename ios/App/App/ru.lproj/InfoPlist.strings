@@ -1,6 +1,6 @@
-"CFBundleDisplayName" = "QRWerk";
-"CFBundleName" = "QRWerk";
-"NSCameraUsageDescription" = "QRWerk использует камеру для сканирования QR-кода и штрих-кодов";
-"NSContactsUsageDescription" = "QRWerk использует Контакты для добавления контакта";
-"NSPhotoLibraryAddUsageDescription" = "QRWerk использует библиотеку фотографий для сохранения изображения QR-кода";
-"NSPhotoLibraryUsageDescription" = "QRWerk использует библиотеку фотографий для импорта изображений и сканирования QR-кода.";
+"CFBundleDisplayName" = "QR Werk";
+"CFBundleName" = "QR Werk";
+"NSCameraUsageDescription" = "QR Werk использует камеру для сканирования QR-кода и штрих-кодов";
+"NSContactsUsageDescription" = "QR Werk использует Контакты для добавления контакта";
+"NSPhotoLibraryAddUsageDescription" = "QR Werk использует библиотеку фотографий для сохранения изображения QR-кода";
+"NSPhotoLibraryUsageDescription" = "QR Werk использует библиотеку фотографий для импорта изображений и сканирования QR-кода.";

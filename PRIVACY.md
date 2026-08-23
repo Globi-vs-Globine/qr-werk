@@ -2,7 +2,7 @@
 
 ## English
 
-This development fork of Simple QR processes camera images, imported photos,
+QR Werk, a development fork of Simple QR, processes camera images, imported photos,
 QR codes and barcodes locally on the device. Scan history and settings are
 stored locally on the device. The fork does not operate its own analytics,
 advertising or tracking service and does not intentionally transmit scanned
@@ -18,7 +18,7 @@ again before an App Store release.
 
 ## Deutsch
 
-Dieser Entwicklungs-Fork von Simple QR verarbeitet Kamerabilder, importierte
+QR Werk, ein Entwicklungs-Fork von Simple QR, verarbeitet Kamerabilder, importierte
 Fotos, QR-Codes und Barcodes lokal auf dem Gerät. Scanverlauf und Einstellungen
 werden lokal auf dem Gerät gespeichert. Der Fork betreibt keine eigene Analyse-,
 Werbe- oder Tracking-Funktion und überträgt gescannte Inhalte nicht absichtlich
