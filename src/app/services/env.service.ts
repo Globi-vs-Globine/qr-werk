@@ -150,7 +150,8 @@ export class EnvService {
   public readonly GOOGLE_PLAY_URL: string = "https://play.google.com/store/apps/details?id=com.tomfong.simpleqr";
   public readonly APP_STORE_URL: string = "https://apps.apple.com/us/app/simple-qr-by-tom-fong/id1621121553";
   public readonly GITHUB_RELEASE_URL: string = "https://github.com/Globi-vs-Globine/qr-werk/commits/dev/ios-history-export";
-  public readonly PRIVACY_POLICY: string = "https://github.com/Globi-vs-Globine/qr-werk/blob/dev/ios-history-export/PRIVACY.md";
+  public readonly PRIVACY_POLICY: string = "https://github.com/Globi-vs-Globine/qr-werk/blob/main/PRIVACY.md";
+  public readonly LICENSE_URL: string = "https://github.com/Globi-vs-Globine/qr-werk/blob/main/LICENSE";
 
   resultContent: string = '';
   editingContent: boolean = false;

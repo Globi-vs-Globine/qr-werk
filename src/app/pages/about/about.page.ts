@@ -83,6 +83,10 @@ export class AboutPage {
     window.open(this.env.PRIVACY_POLICY, '_system');
   }
 
+  viewLicense(): void {
+    window.open(this.env.LICENSE_URL, '_system');
+  }
+
   async reportBug() {
     window.open(`${this.env.GITHUB_REPO_URL}/issues/new`, '_system');
   }

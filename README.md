@@ -102,3 +102,5 @@ This fork is maintained independently at [Globi-vs-Globine/qr-werk](https://gith
 ## License / Lizenz
 
 QR Werk and this fork are licensed under the [GNU General Public License v3.0](LICENSE). Copyright notices, Git history, attribution and the corresponding source code must remain available when the software is redistributed.
+
+The concise origin and modification notice is available in [NOTICE](NOTICE).
