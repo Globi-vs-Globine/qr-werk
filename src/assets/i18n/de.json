@@ -10,6 +10,8 @@
     "ICLOUD_SYNC_NOW": "Jetzt synchronisieren",
     "ICLOUD_SYNC_IN_PROGRESS": "iCloud wird synchronisiert …",
     "ICLOUD_LAST_SYNC": "Zuletzt synchronisiert",
+    "ICLOUD_DEVICE_NAME": "Bezeichnung dieses Geräts",
+    "ICLOUD_DEVICE_NAME_PLACEHOLDER": "z. B. iPhone Lager",
     "ENABLE": "Aktivieren",
     "ABOUT_SIMPLE_QR": "Über QR Werk",
     "OPEN_SOURCE_LICENSE": "Lizenz (GNU GPL v3)",
@@ -319,6 +321,7 @@
     "MSG": {
         "ICLOUD_SYNC_EXPLAIN": "Optional: Gleicht Protokolle, Gruppen, Lesezeichen und Mehrfacherkennungen über deine private iCloud zwischen deinen Apple-Geräten ab. App-Einstellungen bleiben auf diesem Gerät.",
         "ICLOUD_SYNC_CONFIRM": "Beim ersten Abgleich werden die Einträge dieses Geräts und deiner privaten iCloud zusammengeführt. Es werden keine persönlichen Gerätenamen gespeichert.",
+        "ICLOUD_DEVICE_NAME_EXPLAIN": "Damit du mehrere iPhones oder iPads unterscheiden kannst, kannst du eine eigene Bezeichnung eingeben. Lässt du das Feld unverändert, wird nur iPhone oder iPad verwendet.",
         "ICLOUD_SYNC_SUCCESS": "iCloud-Synchronisierung abgeschlossen.",
         "ICLOUD_SYNC_FAILED": "iCloud konnte momentan nicht synchronisiert werden.",
         "ICLOUD_PLUGIN_MISSING": "Die installierte App enthält die neue iCloud-Komponente noch nicht. Bitte QR Werk in Xcode neu installieren.",

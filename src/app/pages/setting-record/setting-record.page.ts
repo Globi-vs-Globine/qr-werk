@@ -46,6 +46,7 @@ export class SettingRecordPage {
   async ionViewDidEnter() {
     setTimeout(() => this.preventRecordsLimitToast = false, 100);
     if (this.iCloudSync.supported) {
+      await this.env.waitForFullInit();
       this.iCloudEnabled = await this.iCloudSync.isEnabled();
       this.iCloudLastSync = await this.iCloudSync.lastSync();
       try { this.iCloudStatus = (await this.iCloudSync.accountStatus()).status; } catch { this.iCloudStatus = 'unknown'; }
@@ -62,13 +63,37 @@ export class SettingRecordPage {
       header: this.translate.instant('ICLOUD_SYNC_ENABLE'),
       message: this.translate.instant('MSG.ICLOUD_SYNC_CONFIRM'),
       cssClass: ['alert-bg'],
+      inputs: [{
+        name: 'deviceLabel', type: 'text', value: this.env.deviceLabel,
+        placeholder: this.translate.instant('ICLOUD_DEVICE_NAME_PLACEHOLDER'),
+        attributes: { maxlength: 30, autocapitalize: 'sentences' },
+      }],
       buttons: [
         { text: this.translate.instant('CANCEL'), role: 'cancel', handler: () => this.iCloudEnabled = false },
-        { text: this.translate.instant('ENABLE'), handler: async () => {
+        { text: this.translate.instant('ENABLE'), handler: async (data) => {
+          await this.env.setDeviceLabel(data?.deviceLabel);
           await this.iCloudSync.setEnabled(true);
           this.iCloudEnabled = true;
           await this.syncICloud();
         } },
+      ],
+    });
+    await alert.present();
+  }
+
+  async editICloudDeviceLabel() {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('ICLOUD_DEVICE_NAME'),
+      message: this.translate.instant('MSG.ICLOUD_DEVICE_NAME_EXPLAIN'),
+      cssClass: ['alert-bg'],
+      inputs: [{
+        name: 'deviceLabel', type: 'text', value: this.env.deviceLabel,
+        placeholder: this.translate.instant('ICLOUD_DEVICE_NAME_PLACEHOLDER'),
+        attributes: { maxlength: 30, autocapitalize: 'sentences' },
+      }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        { text: this.translate.instant('SAVE'), handler: async (data) => this.env.setDeviceLabel(data?.deviceLabel) },
       ],
     });
     await alert.present();

@@ -134,6 +134,7 @@ export class EnvService {
   public readonly KEY_SHOW_OPEN_FOOD_FACTS_BUTTON = "showOpenFoodFactsButton";
   public readonly KEY_SHOW_CONNECT_WIFI_BUTTON = "showConnectWifiButton";
   public readonly KEY_AUTO_EXIT_MIN = "autoExitAppMin";
+  public readonly KEY_ICLOUD_DEVICE_LABEL = "icloud-device-label";
 
   public readonly APP_FOLDER_NAME: string = 'QRWerk';
 
@@ -166,6 +167,7 @@ export class EnvService {
   private _deviceInfo: DeviceInfo | undefined = undefined;
   public deviceId = '';
   public deviceType = 'Gerät';
+  public deviceLabel = 'Gerät';
 
   recordSource: 'create' | 'view' | 'scan' | 'external-share' | undefined;
   detailedRecordSource: 'create' | 'view-log' | 'view-bookmark' | 'scan-camera' | 'scan-image' | 'external-share' | undefined;
@@ -215,6 +217,7 @@ export class EnvService {
         this.deviceType = this._deviceInfo.platform === 'ios'
           ? (this._deviceInfo.model?.toLowerCase().includes('ipad') ? 'iPad' : 'iPhone')
           : this._deviceInfo.platform;
+        this.deviceLabel = this.deviceType;
         this.deviceId = (await Device.getId()).identifier;
       } catch {
         // Ignore
@@ -264,6 +267,8 @@ export class EnvService {
   }
 
   private async _loadStorageCritical(): Promise<void> {
+    const savedDeviceLabel = await Preferences.get({ key: this.KEY_ICLOUD_DEVICE_LABEL });
+    if (savedDeviceLabel.value?.trim()) this.deviceLabel = savedDeviceLabel.value.trim().slice(0, 30);
     const loadPromise1 = Preferences.get({ key: this.KEY_START_PAGE }).then(
       async result => {
         if (result.value != null) {
@@ -336,6 +341,12 @@ export class EnvService {
       loadPromise7b,
       loadPromise10,
     ]);
+  }
+
+  async setDeviceLabel(value?: string): Promise<void> {
+    const normalized = (value ?? '').trim().replace(/\s+/g, ' ').slice(0, 30);
+    this.deviceLabel = normalized || this.deviceType;
+    await Preferences.set({ key: this.KEY_ICLOUD_DEVICE_LABEL, value: this.deviceLabel });
   }
 
   private async _loadStorageDeferred(): Promise<void> {
@@ -1008,9 +1019,9 @@ export class EnvService {
     record.createdAt = date;
     record.modifiedAt = date;
     record.originDeviceId = this.deviceId;
-    record.originDeviceType = this.deviceType;
+    record.originDeviceType = this.deviceLabel;
     record.lastModifiedDeviceId = this.deviceId;
-    record.lastModifiedDeviceType = this.deviceType;
+    record.lastModifiedDeviceType = this.deviceLabel;
     record.group = group?.trim() || undefined;
     if (this.recordSource != null) {
       record.source = this.recordSource;
@@ -1042,7 +1053,7 @@ export class EnvService {
   private markRecordModified(record: ScanRecord): void {
     record.modifiedAt = new Date();
     record.lastModifiedDeviceId = this.deviceId;
-    record.lastModifiedDeviceType = this.deviceType;
+    record.lastModifiedDeviceType = this.deviceLabel;
   }
 
   async recordDuplicateScan(value: string): Promise<boolean> {
@@ -1195,9 +1206,9 @@ export class EnvService {
       bookmark.createdAt = date;
       bookmark.modifiedAt = date;
       bookmark.originDeviceId = this.deviceId;
-      bookmark.originDeviceType = this.deviceType;
+      bookmark.originDeviceType = this.deviceLabel;
       bookmark.lastModifiedDeviceId = this.deviceId;
-      bookmark.lastModifiedDeviceType = this.deviceType;
+      bookmark.lastModifiedDeviceType = this.deviceLabel;
       bookmark.tag = tag;
       this.bookmarks.unshift(bookmark);
       this.bookmarks.sort((a, b) => {

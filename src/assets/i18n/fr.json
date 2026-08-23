@@ -10,6 +10,8 @@
     "ICLOUD_SYNC_NOW": "Synchroniser maintenant",
     "ICLOUD_SYNC_IN_PROGRESS": "Synchronisation avec iCloud…",
     "ICLOUD_LAST_SYNC": "Dernière synchronisation",
+    "ICLOUD_DEVICE_NAME": "Nom de cet appareil",
+    "ICLOUD_DEVICE_NAME_PLACEHOLDER": "p. ex. iPhone Entrepôt",
     "ENABLE": "Activer",
     "ABOUT_SIMPLE_QR": "À propos de QR Werk",
     "OPEN_SOURCE_LICENSE": "Licence (GNU GPL v3)",
@@ -268,6 +270,7 @@
     "MSG": {
         "ICLOUD_SYNC_EXPLAIN": "Facultatif : synchronise l’historique, les groupes, les favoris et les détections multiples via votre iCloud privé entre vos appareils Apple. Les réglages restent sur cet appareil.",
         "ICLOUD_SYNC_CONFIRM": "La première synchronisation fusionne les entrées de cet appareil avec les données de votre iCloud privé. Les noms personnels des appareils ne sont pas enregistrés.",
+        "ICLOUD_DEVICE_NAME_EXPLAIN": "Vous pouvez saisir un libellé pour distinguer plusieurs iPhone ou iPad. Sans modification, seul iPhone ou iPad est utilisé.",
         "ICLOUD_SYNC_SUCCESS": "Synchronisation iCloud terminée.",
         "ICLOUD_SYNC_FAILED": "La synchronisation iCloud est momentanément impossible.",
         "ICLOUD_PLUGIN_MISSING": "L’app installée ne contient pas encore le nouveau composant iCloud. Réinstallez QR Werk depuis Xcode.",

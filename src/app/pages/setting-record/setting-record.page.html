@@ -200,6 +200,12 @@
         (ngModelChange)="onICloudToggle($event)" [disabled]="iCloudBusy"></ion-toggle>
     </ion-item>
     <div class="ion-padding-horizontal d-flex justify-content-center align-content-start flex-column" *ngIf="iCloudEnabled">
+      <ion-item class="ion-no-padding" lines="none" button detail="true" (click)="editICloudDeviceLabel()">
+        <ion-label class="ion-padding-start ion-margin-start">
+          <p>{{ 'ICLOUD_DEVICE_NAME' | translate }}</p>
+          <h3>{{ env.deviceLabel }}</h3>
+        </ion-label>
+      </ion-item>
       <ion-button class="ion-padding-horizontal" fill="outline" color="primary" (click)="syncICloud()" [disabled]="iCloudBusy">
         {{ 'ICLOUD_SYNC_NOW' | translate }}
       </ion-button>
