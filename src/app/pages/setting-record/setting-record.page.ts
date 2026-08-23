@@ -11,7 +11,7 @@ import { Bookmark } from 'src/app/models/bookmark';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Preferences } from '@capacitor/preferences';
-import { de, enUS, fr, it, ptBR, ru, zhCN, zhHK } from 'date-fns/locale';
+import { de, enUS, fr, it } from 'date-fns/locale';
 import { HistoryExportService } from 'src/app/services/history-export.service';
 
 @Component({
@@ -276,18 +276,6 @@ export class SettingRecordPage {
       case "it":
         locale = it;
         break;
-      case "pt-BR":
-        locale = ptBR;
-        break;
-      case "ru":
-        locale = ru;
-        break;
-      case "zh-CN":
-        locale = zhCN;
-        break;
-      case "zh-HK":
-        locale = zhHK;
-        break;
       default:
         locale = enUS;
     }
@@ -311,18 +299,6 @@ export class SettingRecordPage {
         break;
       case "it":
         locale = it;
-        break;
-      case "pt-BR":
-        locale = ptBR;
-        break;
-      case "ru":
-        locale = ru;
-        break;
-      case "zh-CN":
-        locale = zhCN;
-        break;
-      case "zh-HK":
-        locale = zhHK;
         break;
       default:
         locale = enUS;

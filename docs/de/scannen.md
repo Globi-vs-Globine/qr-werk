@@ -11,6 +11,8 @@ Für eine zuverlässige Erkennung:
 - Vergrößere den Abstand bei sehr großen Codes.
 - Gehe näher heran, wenn ein Code im Bild zu klein ist.
 - Verwende bei Bedarf die Taschenlampe.
+- Nutze bei kleinen oder weiter entfernten Codes die Umschaltung zwischen 1× und 2× Zoom.
+- Falls ein beschädigter Code nicht erkannt wird, kannst du den Wert über das Tastatursymbol manuell eingeben.
 
 ## Batch scannen
 
@@ -21,7 +23,9 @@ Mit **Batch scannen** kannst du mehrere Codes nacheinander erfassen, ohne nach j
 3. Scanne die gewünschten Codes nacheinander.
 4. Beende den Vorgang mit **Schließen**.
 
-Bereits während des Batch-Vorgangs werden neue, unterschiedliche Codes gespeichert. Doppelte Werte innerhalb desselben Durchgangs werden übersprungen. Die Einträge landen zunächst unter **Ohne Gruppe**. Im Protokoll kannst du sie anschließend auswählen und einer vorhandenen Gruppe zuweisen.
+Bereits während des Batch-Vorgangs werden die erkannten Codes gespeichert. In den Scan-Einstellungen kannst du festlegen, ob doppelte Werte zugelassen, nur innerhalb des aktuellen Durchgangs verhindert oder im gesamten Protokoll geprüft werden. Erkannte Duplikate werden im Protokoll vermerkt; in der Detailansicht findest du die zugehörigen Zeitpunkte.
+
+Zwischen zwei Erkennungen wartet QRWerk standardmässig eine Sekunde. Dadurch wird derselbe Code nicht allein deshalb mehrfach erkannt, weil die Kamera noch darauf gerichtet ist. Die Einträge landen zunächst unter **Ohne Gruppe** und können im Protokoll gemeinsam einer Gruppe zugewiesen werden.
 
 ## Bild importieren
 

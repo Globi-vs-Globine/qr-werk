@@ -8,21 +8,29 @@ Hier findest du Versionsangaben, unterstützte Barcode-Typen, Hinweise zur Entwi
 
 Die integrierte Anleitung funktioniert offline. Sie verwendet dieselben Kapitel wie die Dokumentation im GitHub-Repository.
 
-## Ergebnisdarstellung
+## QR-Code- und Scan-Einstellungen
 
-In den Ergebnis-Einstellungen legst du fest, wie erkannte und erzeugte Inhalte dargestellt werden und welche Aktionen verfügbar sind.
+Hier legst du fest, wie QR-Codes und erkannte Inhalte dargestellt werden. Für Batch-Scans kannst du ausserdem bestimmen, wie QRWerk mit doppelten Codes umgeht, wie lange die Pause zwischen zwei Erkennungen dauert und ob der Autofokus verwendet wird. Die empfohlene Scan-Pause beträgt eine Sekunde.
 
 ## Protokoll, Sicherung und Wiederherstellung
 
 Hier steuerst du die Protokollierung, Begrenzungen sowie Sicherungs- und Wiederherstellungsfunktionen. Prüfe vor einem Zurücksetzen der App, ob wichtige Daten gesichert wurden.
 
-## Sprache und Darstellung
+## Sprache
 
-QRWerk unterstützt verschiedene Sprachen, Farbschemata und Bildschirmausrichtungen. Tippe auf die gesamte gewünschte Zeile; du musst nicht genau den Haken am rechten Rand treffen.
+QRWerk kann auf Deutsch, Englisch, Französisch und Italienisch verwendet werden. Mit **Systemeinstellung** übernimmt die App automatisch eine dieser Sprachen; bei einer anderen Gerätesprache wird Englisch verwendet. Tippe auf die gesamte gewünschte Zeile – du musst nicht genau den Haken am rechten Rand treffen.
 
-## Vibration
+## Darstellung und Farben
 
-Haptische Rückmeldungen können für unterstützte Geräte aktiviert oder reduziert werden. Nicht jedes Gerät bietet dieselben Vibrationsmöglichkeiten.
+Du kannst zwischen der hellen, dunklen und schwarzen Darstellung wählen oder die Systemeinstellung übernehmen. Zusätzlich lässt sich die Akzentfarbe der Bedienoberfläche anpassen. Zur Auswahl stehen Petrol, Blau, Violett, Grün, Orange und Pink.
+
+## Ausrichtung
+
+Hier bestimmst du, ob QRWerk die Systemeinstellung verwendet oder im Hoch- beziehungsweise Querformat bleibt.
+
+## Vibration und haptische Rückmeldung
+
+Du kannst haptische Bedienrückmeldungen und die Rückmeldung nach einem erfolgreichen Scan gemeinsam oder getrennt aktivieren. Mit **Aus** werden beide Rückmeldungen deaktiviert. Nicht jedes Gerät bietet dieselben Vibrationsmöglichkeiten.
 
 ## App-Startseite
 

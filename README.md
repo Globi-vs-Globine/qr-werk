@@ -24,6 +24,9 @@ Die Verarbeitung und die Historie bleiben grundsätzlich lokal auf dem Gerät. E
 - Scan QR codes and common barcode formats with the native iOS camera scanner.
 - Supported formats include QR Code, EAN-8, EAN-13, UPC-A, UPC-E, Code 39, Code 93, Code 128, Codabar, ITF, Aztec, Data Matrix and PDF417.
 - Batch scan multiple codes consecutively and save them directly to a group.
+- Configure duplicate handling, scan pause and autofocus for batch scanning.
+- Enter a code manually when a damaged label cannot be read reliably.
+- Switch between 1× and 2× zoom in the native iOS scanner.
 - Import one or multiple images from the photo library.
 - Detect multiple codes in one image.
 - Review detected codes and save all or only a selected subset.
@@ -45,6 +48,11 @@ Die Verarbeitung und die Historie bleiben grundsätzlich lokal auf dem Gerät. E
 - Create QR codes from text, URLs, contacts, phone numbers, messages, email addresses, Wi-Fi access data and locations.
 - Use context-sensitive actions such as opening links, copying content or starting a web search.
 - Customize generated QR codes and app appearance.
+- Choose light, dark or black appearance and one of six accent colors.
+
+## Languages / Sprachen
+
+QRWerk is available in German, English, French and Italian. If the iPhone or iPad uses another system language, QRWerk falls back to English.
 
 ## Privacy / Datenschutz
 

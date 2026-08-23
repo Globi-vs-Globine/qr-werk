@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ActionSheetController, AlertController, IonItemSliding, LoadingController, ModalController, PopoverController, ToastController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/env.service';
 import { format, Locale } from 'date-fns';
-import { de, enUS, fr, it, ptBR, ru, zhCN, zhHK } from 'date-fns/locale';
+import { de, enUS, fr, it } from 'date-fns/locale';
 import { ScanRecord } from 'src/app/models/scan-record';
 import { TranslateService } from '@ngx-translate/core';
 import { Bookmark } from 'src/app/models/bookmark';
@@ -296,18 +296,6 @@ export class HistoryPage {
         break;
       case "it":
         locale = it;
-        break;
-      case "pt-BR":
-        locale = ptBR;
-        break;
-      case "ru":
-        locale = ru;
-        break;
-      case "zh-CN":
-        locale = zhCN;
-        break;
-      case "zh-HK":
-        locale = zhHK;
         break;
       default:
         locale = enUS;
