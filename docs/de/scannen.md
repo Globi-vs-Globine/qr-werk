@@ -43,19 +43,35 @@ Unter **Pause zwischen Scans** stellst du 0,5 bis 3 Sekunden ein. Standardmässi
 
 Mit **Autofokus** lässt du die Kamera während des Scannens automatisch scharfstellen. Für den normalen Einsatz sollte diese Option eingeschaltet bleiben. Schalte sie nur testweise aus, wenn die Kamera bei gleichbleibendem Abstand ständig neu fokussiert und dadurch unruhig wird.
 
+### Scan-Optionen und Scanbereich
+
+Im geöffneten Kamerascanner findest du rechts unten die **Scan-Optionen**. Dort kannst du den **Scanbereich** und den **Scanfilter** unmittelbar während der Arbeit anpassen.
+
+Für den Scanbereich stehen drei Darstellungen zur Verfügung:
+
+- **Standard:** ein quadratischer Bereich für QR-Codes und die meisten alltäglichen Scans
+- **Breit:** ein flacher, breiter Bereich für längliche Strichcodes
+- **Ganzes Bild:** ein grosser Bereich, wenn das Gerät auf einem Stativ steht oder ein Code nicht genau positioniert werden kann
+
+Der Rahmen hilft bei der gezielten Auswahl. Erkennt QR Werk im Kamerabild genau einen eindeutigen Code, darf dieser auch teilweise oder vollständig ausserhalb des Rahmens liegen. Sind mehrere Codes sichtbar, werden bevorzugt die Codes innerhalb des gewählten Bereichs verwendet. So kann ein einzelner schwer positionierbarer Code trotzdem erfasst werden, ohne bei Verpackungen mit vielen Codes wahllos den falschen auszuwählen.
+
 ### Scanfilter
 
 Den Scanfilter findest du unter **Einstellungen → QR-Code- und Scan-Einstellungen → Scan-Einstellungen → Scanfilter**. Während der Kamerascanner geöffnet ist, erreichst du dieselben Regeln direkt über das Filtersymbol. Ein farbiges Filtersymbol zeigt an, dass der Filter aktiv ist.
 
-Du kannst folgende Bedingungen einzeln oder gemeinsam verwenden:
+Der Scanfilter legt fest, **wie ein erlaubter Code aufgebaut sein muss**. Er sucht keinen bestimmten Gegenstand und vergleicht nicht mit einer Soll-Liste. Dafür ist später der eigenständige Kontrollmodus vorgesehen.
 
-- **Beginnt mit (Präfix):** akzeptiert nur Werte mit dem angegebenen Anfang, beispielsweise `CF`.
-- **Endet mit (Suffix):** akzeptiert nur Werte mit dem angegebenen Ende.
-- **Genaue Zeichenanzahl:** akzeptiert nur Werte mit exakt dieser Länge.
+Du kannst folgende Bedingungen einzeln oder gemeinsam verwenden. Nicht benötigte Felder bleiben leer:
 
-Alle ausgefüllten Bedingungen müssen gleichzeitig passen. Der Filter unterscheidet Gross- und Kleinschreibung. Beispiel: Mit Präfix `CF` und Zeichenanzahl `20` akzeptiert QR Werk nur 20-stellige Werte, die mit `CF` beginnen. Nicht passende Codes werden kurz gemeldet, aber weder geöffnet noch gespeichert.
+- **Code beginnt mit (Präfix):** Trage den vorgeschriebenen Anfang ein. Bei `CF` werden beispielsweise `CF12345` und `CF-MONITOR-01` akzeptiert, `PC-CF123` jedoch nicht.
+- **Code endet mit (Suffix):** Trage das vorgeschriebene Ende ein. Bei `99` wird beispielsweise `GERAET-99` akzeptiert, `99-GERAET` jedoch nicht.
+- **Code muss genau … Zeichen haben:** Trage ausschliesslich eine Zahl ein, beispielsweise `20`. Gemeint ist die gesamte Länge des gelesenen Inhalts – nicht die gesuchte Artikel- oder Gerätenummer. Buchstaben, Ziffern, Leerzeichen und Sonderzeichen zählen jeweils als ein Zeichen.
 
-Der Filter gilt für normalen Kamerascan, Batch-Scan, Bildimport und manuelle Eingabe. Auf der Einstellungsseite kannst du vor dem Scannen mit einem Testcode kontrollieren, ob deine Regeln wie erwartet funktionieren. Schalte den Filter nach einem Arbeitsauftrag wieder aus, wenn anschliessend andere Codearten erfasst werden sollen.
+Alle ausgefüllten Bedingungen müssen gleichzeitig passen. Der Filter unterscheidet Gross- und Kleinschreibung. Beispiel: Mit Präfix `CF`, Suffix `CH` und Zeichenanzahl `20` akzeptiert QR Werk nur Inhalte, die mit `CF` beginnen, mit `CH` enden und insgesamt genau 20 Zeichen besitzen. Nicht passende Codes werden kurz gemeldet, aber weder geöffnet noch gespeichert.
+
+Der Filter gilt für normalen Kamerascan, Batch-Scan, Bildimport und manuelle Eingabe. Auf der Einstellungsseite kannst du unter **Filter vorab testen** einen vollständigen Beispielcode eingeben. QR Werk zeigt sofort an, ob dieser mit den eingestellten Regeln akzeptiert oder abgewiesen würde. Dieser Test speichert und scannt nichts. Schalte den Filter nach einem Arbeitsauftrag wieder aus, wenn anschliessend andere Codearten erfasst werden sollen.
+
+Wichtig: Wenn du beispielsweise exakt den Code `3200143723` suchst und beim Fund eine besondere Meldung erwartest, ist **Genaue Zeichenanzahl** nicht das richtige Feld. Dort würdest du lediglich `10` eintragen und damit jeden zehnstelligen Code erlauben. Das gezielte Suchen eines Codes oder das Prüfen einer vollständigen Soll-Liste gehört zum separaten Kontrollmodus.
 
 Die gespeicherten Batch-Einträge landen zunächst unter **Ohne Gruppe** und können im Protokoll gemeinsam einer Gruppe zugewiesen werden.
 

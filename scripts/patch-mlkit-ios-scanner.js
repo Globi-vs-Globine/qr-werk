@@ -29,8 +29,9 @@ const accentColorPatchMarker = 'QRWerk: use the selected accent color for the sc
 const scanFilterPatchMarker = 'QRWerk: configure the persistent scan filter inside the scanner.';
 const scanAreaPatchMarker = 'QRWerk: support adaptive and selectable scanner areas.';
 const scanAreaSafeAreaPatchMarker = 'QRWerk: keep the full-image guide below the iOS status area.';
+const scanFilterClarityPatchMarker = 'QRWerk: explain scan-filter fields and distinguish them from control mode.';
 
-if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker) && source.includes(manualInputPatchMarker) && source.includes(accentColorPatchMarker) && source.includes(scanFilterPatchMarker) && source.includes(scanAreaPatchMarker) && source.includes(scanAreaSafeAreaPatchMarker) && implementationSource.includes(manualInputPatchMarker)) {
+if (source.includes(patchMarker) && source.includes(zoomPatchMarker) && source.includes(scannerPolishPatchMarker) && source.includes(autofocusPatchMarker) && source.includes(manualInputPatchMarker) && source.includes(accentColorPatchMarker) && source.includes(scanFilterPatchMarker) && source.includes(scanAreaPatchMarker) && source.includes(scanAreaSafeAreaPatchMarker) && source.includes(scanFilterClarityPatchMarker) && implementationSource.includes(manualInputPatchMarker)) {
   console.log('QRWerk ML Kit iOS scanner UI patch already applied.');
   process.exit(0);
 }
@@ -579,6 +580,24 @@ replaceOnce(
     `        }\n` +
     `        let view = UIView(frame: frame)\n`,
   'full-image guide safe area',
+);
+}
+
+if (!source.includes(scanFilterClarityPatchMarker)) {
+replaceOnce(
+  `        let alert = UIAlertController(title: isGerman ? "Scanfilter" : "Scan filter", message: isGerman ? "Alle ausgefüllten Bedingungen müssen passen." : "All entered conditions must match.", preferredStyle: .alert)\n` +
+    `        alert.addTextField { field in field.placeholder = isGerman ? "Beginnt mit (Präfix)" : "Starts with (prefix)"; field.text = defaults.string(forKey: "CapacitorStorage.scan-filter-prefix") }\n` +
+    `        alert.addTextField { field in field.placeholder = isGerman ? "Endet mit (Suffix)" : "Ends with (suffix)"; field.text = defaults.string(forKey: "CapacitorStorage.scan-filter-suffix") }\n` +
+    `        alert.addTextField { field in field.placeholder = isGerman ? "Genaue Zeichenanzahl" : "Exact character count"; field.keyboardType = .numberPad; field.text = defaults.string(forKey: "CapacitorStorage.scan-filter-length") }\n`,
+  `        // QRWerk: explain scan-filter fields and distinguish them from control mode.\n` +
+    `        let message = isGerman\n` +
+    `            ? "Der Filter erlaubt Codes anhand von Anfang, Ende und Gesamtlänge. Er sucht keinen bestimmten Code. Alle ausgefüllten Bedingungen müssen passen."\n` +
+    `            : "The filter accepts codes by beginning, ending and total length. It does not search for one specific code. All entered conditions must match."\n` +
+    `        let alert = UIAlertController(title: isGerman ? "Scanfilter" : "Scan filter", message: message, preferredStyle: .alert)\n` +
+    `        alert.addTextField { field in field.placeholder = isGerman ? "Code beginnt mit, z. B. CF" : "Code starts with, e.g. CF"; field.text = defaults.string(forKey: "CapacitorStorage.scan-filter-prefix") }\n` +
+    `        alert.addTextField { field in field.placeholder = isGerman ? "Code endet mit, z. B. 99" : "Code ends with, e.g. 99"; field.text = defaults.string(forKey: "CapacitorStorage.scan-filter-suffix") }\n` +
+    `        alert.addTextField { field in field.placeholder = isGerman ? "Gesamtlänge als Zahl, z. B. 20" : "Total length as a number, e.g. 20"; field.keyboardType = .numberPad; field.text = defaults.string(forKey: "CapacitorStorage.scan-filter-length") }\n`,
+  'clear scan filter explanation',
 );
 }
 
