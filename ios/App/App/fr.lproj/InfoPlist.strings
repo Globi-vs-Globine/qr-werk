@@ -1,6 +1,6 @@
 "CFBundleDisplayName" = "QR Werk";
 "CFBundleName" = "QR Werk";
-"NSCameraUsageDescription" = "QR Werk utilise l'appareil photo pour scanner le code QR et les codes-barres";
-"NSContactsUsageDescription" = "QR Werk utilise Contacts pour ajouter un contact";
-"NSPhotoLibraryAddUsageDescription" = "QR Werk utilise la bibliothèque de photos pour enregistrer l'image du code QR";
-"NSPhotoLibraryUsageDescription" = "QR Werk utilise la bibliothèque de photos pour importer l'image et scanner le code QR";
+"NSCameraUsageDescription" = "QR Werk a besoin de l’appareil photo pour scanner des codes QR et des codes-barres.";
+"NSContactsUsageDescription" = "QR Werk accède aux contacts uniquement lorsque vous choisissez d’enregistrer un contact scanné.";
+"NSPhotoLibraryAddUsageDescription" = "QR Werk enregistre une image de code QR dans votre photothèque uniquement à votre demande.";
+"NSPhotoLibraryUsageDescription" = "QR Werk accède à votre photothèque uniquement lorsque vous choisissez des images à scanner.";
