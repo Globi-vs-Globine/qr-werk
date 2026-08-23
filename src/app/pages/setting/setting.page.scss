@@ -8,9 +8,9 @@ ion-item img {
 }
 
 ion-list-header {
-    min-height: 40px;
-    font-size: 0.8rem;
+    min-height: auto;
+    font-size: var(--qrwerk-font-section);
     font-weight: 600;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    text-transform: none;
 }

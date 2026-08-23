@@ -37,6 +37,18 @@ ion-app {
   font-family: var(--ion-font-family);
 }
 
+ion-header ion-title {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+ion-header ion-back-button,
+.qrwerk-standard-page ion-button,
+.qrwerk-settings-page ion-button {
+  min-height: 44px;
+}
+
 /*
  * QR Werk interface foundations
  * --------------------------------------------------------------------------
@@ -134,6 +146,100 @@ ion-app {
   font-weight: 400;
   line-height: 1.35;
   white-space: normal;
+}
+
+/* Standard treatment for remaining settings screens during the design audit. */
+.qrwerk-standard-page {
+  --padding-bottom: calc(var(--qrwerk-space-5) + var(--ion-safe-area-bottom, 0px));
+}
+
+.qrwerk-standard-page > ion-list-header {
+  min-height: auto;
+  margin: var(--qrwerk-space-5) 0 var(--qrwerk-space-3) !important;
+  padding: 0 var(--qrwerk-space-4) !important;
+  color: var(--ion-text-color);
+  font-size: var(--qrwerk-font-section) !important;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.qrwerk-standard-page > ion-list-header:first-child {
+  margin-top: var(--qrwerk-space-4) !important;
+}
+
+.qrwerk-standard-page > ion-item,
+.qrwerk-standard-page > ion-radio-group > ion-item {
+  --min-height: var(--qrwerk-row-min-height);
+  --padding-start: var(--qrwerk-space-4);
+  --inner-padding-end: var(--qrwerk-space-4);
+  --inner-padding-top: var(--qrwerk-space-2);
+  --inner-padding-bottom: var(--qrwerk-space-2);
+}
+
+.qrwerk-standard-page > ion-item ion-label,
+.qrwerk-standard-page > ion-radio-group > ion-item ion-label {
+  margin: var(--qrwerk-space-2) 0;
+}
+
+.qrwerk-standard-page > ion-item ion-label p,
+.qrwerk-standard-page > ion-radio-group > ion-item ion-label p {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: var(--ion-text-color);
+  font-size: var(--qrwerk-font-body);
+  line-height: 1.3;
+  white-space: normal;
+}
+
+.qrwerk-standard-page > ion-item ion-icon[slot='start'],
+.qrwerk-standard-page > ion-radio-group > ion-item ion-icon[slot='start'] {
+  width: var(--qrwerk-icon-size);
+  min-width: var(--qrwerk-icon-size);
+  height: var(--qrwerk-icon-size);
+  margin: 0 var(--qrwerk-space-4) 0 0 !important;
+  padding: 0 !important;
+  font-size: var(--qrwerk-icon-size);
+}
+
+.qrwerk-standard-page ion-radio,
+.qrwerk-standard-page ion-toggle {
+  margin-inline-end: 0 !important;
+}
+
+.qrwerk-standard-page > ion-item:first-child ion-label > p > ion-text > div,
+.qrwerk-standard-page > ion-item:first-child ion-label > p > ion-text {
+  color: var(--ion-color-medium);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.qrwerk-settings-overview > ion-item {
+  --min-height: var(--qrwerk-row-min-height);
+  --padding-start: var(--qrwerk-space-4);
+  --inner-padding-end: var(--qrwerk-space-4);
+  --inner-padding-top: var(--qrwerk-space-2);
+  --inner-padding-bottom: var(--qrwerk-space-2);
+}
+
+.qrwerk-settings-overview > ion-item > ion-icon,
+.qrwerk-settings-overview > ion-item > div ion-icon,
+.qrwerk-settings-overview > ion-item img {
+  width: var(--qrwerk-icon-size);
+  min-width: var(--qrwerk-icon-size);
+  height: var(--qrwerk-icon-size);
+  margin: 0 var(--qrwerk-space-4) 0 0 !important;
+  padding: 0 !important;
+  font-size: var(--qrwerk-icon-size);
+}
+
+.qrwerk-settings-overview > ion-item ion-label p {
+  margin: 0 !important;
+  padding: 0 !important;
+  color: var(--ion-text-color);
+  font-size: var(--qrwerk-font-body);
+  line-height: 1.3;
 }
 
 .text-center-toast {
