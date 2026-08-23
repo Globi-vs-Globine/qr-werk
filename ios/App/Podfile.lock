@@ -116,7 +116,7 @@ SPEC CHECKSUMS:
   CapacitorSplashScreen: 8d6c8cb0542a8e81585c593815db8785ed8ce454
   CapacitorStatusBar: 5526833b87fa9c96a2a90c1322bb1f663c04505f
   CapacitorToast: e32c2b61a70d6fbd0633309c0807b4b9811768b4
-  CordovaPlugins: 77bf54feaf5d90377bfd10ad20f10f256c2a1727
+  CordovaPlugins: 839a101afe291af03a020685e7f8018662e9a5c5
   IONFilesystemLib: 89258b8e3e85465da93127d25d7ce37f977e8a6f
   SquareetlabsCapacitorNavigationBar: b6e54a683e5504db259963b1daf27e723f3cce75
 

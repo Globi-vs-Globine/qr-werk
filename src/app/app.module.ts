@@ -10,7 +10,6 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage-angular';
-import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { SMS } from '@awesome-cordova-plugins/sms/ngx';
 import { ThemeDetection } from '@awesome-cordova-plugins/theme-detection/ngx';
 import { Chooser } from '@awesome-cordova-plugins/chooser/ngx';
@@ -57,7 +56,6 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
         EnvService,
         DatePipe,
         SMS,
-        SocialSharing,
         ThemeDetection,
         Chooser,
         ScreenOrientation,

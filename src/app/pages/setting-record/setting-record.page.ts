@@ -8,7 +8,7 @@ import { format } from 'date-fns';
 import { Chooser, ChooserResult } from '@awesome-cordova-plugins/chooser/ngx';
 import { ScanRecord } from 'src/app/models/scan-record';
 import { Bookmark } from 'src/app/models/bookmark';
-import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
+import { Share } from '@capacitor/share';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Preferences } from '@capacitor/preferences';
 import { de, enUS, fr, it } from 'date-fns/locale';
@@ -36,7 +36,6 @@ export class SettingRecordPage {
     private alertController: AlertController,
     private loadingController: LoadingController,
     private chooser: Chooser,
-    private socialSharing: SocialSharing,
     private platform: Platform,
     private modalController: ModalController,
     private historyExportService: HistoryExportService,
@@ -193,18 +192,19 @@ export class SettingRecordPage {
                 text: this.translate.instant('COPY_SECRET_AND_SAVE_BACKUP'),
                 handler: async () => {
                   const loading3 = await this.presentLoading(this.translate.instant("PLEASE_WAIT"));
-                  await this.socialSharing.share(null, filename, result.uri, null).then(
-                    _ => {
-                      loading3.dismiss();
+                  try {
+                    await Share.share({
+                      title: filename,
+                      files: [result.uri],
+                      dialogTitle: this.translate.instant('COPY_SECRET_AND_SAVE_BACKUP'),
+                    });
+                  } catch (err) {
+                    if (this.env.isDebugging) {
+                      this.presentToast("Error when sharing backup: " + JSON.stringify(err), "long", "top");
                     }
-                  ).catch(
-                    err => {
-                      loading3.dismiss();
-                      if (this.env.isDebugging) {
-                        this.presentToast("Error when SocialSharing.share: " + JSON.stringify(err), "long", "top");
-                      }
-                    }
-                  )
+                  } finally {
+                    await loading3.dismiss();
+                  }
                 }
               }
             ]

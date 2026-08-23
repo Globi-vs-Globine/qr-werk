@@ -1,9 +1,10 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ScreenOrientation } from '@awesome-cordova-plugins/screen-orientation/ngx';
-import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Toast } from '@capacitor/toast';
+import { Share } from '@capacitor/share';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 import { LoadingController, ModalController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvService } from 'src/app/services/env.service';
@@ -42,7 +43,6 @@ export class QrCodePage {
     public env: EnvService,
     private loadingController: LoadingController,
     private modalController: ModalController,
-    private socialSharing: SocialSharing,
     private router: Router,
     private platform: Platform,
     private screenOrientation: ScreenOrientation,
@@ -182,24 +182,30 @@ export class QrCodePage {
       this.qrImageDataUrl = canvas.toDataURL("image/png", 1);
       loading.dismiss();
       const loading2 = await this.presentLoading(this.translate.instant('SHARING'));
-      await this.socialSharing.share(this.translate.instant('MSG.SHARE_QR'), this.translate.instant('SIMPLE_QR'), this.qrImageDataUrl, null).then(
-        _ => {
-          this.qrcodeElement.width = currentWidth;
-          delete this.qrImageDataUrl;
-          this.isSharing = false;
-          loading2.dismiss();
+      const filename = `qr-werk-${Date.now()}.png`;
+      try {
+        const file = await Filesystem.writeFile({
+          path: filename,
+          data: this.qrImageDataUrl.replace(/^data:image\/png;base64,/, ''),
+          directory: Directory.Cache,
+        });
+        await Share.share({
+          title: 'QR Werk',
+          text: this.translate.instant('MSG.SHARE_QR'),
+          files: [file.uri],
+          dialogTitle: this.translate.instant('SHARING'),
+        });
+      } catch (err) {
+        if (this.env.isDebugging) {
+          this.presentToast("Error when sharing QR code: " + JSON.stringify(err), "long", "top");
         }
-      ).catch(
-        err => {
-          if (this.env.isDebugging) {
-            this.presentToast("Error when call SocialSharing.share: " + JSON.stringify(err), "long", "top");
-          }
-          this.qrcodeElement.width = currentWidth;
-          delete this.qrImageDataUrl;
-          this.isSharing = false;
-          loading2.dismiss();
-        }
-      );
+      } finally {
+        await Filesystem.deleteFile({ path: filename, directory: Directory.Cache }).catch(() => undefined);
+        this.qrcodeElement.width = currentWidth;
+        delete this.qrImageDataUrl;
+        this.isSharing = false;
+        await loading2.dismiss();
+      }
     }, 500)
   }
 
