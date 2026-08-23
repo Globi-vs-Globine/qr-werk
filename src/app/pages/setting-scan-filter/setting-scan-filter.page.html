@@ -12,20 +12,21 @@
       <h2>{{ 'ENABLE_SCAN_FILTER' | translate }}</h2>
       <p>{{ 'SCAN_FILTER_SCOPE' | translate }}</p>
     </ion-label>
-    <ion-toggle slot="end" color="primary" [(ngModel)]="settings.enabled" [disabled]="!hasRule"></ion-toggle>
+    <ion-toggle slot="end" color="primary" [(ngModel)]="settings.enabled"></ion-toggle>
   </ion-item>
 
   <div class="ion-padding">
     <ion-input label="{{ 'STARTS_WITH' | translate }}" labelPlacement="stacked" fill="outline"
-      [(ngModel)]="settings.prefix" autocapitalize="off" autocomplete="off"
+      [(ngModel)]="settings.prefix" (ngModelChange)="onRuleChange()" autocapitalize="off" autocomplete="off"
       placeholder="{{ 'OPTIONAL' | translate }}"></ion-input>
     <p class="field-help">{{ 'PREFIX_HELP' | translate }}</p>
     <ion-input class="ion-margin-top" label="{{ 'ENDS_WITH' | translate }}" labelPlacement="stacked" fill="outline"
-      [(ngModel)]="settings.suffix" autocapitalize="off" autocomplete="off"
+      [(ngModel)]="settings.suffix" (ngModelChange)="onRuleChange()" autocapitalize="off" autocomplete="off"
       placeholder="{{ 'OPTIONAL' | translate }}"></ion-input>
     <p class="field-help">{{ 'SUFFIX_HELP' | translate }}</p>
     <ion-input class="ion-margin-top" label="{{ 'EXACT_CHARACTER_COUNT' | translate }}" labelPlacement="stacked"
       fill="outline" type="number" min="1" inputmode="numeric" [(ngModel)]="settings.exactLength"
+      (ngModelChange)="onRuleChange()"
       placeholder="{{ 'OPTIONAL' | translate }}"></ion-input>
     <p class="field-help">{{ 'CHARACTER_COUNT_HELP' | translate }}</p>
     <p class="filter-note">{{ 'SCAN_FILTER_RULES_COMBINE' | translate }}</p>
