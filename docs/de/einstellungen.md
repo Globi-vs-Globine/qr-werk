@@ -10,7 +10,13 @@ Die integrierte Anleitung funktioniert offline. Sie verwendet dieselben Kapitel 
 
 ## QR-Code- und Scan-Einstellungen
 
-Hier legst du fest, wie QR-Codes und erkannte Inhalte dargestellt werden. Für Batch-Scans kannst du ausserdem bestimmen, wie QRWerk mit doppelten Codes umgeht, wie lange die Pause zwischen zwei Erkennungen dauert und ob der Autofokus verwendet wird. Die empfohlene Scan-Pause beträgt eine Sekunde.
+Hier legst du fest, wie QR-Codes und erkannte Inhalte dargestellt werden. Im Abschnitt **Scan-Einstellungen** bestimmst du ausserdem, wie QRWerk mit doppelten Codes umgeht, wie lange die Pause zwischen zwei Erkennungen dauert und ob der Autofokus verwendet wird.
+
+- **Doppelte Codes:** zulassen, nur im laufenden Scan sperren oder mit dem gesamten Protokoll vergleichen
+- **Pause zwischen Scans:** 0,5 bis 3 Sekunden; empfohlen und voreingestellt ist eine Sekunde
+- **Autofokus:** für die automatische Scharfstellung der Kamera; normalerweise eingeschaltet lassen
+
+Eine ausführliche Erklärung der Auswirkungen findest du im Kapitel **Scannen → Batch scannen**.
 
 ## Protokoll, Sicherung und Wiederherstellung
 

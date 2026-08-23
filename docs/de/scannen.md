@@ -23,9 +23,27 @@ Mit **Batch scannen** kannst du mehrere Codes nacheinander erfassen, ohne nach j
 3. Scanne die gewünschten Codes nacheinander.
 4. Beende den Vorgang mit **Schließen**.
 
-Bereits während des Batch-Vorgangs werden die erkannten Codes gespeichert. In den Scan-Einstellungen kannst du festlegen, ob doppelte Werte zugelassen, nur innerhalb des aktuellen Durchgangs verhindert oder im gesamten Protokoll geprüft werden. Erkannte Duplikate werden im Protokoll vermerkt; in der Detailansicht findest du die zugehörigen Zeitpunkte.
+Bereits während des Batch-Vorgangs werden die erkannten Codes gespeichert. Die zugehörigen Optionen findest du unter **Einstellungen → QR-Code- und Scan-Einstellungen → Scan-Einstellungen**.
 
-Zwischen zwei Erkennungen wartet QRWerk standardmässig eine Sekunde. Dadurch wird derselbe Code nicht allein deshalb mehrfach erkannt, weil die Kamera noch darauf gerichtet ist. Die Einträge landen zunächst unter **Ohne Gruppe** und können im Protokoll gemeinsam einer Gruppe zugewiesen werden.
+### Doppelte Codes
+
+Unter **Doppelte Codes** stehen drei Möglichkeiten zur Auswahl:
+
+- **Zulassen:** Jeder Scan wird gespeichert. Das ist sinnvoll, wenn derselbe Code bewusst mehrfach erfasst werden soll.
+- **Im selben Scanlauf sperren:** Ein Code wird innerhalb des laufenden Batch-Scans nur einmal gespeichert. Derselbe Wert aus einem früheren Scanlauf darf erneut gespeichert werden. Diese Einstellung eignet sich für die meisten Arbeiten.
+- **Auch frühere Protokolleinträge sperren:** Ein Wert wird nicht erneut gespeichert, wenn er bereits im Protokoll vorhanden ist. Das eignet sich für Bestände, in denen jeder Code nur einmal vorkommen darf.
+
+Erkannte Duplikate werden beim vorhandenen Protokolleintrag vermerkt. In dessen Detailansicht findest du Anzahl, Datum und Uhrzeit der weiteren Erkennungen.
+
+### Pause zwischen Scans
+
+Unter **Pause zwischen Scans** stellst du 0,5 bis 3 Sekunden ein. Standardmässig wartet QRWerk eine Sekunde, bevor der nächste Code angenommen wird. Dadurch wird derselbe Code nicht allein deshalb mehrfach erkannt, weil die Kamera noch darauf gerichtet ist. Eine längere Pause reduziert unbeabsichtigte Wiederholungen; eine kürzere Pause beschleunigt grosse Scanläufe.
+
+### Autofokus
+
+Mit **Autofokus** lässt du die Kamera während des Scannens automatisch scharfstellen. Für den normalen Einsatz sollte diese Option eingeschaltet bleiben. Schalte sie nur testweise aus, wenn die Kamera bei gleichbleibendem Abstand ständig neu fokussiert und dadurch unruhig wird.
+
+Die gespeicherten Batch-Einträge landen zunächst unter **Ohne Gruppe** und können im Protokoll gemeinsam einer Gruppe zugewiesen werden.
 
 ## Bild importieren
 
