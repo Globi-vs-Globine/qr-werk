@@ -11,8 +11,7 @@
     "copy:an": "ionic cap copy android --prod",
     "copy:ios": "ionic cap copy ios --prod",
     "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -54,7 +53,6 @@
     "@ionic/angular": "^8.6.5",
     "@ionic/storage": "^4.0.0",
     "@ionic/storage-angular": "^4.0.0",
-    "@ng-bootstrap/ng-bootstrap": "^19.0.1",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
     "@squareetlabs/capacitor-navigation-bar": "^1.1.0",
@@ -67,11 +65,8 @@
     "cordova-sms-plugin": "^1.0.3",
     "date-fns": "2.29.3",
     "es6-promise-plugin": "^4.2.2",
-    "human-signals": "^2.1.0",
     "jsqr": "^1.4.0",
     "material-design-icons": "^3.0.1",
-    "osenv": "^0.1.5",
-    "properties-parser": "^0.3.1",
     "rxjs": "^7.8.1",
     "strip-final-newline": "^2.0.0",
     "tslib": "^2.6.2",

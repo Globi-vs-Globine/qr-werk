@@ -20,7 +20,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1B75189429375EAB00800D38 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		2FAD9762203C412B000D30F8 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = config.xml; sourceTree = "<group>"; };
 		50379B222058CBB4000EE86E /* capacitor.config.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = capacitor.config.json; sourceTree = "<group>"; };
 		504EC3041FED79650016851F /* QRWerk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QRWerk.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,16 +33,7 @@
 		707C0537E9D73B351B292A19 /* Pods-QRWerk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QRWerk.release.xcconfig"; path = "Pods/Target Support Files/Pods-QRWerk/Pods-QRWerk.release.xcconfig"; sourceTree = "<group>"; };
 		8F7477176B3F096D2116C739 /* Pods_QRWerk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QRWerk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D724A1830A1000100000001 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		D208D0B328184815006217ED /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/Main.strings"; sourceTree = "<group>"; };
-		D208D0B428184815006217ED /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		D208D0B528184864006217ED /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Main.strings"; sourceTree = "<group>"; };
-		D208D0B628184864006217ED /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
-		D208D0B728184874006217ED /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
-		D208D0B828184874006217ED /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		D208D0BC281849A5006217ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		D208D0BE281849AA006217ED /* zh-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-HK"; path = "zh-HK.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		D208D0BF281849AD006217ED /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
-		D208D0C0281849AE006217ED /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		D26FE7F9283D1E6C002A61AE /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D26FE7FA283D1E76002A61AE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		D29D2E2A2847C31D00566DFF /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -161,13 +151,9 @@
 			knownRegions = (
 				en,
 				Base,
-				"zh-HK",
-				"zh-Hant",
-				"zh-Hans",
 				de,
 				fr,
 				it,
-				ru,
 			);
 			mainGroup = 504EC2FB1FED79650016851F;
 			productRefGroup = 504EC3051FED79650016851F /* Products */;
@@ -249,9 +235,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				504EC30C1FED79650016851F /* Base */,
-				D208D0B328184815006217ED /* zh-HK */,
-				D208D0B528184864006217ED /* zh-Hant */,
-				D208D0B728184874006217ED /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -260,9 +243,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				504EC3111FED79650016851F /* Base */,
-				D208D0B428184815006217ED /* zh-HK */,
-				D208D0B628184864006217ED /* zh-Hant */,
-				D208D0B828184874006217ED /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -271,13 +251,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				D208D0BC281849A5006217ED /* en */,
-				D208D0BE281849AA006217ED /* zh-HK */,
-				D208D0BF281849AD006217ED /* zh-Hant */,
-				D208D0C0281849AE006217ED /* zh-Hans */,
 				D26FE7F9283D1E6C002A61AE /* fr */,
 				D26FE7FA283D1E76002A61AE /* de */,
 				D29D2E2A2847C31D00566DFF /* it */,
-				1B75189429375EAB00800D38 /* ru */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
