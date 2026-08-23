@@ -86,11 +86,32 @@ export class SettingRecordPage {
       this.iCloudStatus = 'available';
       this.presentToast(this.translate.instant('MSG.ICLOUD_SYNC_SUCCESS'), 'short', 'bottom');
     } catch (error: any) {
-      this.presentToast(this.translate.instant(error?.message === 'noAccount' ? 'MSG.ICLOUD_NO_ACCOUNT' : 'MSG.ICLOUD_SYNC_FAILED'), 'long', 'bottom');
+      const reason = String(error?.message ?? error ?? 'unknown');
+      if (reason === 'noAccount') {
+        this.presentToast(this.translate.instant('MSG.ICLOUD_NO_ACCOUNT'), 'long', 'bottom');
+      } else {
+        const alert = await this.alertController.create({
+          header: this.translate.instant('ICLOUD_SYNC_FAILED_TITLE'),
+          message: `${this.translate.instant('MSG.ICLOUD_SYNC_FAILED')}<br><br><small>${this.describeICloudError(reason)}</small>`,
+          cssClass: ['alert-bg'],
+          buttons: [this.translate.instant('OK')],
+        });
+        await alert.present();
+      }
     } finally {
       await loading.dismiss();
       this.iCloudBusy = false;
     }
+  }
+
+  private describeICloudError(reason: string): string {
+    if (/not implemented|unimplemented/i.test(reason)) return this.translate.instant('MSG.ICLOUD_PLUGIN_MISSING');
+    if (/not authenticated|no account/i.test(reason)) return this.translate.instant('MSG.ICLOUD_NO_ACCOUNT');
+    if (/permission|not permitted|bad container|container.*not/i.test(reason)) return this.translate.instant('MSG.ICLOUD_PERMISSION_FAILED');
+    if (/network|connection|offline/i.test(reason)) return this.translate.instant('MSG.ICLOUD_NETWORK_FAILED');
+    // Keep the original Apple/CloudKit code visible during development so a
+    // photographed error can be diagnosed without exposing any scan content.
+    return reason.replace(/[<>]/g, '');
   }
 
   ionViewWillLeave() {

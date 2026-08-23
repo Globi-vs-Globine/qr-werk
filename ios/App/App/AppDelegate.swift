@@ -17,7 +17,11 @@ class QRWerkCloudSyncPlugin: CAPPlugin, CAPBridgedPlugin {
 
     @objc func accountStatus(_ call: CAPPluginCall) {
         container.accountStatus { status, error in
-            if let error = error { call.reject(error.localizedDescription); return }
+            if let error = error {
+                let nsError = error as NSError
+                call.reject("accountStatus|\(nsError.domain)|\(nsError.code)|\(error.localizedDescription)")
+                return
+            }
             let value: String
             switch status {
             case .available: value = "available"
@@ -45,7 +49,10 @@ class QRWerkCloudSyncPlugin: CAPPlugin, CAPBridgedPlugin {
                 call.resolve(["exists": true, "payload": payload, "updatedAt": record.modificationDate?.timeIntervalSince1970 ?? 0])
             } catch let error as CKError where error.code == .unknownItem {
                 call.resolve(["exists": false])
-            } catch { call.reject(error.localizedDescription) }
+            } catch {
+                let nsError = error as NSError
+                call.reject("download|\(nsError.domain)|\(nsError.code)|\(error.localizedDescription)")
+            }
         }
     }
 
@@ -64,7 +71,10 @@ class QRWerkCloudSyncPlugin: CAPPlugin, CAPBridgedPlugin {
                 record["schemaVersion"] = 1 as CKRecordValue
                 let saved = try await database.save(record)
                 call.resolve(["updatedAt": saved.modificationDate?.timeIntervalSince1970 ?? Date().timeIntervalSince1970])
-            } catch { call.reject(error.localizedDescription) }
+            } catch {
+                let nsError = error as NSError
+                call.reject("upload|\(nsError.domain)|\(nsError.code)|\(error.localizedDescription)")
+            }
         }
     }
 }
