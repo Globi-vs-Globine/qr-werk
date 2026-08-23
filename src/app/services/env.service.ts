@@ -445,15 +445,9 @@ export class EnvService {
         }
       }
     );
-    const loadPromise12 = Preferences.get({ key: this.KEY_RECORDS_LIMIT }).then(
-      async result => {
-        if (result.value != null) {
-          this.recordsLimit = JSON.parse(result.value);
-        } else {
-          this.recordsLimit = -1;
-        }
-      }
-    );
+    const loadPromise12 = Preferences.set({ key: this.KEY_RECORDS_LIMIT, value: JSON.stringify(-1) }).then(() => {
+      this.recordsLimit = -1;
+    });
     const loadPromise13 = Preferences.get({ key: this.KEY_SHOW_NUMBER_OF_RECORDS }).then(
       async result => {
         if (result.value != null) {

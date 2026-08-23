@@ -19,13 +19,13 @@ Hier legst du fest, wie QR-Codes und erkannte Inhalte dargestellt werden. Im Abs
 
 Eine ausführliche Erklärung mit Eingabebeispielen, Scanbereichen und der Abgrenzung zum geplanten Kontrollmodus findest du im Kapitel **Scannen**.
 
-## Protokoll, Sicherung und Wiederherstellung
+## Datenverwaltung
 
-Hier steuerst du die Protokollierung, Begrenzungen sowie Sicherungs- und Wiederherstellungsfunktionen. Prüfe vor einem Zurücksetzen der App, ob wichtige Daten gesichert wurden.
+Hier steuerst du die automatische Protokollierung, iCloud-Synchronisierung sowie Sicherungs-, Wiederherstellungs- und Exportfunktionen. Das Protokoll besitzt keine künstliche Begrenzung. Prüfe vor einem Zurücksetzen der App, ob wichtige Daten gesichert wurden.
 
 ### iCloud-Synchronisierung
 
-Unter **Einstellungen → Protokoll, Sicherung und Wiederherstellung** kannst du die iCloud-Synchronisierung freiwillig einschalten. Beim ersten Einschalten führt QR Werk die Einträge des Geräts mit vorhandenen Einträgen deiner privaten iCloud zusammen. Danach erfolgt der Abgleich beim Öffnen und Verlassen der App sowie automatisch wenige Sekunden nach Änderungen. Mehrere rasche Scans werden gesammelt übertragen. Mit **Jetzt synchronisieren** kannst du den Abgleich zusätzlich sofort starten.
+Unter **Einstellungen → Datenverwaltung** kannst du die iCloud-Synchronisierung freiwillig einschalten. Beim ersten Einschalten führt QR Werk die Einträge des Geräts mit vorhandenen Einträgen deiner privaten iCloud zusammen. Danach erfolgt der Abgleich beim Öffnen und Verlassen der App sowie automatisch wenige Sekunden nach Änderungen. Mehrere rasche Scans werden gesammelt übertragen. Mit **Jetzt synchronisieren** kannst du den Abgleich zusätzlich sofort starten.
 
 Synchronisiert werden Protokolle, Gruppen, Lesezeichen, Mehrfacherkennungen sowie die in QR Werk gewählte Gerätebezeichnung. Beim Aktivieren kannst du beispielsweise „iPhone Lager“ oder „iPad Büro“ eintragen. Ohne eigene Eingabe verwendet QR Werk nur „iPhone“ beziehungsweise „iPad“. Der persönliche Apple-Gerätename wird nicht ausgelesen; die übrigen App-Einstellungen bleiben lokal. Für den Abgleich müssen auf allen Geräten derselbe iCloud-Account und eine Internetverbindung aktiv sein.
 

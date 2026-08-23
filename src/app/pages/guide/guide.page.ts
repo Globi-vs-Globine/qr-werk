@@ -44,12 +44,22 @@ export class GuidePage {
     this.selectedChapter = chapter;
     this.loading = true;
     this.renderedChapter = undefined;
-    this.http.get(`assets/docs/de/${chapter.file}`, { responseType: 'text' }).subscribe({
+    const language = ['de', 'en', 'fr', 'it'].includes(this.translate.currentLang)
+      ? this.translate.currentLang : 'en';
+    this.loadChapter(language, chapter.file);
+  }
+
+  private loadChapter(language: string, file: string, allowFallback = true): void {
+    this.http.get(`assets/docs/${language}/${file}`, { responseType: 'text' }).subscribe({
       next: markdown => {
         this.renderedChapter = this.sanitizer.bypassSecurityTrustHtml(this.markdownToHtml(markdown));
         this.loading = false;
       },
       error: () => {
+        if (allowFallback && language !== 'de') {
+          this.loadChapter('de', file, false);
+          return;
+        }
         this.renderedChapter = this.sanitizer.bypassSecurityTrustHtml(`<p>${this.translate.instant('GUIDE_LOAD_FAILED')}</p>`);
         this.loading = false;
       },

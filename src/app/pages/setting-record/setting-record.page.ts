@@ -24,7 +24,6 @@ export class SettingRecordPage {
 
   @ViewChild('restoreFileInput') restoreFileInput?: ElementRef<HTMLInputElement>;
 
-  preventRecordsLimitToast: boolean = true;
   iCloudEnabled = false;
   iCloudBusy = false;
   iCloudStatus = 'unknown';
@@ -43,7 +42,8 @@ export class SettingRecordPage {
   ) { }
 
   async ionViewDidEnter() {
-    setTimeout(() => this.preventRecordsLimitToast = false, 100);
+    this.env.recordsLimit = -1;
+    await Preferences.set({ key: this.env.KEY_RECORDS_LIMIT, value: JSON.stringify(-1) });
     if (this.iCloudSync.supported) {
       await this.env.waitForFullInit();
       this.iCloudEnabled = await this.iCloudSync.isEnabled();
@@ -138,21 +138,10 @@ export class SettingRecordPage {
     return reason.replace(/[<>]/g, '');
   }
 
-  ionViewWillLeave() {
-    this.preventRecordsLimitToast = true;
-  }
-
   async onScanRecordLoggingChange(ev: any) {
     this.env.scanRecordLogging = ev ? 'on' : 'off';
     await Preferences.set({ key: this.env.KEY_SCAN_RECORD_LOGGING, value: this.env.scanRecordLogging });
     await this.tapHaptic();
-  }
-
-  async saveRecordsLimit() {
-    await Preferences.set({ key: this.env.KEY_RECORDS_LIMIT, value: JSON.stringify(this.env.recordsLimit) });
-    if (this.env.recordsLimit != -1 && !this.preventRecordsLimitToast) {
-      this.presentToast(this.translate.instant("MSG.DELETE_OVERFLOWED_RECORDS"), "short", "bottom");
-    }
   }
 
   async onShowNumberOfRecordsChange(ev: any) {
