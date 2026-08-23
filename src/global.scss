@@ -52,7 +52,7 @@ ion-app {
   --qrwerk-space-6: 32px;
   --qrwerk-font-body: 17px;
   --qrwerk-font-secondary: 13px;
-  --qrwerk-font-section: 13px;
+  --qrwerk-font-section: 15px;
   --qrwerk-row-min-height: 56px;
   --qrwerk-icon-size: 23px;
 }
@@ -70,11 +70,12 @@ ion-app {
 }
 
 .qrwerk-settings-section ion-list-header {
-  min-height: 32px;
+  min-height: 38px;
   padding-inline-start: var(--qrwerk-space-4);
   padding-inline-end: var(--qrwerk-space-4);
   font-size: var(--qrwerk-font-section);
   font-weight: 600;
+  line-height: 1.25;
   letter-spacing: 0.01em;
   text-transform: none;
 }
