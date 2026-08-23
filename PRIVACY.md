@@ -10,7 +10,9 @@ QR Werk processes camera images, imported photos, QR codes and barcodes on the d
 
 QR Werk does **not** transmit scanned, imported, created or manually entered code contents, the scan history, groups, bookmarks or app settings to the fork maintainer. The app contains no analytics, advertising, user-tracking or crash-reporting service operated by the fork maintainer or a third party.
 
-Optional iCloud synchronization is not part of the current version. If it is added later, it will be disabled by default, clearly identified in the app and documented here before release.
+### Optional iCloud synchronization
+
+iCloud synchronization is disabled by default. If the user enables it, QR Werk stores the scan history, groups, bookmarks, duplicate-detection history and anonymous device-type information (for example, “iPhone” or “iPad”) in the user's private Apple CloudKit database. App settings and personal device names are not synchronized. The data is used only to keep the user's Apple devices consistent; it is not sent to or accessible through a server operated by the QR Werk maintainer. Apple's iCloud terms and privacy policy apply.
 
 ### Permissions
 
@@ -45,7 +47,9 @@ QR Werk verarbeitet Kamerabilder, importierte Fotos, QR-Codes und Barcodes auf d
 
 QR Werk überträgt **keine** gescannten, importierten, erstellten oder manuell eingegebenen Code-Inhalte, kein Scan-Protokoll, keine Gruppen, keine Lesezeichen und keine App-Einstellungen an den Betreiber des Forks. Die App enthält keinen Analyse-, Werbe-, Benutzer-Tracking- oder Absturzberichtsdienst des Fork-Betreibers oder eines Drittanbieters.
 
-Eine optionale iCloud-Synchronisation ist nicht Bestandteil der aktuellen Version. Falls sie später ergänzt wird, ist sie standardmässig ausgeschaltet, in der App klar gekennzeichnet und wird vor der Veröffentlichung hier dokumentiert.
+### Optionale iCloud-Synchronisierung
+
+Die iCloud-Synchronisierung ist standardmässig ausgeschaltet. Aktiviert der Benutzer sie, speichert QR Werk das Scan-Protokoll, Gruppen, Lesezeichen, den Verlauf von Mehrfacherkennungen sowie eine anonyme Geräteart (beispielsweise „iPhone“ oder „iPad“) in der privaten Apple-CloudKit-Datenbank des Benutzers. App-Einstellungen und persönliche Gerätenamen werden nicht synchronisiert. Die Daten dienen ausschliesslich dem Abgleich zwischen den Apple-Geräten des Benutzers; sie werden nicht an einen vom Betreiber von QR Werk betriebenen Server gesendet und sind dort nicht zugänglich. Es gelten Apples iCloud-Bedingungen und Datenschutzbestimmungen.
 
 ### Berechtigungen
 

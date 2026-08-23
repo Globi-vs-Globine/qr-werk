@@ -61,7 +61,7 @@ QR Werk is available in German, English, French and Italian. If the iPhone or iP
 
 The app has no advertising backend and does not require an account. Scan history and groups are stored locally. Camera and photo-library access are used only for scanning or importing codes initiated by the user.
 
-See [PRIVACY.md](PRIVACY.md) for the privacy information maintained with this fork. This document will be updated before an App Store release if optional iCloud synchronization is added.
+See [PRIVACY.md](PRIVACY.md) for the privacy information maintained with this fork. Optional iCloud synchronization is disabled by default and stores selected app data only in the user's private CloudKit database.
 
 ## iOS development
 

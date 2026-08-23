@@ -6,6 +6,7 @@ import { Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvService } from './services/env.service';
 import { Router } from '@angular/router';
+import { ICloudSyncService } from './services/icloud-sync.service';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ export class AppComponent {
     private platform: Platform,
     private router: Router,
     private ngZone: NgZone,
+    private iCloudSync: ICloudSyncService,
   ) {
     this.translate.addLangs(this.env.languages);
     this.translate.setDefaultLang('en');
@@ -40,6 +42,7 @@ export class AppComponent {
       // Set flag synchronously before async check to prevent race condition
       this.env.pendingLaunchUrlCheck = true;
       this.checkLaunchUrl();
+      this.runAutomaticICloudSync();
     });
   }
 
@@ -91,10 +94,12 @@ export class AppComponent {
           );
         }
         if (isActive) {
+          this.runAutomaticICloudSync();
           setTimeout(async () => {
             await SplashScreen.hide();
           }, 300);
         } else {
+          this.runAutomaticICloudSync();
           await SplashScreen.show({
             autoHide: false,
           });
@@ -108,6 +113,23 @@ export class AppComponent {
         this.handleSharedUrl(url);
       });
     });
+  }
+
+  private iCloudSyncRunning = false;
+
+  private async runAutomaticICloudSync(): Promise<void> {
+    if (!this.iCloudSync.supported || this.iCloudSyncRunning || !(await this.iCloudSync.isEnabled())) return;
+    this.iCloudSyncRunning = true;
+    try {
+      await this.env.waitForFullInit();
+      const result = await this.iCloudSync.synchronize(this.env.scanRecords, this.env.bookmarks);
+      await this.env.replaceSynchronizedData(result.records, result.bookmarks);
+    } catch {
+      // Automatic synchronization stays quiet. The settings page shows errors
+      // when the user explicitly requests a sync.
+    } finally {
+      this.iCloudSyncRunning = false;
+    }
   }
 
   private async checkLaunchUrl(): Promise<void> {

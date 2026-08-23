@@ -23,6 +23,12 @@ Eine ausführliche Erklärung mit Eingabebeispielen, Scanbereichen und der Abgre
 
 Hier steuerst du die Protokollierung, Begrenzungen sowie Sicherungs- und Wiederherstellungsfunktionen. Prüfe vor einem Zurücksetzen der App, ob wichtige Daten gesichert wurden.
 
+### iCloud-Synchronisierung
+
+Unter **Einstellungen → Protokoll, Sicherung und Wiederherstellung** kannst du die iCloud-Synchronisierung freiwillig einschalten. Beim ersten Einschalten führt QR Werk die Einträge des Geräts mit vorhandenen Einträgen deiner privaten iCloud zusammen. Danach erfolgt der Abgleich beim Öffnen und Verlassen der App; mit **Jetzt synchronisieren** kannst du ihn zusätzlich sofort starten.
+
+Synchronisiert werden Protokolle, Gruppen, Lesezeichen, Mehrfacherkennungen sowie die neutrale Geräteart. Persönliche Gerätenamen und die übrigen App-Einstellungen bleiben lokal. Für den Abgleich müssen auf allen Geräten derselbe iCloud-Account und eine Internetverbindung aktiv sein.
+
 ## Sprache
 
 QR Werk kann auf Deutsch, Englisch, Französisch und Italienisch verwendet werden. Mit **Systemeinstellung** übernimmt die App automatisch eine dieser Sprachen; bei einer anderen Gerätesprache wird Englisch verwendet. Tippe auf die gesamte gewünschte Zeile – du musst nicht genau den Haken am rechten Rand treffen.

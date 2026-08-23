@@ -13,6 +13,7 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Preferences } from '@capacitor/preferences';
 import { de, enUS, fr, it } from 'date-fns/locale';
 import { HistoryExportService } from 'src/app/services/history-export.service';
+import { ICloudSyncService } from 'src/app/services/icloud-sync.service';
 
 @Component({
   selector: 'app-setting-record',
@@ -23,6 +24,10 @@ import { HistoryExportService } from 'src/app/services/history-export.service';
 export class SettingRecordPage {
 
   preventRecordsLimitToast: boolean = true;
+  iCloudEnabled = false;
+  iCloudBusy = false;
+  iCloudStatus = 'unknown';
+  iCloudLastSync?: Date;
 
   constructor(
     public translate: TranslateService,
@@ -35,10 +40,57 @@ export class SettingRecordPage {
     private platform: Platform,
     private modalController: ModalController,
     private historyExportService: HistoryExportService,
+    public iCloudSync: ICloudSyncService,
   ) { }
 
-  ionViewDidEnter() {
+  async ionViewDidEnter() {
     setTimeout(() => this.preventRecordsLimitToast = false, 100);
+    if (this.iCloudSync.supported) {
+      this.iCloudEnabled = await this.iCloudSync.isEnabled();
+      this.iCloudLastSync = await this.iCloudSync.lastSync();
+      try { this.iCloudStatus = (await this.iCloudSync.accountStatus()).status; } catch { this.iCloudStatus = 'unknown'; }
+    }
+  }
+
+  async onICloudToggle(enabled: boolean) {
+    if (!enabled) {
+      await this.iCloudSync.setEnabled(false);
+      this.iCloudEnabled = false;
+      return;
+    }
+    const alert = await this.alertController.create({
+      header: this.translate.instant('ICLOUD_SYNC_ENABLE'),
+      message: this.translate.instant('MSG.ICLOUD_SYNC_CONFIRM'),
+      cssClass: ['alert-bg'],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel', handler: () => this.iCloudEnabled = false },
+        { text: this.translate.instant('ENABLE'), handler: async () => {
+          await this.iCloudSync.setEnabled(true);
+          this.iCloudEnabled = true;
+          await this.syncICloud();
+        } },
+      ],
+    });
+    await alert.present();
+  }
+
+  async syncICloud() {
+    if (this.iCloudBusy) return;
+    this.iCloudBusy = true;
+    const loading = await this.presentLoading(this.translate.instant('ICLOUD_SYNC_IN_PROGRESS'));
+    try {
+      await this.env.waitForFullInit();
+      const result = await this.iCloudSync.synchronize(this.env.scanRecords, this.env.bookmarks);
+      await this.env.replaceSynchronizedData(result.records, result.bookmarks);
+      this.iCloudLastSync = result.syncedAt;
+      this.iCloudStatus = 'available';
+      this.presentToast(this.translate.instant('MSG.ICLOUD_SYNC_SUCCESS'), 'short', 'bottom');
+    } catch (error: any) {
+      this.presentToast(this.translate.instant(error?.message === 'noAccount' ? 'MSG.ICLOUD_NO_ACCOUNT' : 'MSG.ICLOUD_SYNC_FAILED'), 'long', 'bottom');
+    } finally {
+      await loading.dismiss();
+      this.iCloudBusy = false;
+    }
   }
 
   ionViewWillLeave() {

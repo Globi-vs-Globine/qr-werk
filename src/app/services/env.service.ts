@@ -238,6 +238,31 @@ export class EnvService {
     return this._fullInitPromise;
   }
 
+  async waitForFullInit(): Promise<void> {
+    await this.ensureCriticalInit();
+    await this.ensureFullInit();
+  }
+
+  async replaceSynchronizedData(records: ScanRecord[], bookmarks: Bookmark[]): Promise<void> {
+    this.scanRecords = records.map(record => {
+      record.createdAt = new Date(record.createdAt);
+      if (record.modifiedAt) record.modifiedAt = new Date(record.modifiedAt);
+      if (record.lastSyncedAt) record.lastSyncedAt = new Date(record.lastSyncedAt);
+      if (record.lastDuplicateAt) record.lastDuplicateAt = new Date(record.lastDuplicateAt);
+      if (record.duplicateDetectedAt) record.duplicateDetectedAt = record.duplicateDetectedAt.map(value => new Date(value));
+      return record;
+    }).sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    this.bookmarks = bookmarks.map(bookmark => {
+      bookmark.createdAt = new Date(bookmark.createdAt);
+      if (bookmark.modifiedAt) bookmark.modifiedAt = new Date(bookmark.modifiedAt);
+      return bookmark;
+    }).sort((a, b) => ('' + a.tag).localeCompare(b.tag ?? ''));
+    await Promise.all([
+      Preferences.set({ key: this.KEY_SCAN_RECORDS, value: JSON.stringify(this.scanRecords) }),
+      Preferences.set({ key: this.KEY_BOOKMARKS, value: JSON.stringify(this.bookmarks) }),
+    ]);
+  }
+
   private async _loadStorageCritical(): Promise<void> {
     const loadPromise1 = Preferences.get({ key: this.KEY_START_PAGE }).then(
       async result => {

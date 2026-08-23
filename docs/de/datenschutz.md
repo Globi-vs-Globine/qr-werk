@@ -4,7 +4,7 @@
 
 QR Werk verarbeitet Scan-Protokoll, Gruppen, Lesezeichen und Einstellungen lokal auf dem Gerät. Es gibt kein QR-Werk-Benutzerkonto und keine Werbung. Die App überträgt keine Code-Inhalte, kein Scan-Protokoll, keine Gruppen, keine Lesezeichen und keine Einstellungen an den Betreiber des Forks. Sie enthält keinen Analyse-, Tracking- oder Absturzberichtsdienst.
 
-Eine optionale iCloud-Synchronisation ist in der aktuellen Version noch nicht enthalten. Falls sie später ergänzt wird, bleibt sie standardmässig ausgeschaltet und wird vor der Veröffentlichung in der Datenschutzerklärung beschrieben.
+Die optionale iCloud-Synchronisierung ist standardmässig ausgeschaltet. Nach dem Aktivieren werden Protokolle, Gruppen, Lesezeichen, Mehrfacherkennungen und die neutrale Geräteart (iPhone, iPad oder Mac) in deiner privaten iCloud gespeichert. Persönliche Gerätenamen und App-Einstellungen werden nicht synchronisiert. Beim ersten Abgleich werden lokale und bereits vorhandene iCloud-Einträge zusammengeführt.
 
 ## Berechtigungen
 

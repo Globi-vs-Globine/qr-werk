@@ -1,5 +1,79 @@
 import UIKit
 import Capacitor
+import CloudKit
+
+@objc(QRWerkCloudSyncPlugin)
+class QRWerkCloudSyncPlugin: CAPPlugin, CAPBridgedPlugin {
+    let identifier = "QRWerkCloudSyncPlugin"
+    let jsName = "QRWerkCloudSync"
+    let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "accountStatus", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "download", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "upload", returnType: CAPPluginReturnPromise)
+    ]
+
+    private let container = CKContainer(identifier: "iCloud.ch.qrwerk.app")
+    private let recordID = CKRecord.ID(recordName: "primary")
+
+    @objc func accountStatus(_ call: CAPPluginCall) {
+        container.accountStatus { status, error in
+            if let error = error { call.reject(error.localizedDescription); return }
+            let value: String
+            switch status {
+            case .available: value = "available"
+            case .noAccount: value = "noAccount"
+            case .restricted: value = "restricted"
+            case .couldNotDetermine: value = "unknown"
+            @unknown default: value = "unknown"
+            }
+            call.resolve(["status": value])
+        }
+    }
+
+    @objc func download(_ call: CAPPluginCall) {
+        Task {
+            do {
+                let record = try await container.privateCloudDatabase.record(for: recordID)
+                let payload: String
+                if let asset = record["payloadAsset"] as? CKAsset,
+                   let url = asset.fileURL {
+                    payload = try String(contentsOf: url, encoding: .utf8)
+                } else {
+                    // Compatibility with early development snapshots.
+                    payload = record["payload"] as? String ?? ""
+                }
+                call.resolve(["exists": true, "payload": payload, "updatedAt": record.modificationDate?.timeIntervalSince1970 ?? 0])
+            } catch let error as CKError where error.code == .unknownItem {
+                call.resolve(["exists": false])
+            } catch { call.reject(error.localizedDescription) }
+        }
+    }
+
+    @objc func upload(_ call: CAPPluginCall) {
+        guard let payload = call.getString("payload") else { call.reject("Missing payload"); return }
+        Task {
+            let temporaryURL = FileManager.default.temporaryDirectory
+                .appendingPathComponent("qrwerk-cloud-\(UUID().uuidString).json")
+            do {
+                try payload.write(to: temporaryURL, atomically: true, encoding: .utf8)
+                defer { try? FileManager.default.removeItem(at: temporaryURL) }
+                let database = container.privateCloudDatabase
+                let record = (try? await database.record(for: recordID)) ?? CKRecord(recordType: "QRWerkSnapshot", recordID: recordID)
+                record["payloadAsset"] = CKAsset(fileURL: temporaryURL)
+                record["payload"] = nil
+                record["schemaVersion"] = 1 as CKRecordValue
+                let saved = try await database.save(record)
+                call.resolve(["updatedAt": saved.modificationDate?.timeIntervalSince1970 ?? Date().timeIntervalSince1970])
+            } catch { call.reject(error.localizedDescription) }
+        }
+    }
+}
+
+class QRWerkViewController: CAPBridgeViewController {
+    override func capacitorDidLoad() {
+        bridge?.registerPluginType(QRWerkCloudSyncPlugin.self)
+    }
+}
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -48,4 +122,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-

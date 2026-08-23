@@ -61,7 +61,7 @@ QR Werk ist auf Deutsch, Englisch, Französisch und Italienisch verfügbar. Verw
 
 Die App besitzt kein Werbe-Backend und benötigt kein Benutzerkonto. Scan-Protokoll und Gruppen werden lokal gespeichert. Auf Kamera und Fotomediathek wird nur zugegriffen, wenn der Benutzer einen Scan oder Bildimport auslöst.
 
-Weitere Informationen enthält [PRIVACY.md](PRIVACY.md). Falls die optionale iCloud-Synchronisation ergänzt wird, wird diese Erklärung vor einer App-Store-Veröffentlichung entsprechend erweitert.
+Weitere Informationen enthält [PRIVACY.md](PRIVACY.md). Die optionale iCloud-Synchronisierung ist standardmässig ausgeschaltet und speichert ausgewählte App-Daten ausschliesslich in der privaten CloudKit-Datenbank des Benutzers.
 
 ## iOS-Entwicklung
 

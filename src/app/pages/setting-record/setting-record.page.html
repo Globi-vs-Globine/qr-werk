@@ -187,6 +187,27 @@
 
   <div class="ion-padding-vertical mb-2">
     <h3 class="ion-margin-start ion-padding-horizontal my-0">
+      <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'ICLOUD_SYNC' | translate }}</ion-text>
+    </h3>
+    <ion-item class="ion-no-padding" lines="none">
+      <ion-label class="ion-padding-start ion-margin-start">
+        <p><ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'" style="white-space: normal;">
+          {{ 'MSG.ICLOUD_SYNC_EXPLAIN' | translate }}
+        </ion-text></p>
+        <p *ngIf="iCloudLastSync">{{ 'ICLOUD_LAST_SYNC' | translate }}: {{ maskDatetime(iCloudLastSync) }}</p>
+      </ion-label>
+      <ion-toggle class="ion-padding-end" slot="end" [ngModel]="iCloudEnabled"
+        (ngModelChange)="onICloudToggle($event)" [disabled]="iCloudBusy"></ion-toggle>
+    </ion-item>
+    <div class="ion-padding-horizontal d-flex justify-content-center align-content-start flex-column" *ngIf="iCloudEnabled">
+      <ion-button class="ion-padding-horizontal" fill="outline" color="primary" (click)="syncICloud()" [disabled]="iCloudBusy">
+        {{ 'ICLOUD_SYNC_NOW' | translate }}
+      </ion-button>
+    </div>
+  </div>
+
+  <div class="ion-padding-vertical mb-2">
+    <h3 class="ion-margin-start ion-padding-horizontal my-0">
       <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'BACKUP' | translate }}</ion-text>
     </h3>
     <ion-item class="ion-no-padding" lines="none">
