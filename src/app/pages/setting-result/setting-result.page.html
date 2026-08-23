@@ -10,7 +10,7 @@
 
 <ion-content class="qrwerk-settings-page">
   <section class="qrwerk-settings-section">
-    <ion-list-header>{{ 'QR_CODE' | translate }}</ion-list-header>
+    <ion-list-header><ion-label class="qrwerk-section-title">{{ 'QR_CODE' | translate }}</ion-label></ion-list-header>
     <ion-list class="qrwerk-settings-list">
       <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="inset" (click)="setQrStyle()">
         <ion-icon slot="start" color="primary" name="qr-code-outline"></ion-icon>
@@ -32,7 +32,7 @@
   </section>
 
   <section class="qrwerk-settings-section">
-    <ion-list-header>{{ 'SCAN_SETTINGS' | translate }}</ion-list-header>
+    <ion-list-header><ion-label class="qrwerk-section-title">{{ 'SCAN_SETTINGS' | translate }}</ion-label></ion-list-header>
     <ion-list class="qrwerk-settings-list">
       <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="inset" (click)="chooseDuplicateSetting()">
         <ion-icon slot="start" color="primary" name="copy-outline"></ion-icon>
@@ -64,7 +64,7 @@
   </section>
 
   <section class="qrwerk-settings-section">
-    <ion-list-header>{{ 'TASK' | translate }}</ion-list-header>
+    <ion-list-header><ion-label class="qrwerk-section-title">{{ 'TASK' | translate }}</ion-label></ion-list-header>
     <ion-list class="qrwerk-settings-list">
       <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="inset" (click)="setResultPageButtons()">
         <ion-icon slot="start" color="primary" src="assets/icon/touch.svg"></ion-icon>

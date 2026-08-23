@@ -52,7 +52,7 @@ ion-app {
   --qrwerk-space-6: 32px;
   --qrwerk-font-body: 17px;
   --qrwerk-font-secondary: 13px;
-  --qrwerk-font-section: 15px;
+  --qrwerk-font-section: 17px;
   --qrwerk-row-min-height: 56px;
   --qrwerk-icon-size: 23px;
 }
@@ -62,22 +62,30 @@ ion-app {
 }
 
 .qrwerk-settings-section {
-  margin-top: var(--qrwerk-space-5);
+  margin-top: 28px;
 }
 
 .qrwerk-settings-section:first-child {
-  margin-top: var(--qrwerk-space-3);
+  margin-top: var(--qrwerk-space-4);
 }
 
 .qrwerk-settings-section ion-list-header {
-  min-height: 38px;
+  min-height: auto;
   padding-inline-start: var(--qrwerk-space-4);
   padding-inline-end: var(--qrwerk-space-4);
-  font-size: var(--qrwerk-font-section);
-  font-weight: 600;
-  line-height: 1.25;
+  padding-top: 0;
+  padding-bottom: var(--qrwerk-space-3);
+  align-items: flex-start;
   letter-spacing: 0.01em;
   text-transform: none;
+}
+
+.qrwerk-settings-section ion-list-header .qrwerk-section-title {
+  margin: 0;
+  color: var(--ion-text-color);
+  font-size: var(--qrwerk-font-section) !important;
+  font-weight: 600 !important;
+  line-height: 1.25;
 }
 
 .qrwerk-settings-list {
