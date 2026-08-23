@@ -37,6 +37,96 @@ ion-app {
   font-family: var(--ion-font-family);
 }
 
+/*
+ * QR Werk interface foundations
+ * --------------------------------------------------------------------------
+ * Shared typography and spacing keep settings screens visually consistent.
+ * Pages can adopt these classes incrementally without changing behaviour.
+ */
+:root {
+  --qrwerk-space-1: 4px;
+  --qrwerk-space-2: 8px;
+  --qrwerk-space-3: 12px;
+  --qrwerk-space-4: 16px;
+  --qrwerk-space-5: 24px;
+  --qrwerk-space-6: 32px;
+  --qrwerk-font-body: 17px;
+  --qrwerk-font-secondary: 13px;
+  --qrwerk-font-section: 13px;
+  --qrwerk-row-min-height: 56px;
+  --qrwerk-icon-size: 23px;
+}
+
+.qrwerk-settings-page {
+  --padding-bottom: calc(var(--qrwerk-space-5) + var(--ion-safe-area-bottom, 0px));
+}
+
+.qrwerk-settings-section {
+  margin-top: var(--qrwerk-space-5);
+}
+
+.qrwerk-settings-section:first-child {
+  margin-top: var(--qrwerk-space-3);
+}
+
+.qrwerk-settings-section ion-list-header {
+  min-height: 32px;
+  padding-inline-start: var(--qrwerk-space-4);
+  padding-inline-end: var(--qrwerk-space-4);
+  font-size: var(--qrwerk-font-section);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
+}
+
+.qrwerk-settings-list {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.qrwerk-settings-item {
+  --min-height: var(--qrwerk-row-min-height);
+  --padding-start: var(--qrwerk-space-4);
+  --inner-padding-end: var(--qrwerk-space-4);
+  --inner-padding-top: var(--qrwerk-space-2);
+  --inner-padding-bottom: var(--qrwerk-space-2);
+}
+
+.qrwerk-settings-item ion-icon[slot='start'],
+.qrwerk-settings-item img[slot='start'] {
+  width: var(--qrwerk-icon-size);
+  min-width: var(--qrwerk-icon-size);
+  height: var(--qrwerk-icon-size);
+  margin-inline-end: var(--qrwerk-space-4);
+  font-size: var(--qrwerk-icon-size);
+}
+
+.qrwerk-settings-item ion-label {
+  margin-top: var(--qrwerk-space-2);
+  margin-bottom: var(--qrwerk-space-2);
+}
+
+.qrwerk-settings-item ion-label h2,
+.qrwerk-settings-item ion-label .qrwerk-row-title {
+  margin: 0;
+  color: var(--ion-text-color);
+  font-size: var(--qrwerk-font-body);
+  font-weight: 400;
+  line-height: 1.25;
+  white-space: normal;
+}
+
+.qrwerk-settings-item ion-label p,
+.qrwerk-settings-item ion-label .qrwerk-row-detail {
+  margin: var(--qrwerk-space-1) 0 0;
+  color: var(--ion-color-medium);
+  font-size: var(--qrwerk-font-secondary);
+  font-weight: 400;
+  line-height: 1.35;
+  white-space: normal;
+}
+
 .text-center-toast {
     text-align: center;
     --max-width: 320px;
