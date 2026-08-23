@@ -329,7 +329,45 @@ final class QRWerkScannerViewController: UIViewController, AVCaptureMetadataOutp
     }
 
     private func localized(_ german: String, _ english: String) -> String {
-        Locale.preferredLanguages.first?.hasPrefix("de") == true ? german : english
+        let stored = UserDefaults.standard.string(forKey: "CapacitorStorage.language")
+        let language: String
+        if let stored = stored, ["de", "en", "fr", "it"].contains(stored) {
+            language = stored
+        } else {
+            language = String((Locale.preferredLanguages.first ?? "en").prefix(2))
+        }
+        if language == "de" { return german }
+        if language == "fr" {
+            return [
+                "Schliessen": "Fermer", "Code manuell eingeben": "Saisir le code manuellement",
+                "Taschenlampe": "Lampe", "Scan-Optionen": "Options de scan",
+                "Abbrechen": "Annuler", "Übernehmen": "Appliquer", "Scanbereich": "Zone de scan",
+                "Ein eindeutig erkannter Code wird im gewählten Bereich erfasst.": "Un code clairement reconnu est capturé dans la zone sélectionnée.",
+                "Standard": "Standard", "Breit": "Large", "Ganzes Bild": "Image entière",
+                "Scan-Filter": "Filtre de scan",
+                "Optional: Nur Codes übernehmen, die alle ausgefüllten Bedingungen erfüllen.": "Facultatif : accepter uniquement les codes qui remplissent toutes les conditions.",
+                "Präfix – beginnt mit, z. B. CF": "Préfixe – commence par, p. ex. CF",
+                "Suffix – endet mit, z. B. 99": "Suffixe – se termine par, p. ex. 99",
+                "Zeichenlänge – genau, z. B. 20": "Nombre de caractères – exact, p. ex. 20",
+                "Filter ausschalten": "Désactiver le filtre"
+            ][german] ?? english
+        }
+        if language == "it" {
+            return [
+                "Schliessen": "Chiudi", "Code manuell eingeben": "Inserisci codice manualmente",
+                "Taschenlampe": "Torcia", "Scan-Optionen": "Opzioni di scansione",
+                "Abbrechen": "Annulla", "Übernehmen": "Applica", "Scanbereich": "Area di scansione",
+                "Ein eindeutig erkannter Code wird im gewählten Bereich erfasst.": "Un codice chiaramente riconosciuto viene acquisito nell’area selezionata.",
+                "Standard": "Standard", "Breit": "Ampia", "Ganzes Bild": "Immagine intera",
+                "Scan-Filter": "Filtro di scansione",
+                "Optional: Nur Codes übernehmen, die alle ausgefüllten Bedingungen erfüllen.": "Facoltativo: accetta solo i codici che soddisfano tutte le condizioni.",
+                "Präfix – beginnt mit, z. B. CF": "Prefisso – inizia con, ad es. CF",
+                "Suffix – endet mit, z. B. 99": "Suffisso – termina con, ad es. 99",
+                "Zeichenlänge – genau, z. B. 20": "Numero di caratteri – esatto, ad es. 20",
+                "Filter ausschalten": "Disattiva filtro"
+            ][german] ?? english
+        }
+        return english
     }
 
     static let supportedMetadataTypes: Set<AVMetadataObject.ObjectType> = [.qr, .aztec, .dataMatrix, .pdf417, .code128, .code39, .code93, .ean8, .ean13, .upce, .interleaved2of5, .itf14, .codabar]

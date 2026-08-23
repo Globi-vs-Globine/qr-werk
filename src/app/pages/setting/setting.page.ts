@@ -37,14 +37,6 @@ export class SettingPage {
     return this.platform.is('android');
   }
 
-  rateAndroidApp() {
-    window.open(this.env.GOOGLE_PLAY_URL, '_system');
-  }
-
-  rateIosApp() {
-    window.open(this.env.APP_STORE_URL, '_system');
-  }
-
   setLanguage() {
     this.router.navigate(['setting-language']);
   }
@@ -146,10 +138,6 @@ export class SettingPage {
 
   exitApp() {
     navigator['app'].exitApp();
-  }
-
-  openGooglePlay(): void {
-    window.open(this.env.GOOGLE_PLAY_URL, '_system');
   }
 
   async presentToast(msg: string, duration: "short" | "long", pos: "top" | "center" | "bottom") {

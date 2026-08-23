@@ -2,14 +2,14 @@
   <ion-toolbar [color]="env.colorTheme === 'black'? 'black' : 'dark'">
     <ion-buttons slot="start">
       @if (selectedChapter) {
-      <ion-button (click)="closeChapter()" aria-label="Zurück zur Kapitelübersicht">
+      <ion-button (click)="closeChapter()" [attr.aria-label]="'GUIDE_BACK' | translate">
         <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
       </ion-button>
       } @else {
       <ion-back-button text="" defaultHref="tabs/setting"></ion-back-button>
       }
     </ion-buttons>
-    <ion-title>{{ selectedChapter?.title || 'Anleitung' }}</ion-title>
+    <ion-title>{{ (selectedChapter?.titleKey || 'GUIDE') | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -17,16 +17,17 @@
   @if (!selectedChapter) {
   <div class="guide-intro">
     <img src="assets/img/round_icon.png" alt="QR Werk">
-    <h1>QR Werk – Anleitung</h1>
-    <p>Wähle ein Kapitel. Die gesamte Anleitung ist offline verfügbar.</p>
+    <h1>{{ 'GUIDE_TITLE' | translate }}</h1>
+    <p>{{ 'GUIDE_INTRO' | translate }}</p>
+    <p *ngIf="env.language !== 'de'">{{ 'GUIDE_LANGUAGE_NOTE' | translate }}</p>
   </div>
   <ion-list lines="full">
     @for (chapter of chapters; track chapter.file) {
     <ion-item button="true" detail="true" (click)="openChapter(chapter)">
       <ion-icon slot="start" color="primary" [name]="chapter.icon"></ion-icon>
       <ion-label>
-        <h2>{{ chapter.title }}</h2>
-        <p>{{ chapter.description }}</p>
+        <h2>{{ chapter.titleKey | translate }}</h2>
+        <p>{{ chapter.descriptionKey | translate }}</p>
       </ion-label>
     </ion-item>
     }

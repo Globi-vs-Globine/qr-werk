@@ -43,14 +43,6 @@ export class LandingPage {
     }
   }
 
-  openGooglePlay(): void {
-    window.open(this.env.GOOGLE_PLAY_URL, '_system');
-  }
-
-  openAppStore(): void {
-    window.open(this.env.APP_STORE_URL, '_system');
-  }
-
   async confirmExitApp(): Promise<void> {
     if (this.env.showExitAppAlert == "on") {
       const alert = await this.alertController.create({
@@ -74,15 +66,14 @@ export class LandingPage {
         cssClass: ['alert-bg', 'alert-input-no-border'],
         buttons: [
           {
-            text: this.translate.instant('EXIT'),
-            handler: () => {
-              navigator['app'].exitApp();
-            }
+            text: this.translate.instant('CANCEL'),
+            role: 'cancel'
           },
           {
-            text: this.translate.instant('RATE_THE_APP'),
+            text: this.translate.instant('EXIT'),
+            role: 'destructive',
             handler: () => {
-              this.openGooglePlay();
+              navigator['app'].exitApp();
             }
           }
         ]

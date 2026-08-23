@@ -143,10 +143,6 @@ export class SettingRecordPage {
     this.preventRecordsLimitToast = true;
   }
 
-  async saveHistoryPageStartSegment() {
-    await Preferences.set({ key: this.env.KEY_HISTORY_PAGE_START_SEGMENT, value: this.env.historyPageStartSegment });
-  }
-
   async onScanRecordLoggingChange(ev: any) {
     this.env.scanRecordLogging = ev ? 'on' : 'off';
     await Preferences.set({ key: this.env.KEY_SCAN_RECORD_LOGGING, value: this.env.scanRecordLogging });
@@ -173,10 +169,9 @@ export class SettingRecordPage {
       scanRecords: this.env.scanRecords,
       bookmarks: this.env.bookmarks
     };
-    const value = JSON.stringify(backup);
     const loading = await this.presentLoading(this.translate.instant("BACKING_UP"));
     const now = format(new Date(), "yyyyMMddHHmmss");
-    const filename = `simpleqr-backup-${now}.txt`;
+    const filename = `qr-werk-backup-${now}.txt`;
     await Filesystem.writeFile({
       path: `${filename}`,
       data: JSON.stringify(backup),

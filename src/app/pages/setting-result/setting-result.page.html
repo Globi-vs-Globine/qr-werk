@@ -12,7 +12,7 @@
 
   <ion-list-header class="ion-margin-start ion-padding-horizontal mt-1"><ion-text
       [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'QR_CODE' | translate }}</ion-text></ion-list-header>
-  <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setQrStyle()">
+  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setQrStyle()">
     <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="qr-code-outline">
     </ion-icon>
     <ion-label>
@@ -23,7 +23,7 @@
       </p>
     </ion-label>
   </ion-item>
-  <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setAutoQr()">
+  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setAutoQr()">
     <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" src="assets/icon/popup.svg">
     </ion-icon>
     <ion-label>
@@ -34,7 +34,7 @@
       </p>
     </ion-label>
   </ion-item>
-  <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setAutoMaxBrightness()">
+  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setAutoMaxBrightness()">
     <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="sunny">
     </ion-icon>
     <ion-label>
@@ -45,7 +45,7 @@
       </p>
     </ion-label>
   </ion-item>
-  <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setAutoOpenUrl()">
+  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setAutoOpenUrl()">
     <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="open">
     </ion-icon>
     <ion-label>
@@ -89,7 +89,7 @@
 
   <ion-list-header class="ion-margin-start ion-padding-horizontal mt-1"><ion-text
       [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'TASK' | translate }}</ion-text></ion-list-header>
-  <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setResultPageButtons()">
+  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setResultPageButtons()">
     <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" src="assets/icon/touch.svg">
     </ion-icon>
     <ion-label>
@@ -100,7 +100,7 @@
       </p>
     </ion-label>
   </ion-item>
-  <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setSearchEngine()" style="margin-bottom: var(--ion-safe-area-bottom, 0);">
+  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setSearchEngine()" style="margin-bottom: var(--ion-safe-area-bottom, 0);">
     <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" *ngIf="env.searchEngine === 'google'"
       name="logo-google">
     </ion-icon>

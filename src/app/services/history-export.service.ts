@@ -14,7 +14,7 @@ export class HistoryExportService {
 
   async exportAndShare(records: ScanRecord[], bookmarks: Bookmark[], exportFormat: HistoryExportFormat, content: HistoryExportContent = 'full'): Promise<void> {
     const timestamp = format(new Date(), 'yyyyMMddHHmmss');
-    const filename = `simpleqr-${content === 'codes' ? 'codes' : 'history'}-${timestamp}.${exportFormat}`;
+    const filename = `qr-werk-${content === 'codes' ? 'codes' : 'history'}-${timestamp}.${exportFormat}`;
     const data = content === 'codes'
       ? this.codesOnly(records)
       : exportFormat === 'csv'
@@ -32,7 +32,7 @@ export class HistoryExportService {
       await Share.share({
         title: filename,
         files: [result.uri],
-        dialogTitle: 'Export scan history'
+        dialogTitle: 'QR Werk export'
       });
     } finally {
       await Filesystem.deleteFile({ path: filename, directory: Directory.Cache }).catch(() => undefined);

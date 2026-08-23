@@ -9,7 +9,7 @@ This fork keeps the upstream Ionic/Angular and Capacitor 7 structure. iOS suppor
 - CocoaPods (`pod --version` must succeed)
 - An Apple development team selected locally in Xcode
 
-The repository intentionally does not contain an upstream developer-team identifier. Open `ios/App/App.xcworkspace`, select the **App** target, then choose your own team under **Signing & Capabilities**. Change the bundle identifier if the existing `com.tomfong.simpleqr` identifier is unavailable to your team.
+Open `ios/App/QRWerk.xcworkspace`, select the **QRWerk** target, then choose your own team under **Signing & Capabilities**. The QR Werk bundle identifier is `ch.qrwerk.app`.
 
 ## Build
 

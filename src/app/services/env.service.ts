@@ -149,9 +149,7 @@ export class EnvService {
 
   public readonly GITHUB_REPO_URL: string = "https://github.com/Globi-vs-Globine/qr-werk";
   public readonly UPSTREAM_REPO_URL: string = "https://github.com/tomfong/simple-qr";
-  public readonly GOOGLE_PLAY_URL: string = "https://play.google.com/store/apps/details?id=com.tomfong.simpleqr";
-  public readonly APP_STORE_URL: string = "https://apps.apple.com/us/app/simple-qr-by-tom-fong/id1621121553";
-  public readonly GITHUB_RELEASE_URL: string = "https://github.com/Globi-vs-Globine/qr-werk/commits/dev/ios-history-export";
+  public readonly GITHUB_RELEASE_URL: string = "https://github.com/Globi-vs-Globine/qr-werk/commits/main";
   public readonly PRIVACY_POLICY: string = "https://github.com/Globi-vs-Globine/qr-werk/blob/main/PRIVACY.md";
   public readonly LICENSE_URL: string = "https://github.com/Globi-vs-Globine/qr-werk/blob/main/LICENSE";
 
@@ -1494,7 +1492,7 @@ export class EnvService {
     const osVersion = this._deviceInfo?.osVersion;
     const mailContent =
       `
-        mailto:${toEmail}?subject=Simple%20QR%20-%20Report%20Issue%20(%23${datetimestr1})&body=Date%20%26%20Time%0A${datetimestr2}%0A%0AApp%20Version%0A${this.appVersionNumber}%0A%0AModel%0A${model}%0A%0APlatform%0A${os}%20${osVersion}%0A%0ADescription%0D%0A(describe%20the%20issue%20below)%0D%0A%0D%0A
+        mailto:${toEmail}?subject=QR%20Werk%20-%20Report%20Issue%20(%23${datetimestr1})&body=Date%20%26%20Time%0A${datetimestr2}%0A%0AApp%20Version%0A${this.appVersionNumber}%0A%0AModel%0A${model}%0A%0APlatform%0A${os}%20${osVersion}%0A%0ADescription%0D%0A(describe%20the%20issue%20below)%0D%0A%0D%0A
       `;
     return mailContent;
   }

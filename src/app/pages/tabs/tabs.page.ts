@@ -85,7 +85,7 @@ export class TabsPage {
 
   async showUpdateNotes() {
     const alert = await this.alertController.create({
-      header: this.translate.instant("UPDATE_SUCCESSFULLY"),
+      header: this.translate.instant("PATCH_NOTES"),
       message: this.platform.is('ios') ? this.translate.instant("UPDATE.UPDATE_NOTES_IOS") : this.translate.instant("UPDATE.UPDATE_NOTES_ANDROID"),
       buttons: [
         {
@@ -102,14 +102,6 @@ export class TabsPage {
       cssClass: ['left-align', 'alert-bg']
     });
     await alert.present();
-  }
-
-  openGooglePlay(): void {
-    window.open(this.env.GOOGLE_PLAY_URL, '_system');
-  }
-
-  openAppStore(): void {
-    window.open(this.env.APP_STORE_URL, '_system');
   }
 
   openGitHubRelease() {

@@ -15,7 +15,8 @@ ion-tab-button ion-icon {
 ion-tab-button ion-label {
     max-width: 100%;
     overflow: hidden;
-    font-size: 10px;
+    // Apple's typography guidance recommends avoiding text below 11 pt.
+    font-size: 11px;
     line-height: 1.2;
     text-overflow: ellipsis;
     white-space: nowrap;

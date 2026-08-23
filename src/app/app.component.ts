@@ -157,9 +157,9 @@ export class AppComponent {
 
     let sharedText: string | null = null;
 
-    // Handle custom URL scheme: simpleqr://share?text=<encoded_text>
-    if (url.startsWith('simpleqr://share?text=')) {
-      const encodedText = url.replace('simpleqr://share?text=', '');
+    // Keep the former scheme for compatibility with existing shortcuts.
+    if (url.startsWith('qrwerk://share?text=') || url.startsWith('simpleqr://share?text=')) {
+      const encodedText = url.replace(/^(qrwerk|simpleqr):\/\/share\?text=/, '');
       sharedText = decodeURIComponent(encodedText);
     }
     // Handle Android share intent: intent://#Intent;...;S.android.intent.extra.TEXT=<text>;end

@@ -20,7 +20,7 @@
   <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="navigateAbout()">
     <div class="d-flex align-items-baseline my-1">
       <div class="ion-margin-start ion-padding-horizontal">
-        <img src="assets/img/round_icon.png" width="24">
+        <img src="assets/img/round_icon.png" width="24" alt="QR Werk">
       </div>
       <ion-label>
         <p class="ion-padding-horizontal pre-line">
@@ -36,7 +36,7 @@
     <ion-label>
       <p class="ion-padding-horizontal pre-line">
         <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          Anleitung
+          {{ 'GUIDE' | translate }}
         </ion-text>
       </p>
     </ion-label>

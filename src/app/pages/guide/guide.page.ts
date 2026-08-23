@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { EnvService } from 'src/app/services/env.service';
+import { TranslateService } from '@ngx-translate/core';
 
 interface GuideChapter {
-  title: string;
-  description: string;
+  titleKey: string;
+  descriptionKey: string;
   icon: string;
   file: string;
 }
@@ -22,19 +23,20 @@ export class GuidePage {
   loading = false;
 
   readonly chapters: GuideChapter[] = [
-    { title: 'Schnellstart', description: 'Die ersten Schritte mit QR Werk', icon: 'rocket-outline', file: 'schnellstart.md' },
-    { title: 'Scannen', description: 'Kamera, Batch-Scan und Bildimport', icon: 'scan-outline', file: 'scannen.md' },
-    { title: 'Protokoll und Gruppen', description: 'Scans ordnen und verwalten', icon: 'folder-open-outline', file: 'protokoll-und-gruppen.md' },
-    { title: 'Import und Export', description: 'Codes und vollständige Datensätze übertragen', icon: 'swap-vertical-outline', file: 'import-und-export.md' },
-    { title: 'Codes erstellen', description: 'QR-Codes und Barcodes erzeugen', icon: 'create-outline', file: 'codes-erstellen.md' },
-    { title: 'Einstellungen', description: 'QR Werk an deine Arbeitsweise anpassen', icon: 'settings-outline', file: 'einstellungen.md' },
-    { title: 'Häufige Fragen', description: 'Lösungen für typische Probleme', icon: 'help-circle-outline', file: 'fehlerbehebung.md' },
-    { title: 'Datenschutz und Open Source', description: 'Berechtigungen, lokale Daten und GPL', icon: 'shield-checkmark-outline', file: 'datenschutz.md' },
+    { titleKey: 'GUIDE_QUICKSTART', descriptionKey: 'GUIDE_QUICKSTART_DESC', icon: 'rocket-outline', file: 'schnellstart.md' },
+    { titleKey: 'GUIDE_SCAN', descriptionKey: 'GUIDE_SCAN_DESC', icon: 'scan-outline', file: 'scannen.md' },
+    { titleKey: 'GUIDE_HISTORY', descriptionKey: 'GUIDE_HISTORY_DESC', icon: 'folder-open-outline', file: 'protokoll-und-gruppen.md' },
+    { titleKey: 'GUIDE_TRANSFER', descriptionKey: 'GUIDE_TRANSFER_DESC', icon: 'swap-vertical-outline', file: 'import-und-export.md' },
+    { titleKey: 'GUIDE_CREATE', descriptionKey: 'GUIDE_CREATE_DESC', icon: 'create-outline', file: 'codes-erstellen.md' },
+    { titleKey: 'GUIDE_SETTINGS', descriptionKey: 'GUIDE_SETTINGS_DESC', icon: 'settings-outline', file: 'einstellungen.md' },
+    { titleKey: 'GUIDE_FAQ', descriptionKey: 'GUIDE_FAQ_DESC', icon: 'help-circle-outline', file: 'fehlerbehebung.md' },
+    { titleKey: 'GUIDE_PRIVACY', descriptionKey: 'GUIDE_PRIVACY_DESC', icon: 'shield-checkmark-outline', file: 'datenschutz.md' },
   ];
 
   constructor(
     private readonly http: HttpClient,
     private readonly sanitizer: DomSanitizer,
+    public readonly translate: TranslateService,
     public readonly env: EnvService,
   ) {}
 
@@ -48,7 +50,7 @@ export class GuidePage {
         this.loading = false;
       },
       error: () => {
-        this.renderedChapter = this.sanitizer.bypassSecurityTrustHtml('<p>Die Anleitung konnte nicht geladen werden.</p>');
+        this.renderedChapter = this.sanitizer.bypassSecurityTrustHtml(`<p>${this.translate.instant('GUIDE_LOAD_FAILED')}</p>`);
         this.loading = false;
       },
     });

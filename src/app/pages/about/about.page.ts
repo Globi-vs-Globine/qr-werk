@@ -34,14 +34,6 @@ export class AboutPage {
     window.open(this.env.GITHUB_REPO_URL, '_system');
   }
 
-  openGooglePlay(): void {
-    window.open(this.env.GOOGLE_PLAY_URL, '_system');
-  }
-
-  openAppStore(): void {
-    window.open(this.env.APP_STORE_URL, '_system');
-  }
-
   async showBarcodeType() {
     const formats = '<ul><li>QR Code</li><li>EAN-8 / EAN-13</li><li>UPC-A / UPC-E</li><li>Code 39 / 93 / 128</li><li>Codabar / ITF</li><li>Aztec</li><li>Data Matrix</li><li>PDF417</li></ul>';
     const alert = await this.alertController.create({

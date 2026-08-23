@@ -16,7 +16,7 @@ import { rgbToHex } from 'src/app/utils/helpers';
 })
 export class SettingQrPage {
 
-  qrCodeContent: string = 'https://github.com/tomfong/simple-qr';
+  qrCodeContent: string = 'https://github.com/Globi-vs-Globine/qr-werk';
   qrElementType: QRCodeElementType = "canvas";
   errorCorrectionLevel: 'low' | 'medium' | 'quartile' | 'high' | 'L' | 'M' | 'Q' | 'H';
   readonly MAX_WIDTH = 300;

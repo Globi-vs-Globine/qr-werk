@@ -3,7 +3,7 @@
 [English](README.md) | [Deutsch](README.de.md)
 
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-orange.svg)](LICENSE)
-[![Status: Development](https://img.shields.io/badge/status-development-blue.svg)](https://github.com/Globi-vs-Globine/qr-werk/tree/dev/ios-history-export)
+[![Status: Development](https://img.shields.io/badge/status-development-blue.svg)](https://github.com/Globi-vs-Globine/qr-werk)
 
 <p align="center">
   <img src="src/assets/img/round_icon.png" alt="QR Werk app logo" width="160">
@@ -79,7 +79,7 @@ Then open `ios/App/QRWerk.xcworkspace` in Xcode. A unique bundle identifier and 
 
 ## Project status and releases
 
-- Active development takes place on [`dev/ios-history-export`](https://github.com/Globi-vs-Globine/qr-werk/tree/dev/ios-history-export).
+- Development takes place on dedicated feature branches. Reviewed changes are merged into `main` through pull requests.
 - Changes are reviewed through pull requests before they are merged into `main`.
 - QR Werk currently provides no official App Store or packaged GitHub release.
 - Bugs and feature requests for this fork belong in its [GitHub Issues](https://github.com/Globi-vs-Globine/qr-werk/issues).

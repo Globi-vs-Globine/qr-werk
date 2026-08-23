@@ -15,6 +15,6 @@ Diese Dokumentation beschreibt die Bedienung der iOS-orientierten Version von QR
 
 ## Stand der Dokumentation
 
-Die Anleitung bezieht sich auf den Entwicklungszweig `dev/ios-history-export`. Funktionen und Bildschirmdarstellungen können sich bis zur ersten öffentlichen Version noch ändern.
+Die Anleitung beschreibt den aktuellen Entwicklungsstand. Funktionen und Bildschirmdarstellungen können sich bis zur ersten öffentlichen Version noch ändern.
 
 Screenshots werden ergänzt, sobald die Bedienoberfläche weitgehend feststeht.

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Toast } from '@capacitor/toast';
 import { EnvService } from 'src/app/services/env.service';
 import { ScanFilterService, ScanFilterSettings } from 'src/app/services/scan-filter.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-setting-scan-filter',
@@ -13,7 +14,11 @@ export class SettingScanFilterPage {
   settings: ScanFilterSettings = { enabled: false, prefix: '', suffix: '', exactLength: null };
   testValue = '';
 
-  constructor(public env: EnvService, public scanFilter: ScanFilterService) {}
+  constructor(
+    public env: EnvService,
+    public scanFilter: ScanFilterService,
+    private translate: TranslateService,
+  ) {}
 
   async ionViewWillEnter(): Promise<void> {
     this.settings = await this.scanFilter.load();
@@ -30,7 +35,7 @@ export class SettingScanFilterPage {
   async save(): Promise<void> {
     if (!this.hasRule) this.settings.enabled = false;
     await this.scanFilter.save(this.settings);
-    await Toast.show({ text: 'Scanfilter gespeichert', duration: 'short', position: 'bottom' });
+    await Toast.show({ text: this.translate.instant('SCAN_FILTER_SAVED'), duration: 'short', position: 'bottom' });
   }
 
   async reset(): Promise<void> {
