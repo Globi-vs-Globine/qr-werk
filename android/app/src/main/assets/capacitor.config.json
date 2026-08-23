@@ -1,5 +1,5 @@
 {
-	"appId": "com.tomfong.simpleqr",
+	"appId": "ch.qrwerk.app",
 	"appName": "QR Werk",
 	"webDir": "www",
 	"android": {
