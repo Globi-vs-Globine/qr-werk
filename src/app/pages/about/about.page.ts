@@ -89,7 +89,7 @@ export class AboutPage {
   async tapAppVersion() {
     this.tapAppVersionTimes++;
     if (this.env.debugMode != 'on') {
-      if (this.tapAppVersionTimes >= 5) {
+      if (this.tapAppVersionTimes >= 10) {
         this.env.debugMode = 'on';
         await Preferences.set({ key: this.env.KEY_DEBUG_MODE, value: 'on' });
         await Toast.show({
