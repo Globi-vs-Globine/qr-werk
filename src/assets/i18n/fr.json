@@ -224,7 +224,8 @@
     "STATE": "Etat",
     "STREET": "Rue",
     "SUCCESS": "Succès",
-    "SUPPORTED_BARCODE_TYPE": "Type de code-barres pris en charge",
+    "SUPPORTED_BARCODE_TYPE": "Types de codes-barres pris en charge",
+    "SCROLL_FOR_MORE": "Faites défiler pour voir tous les types",
     "SUPPORTED_TYPE": "Type pris en charge",
     "SYSTEM_DEFAULT": "Système par défaut",
     "TASK": "Tâche",
@@ -348,7 +349,7 @@
         "UPC": "Code produit universel"
     },
     "UPDATE": {
-        "UPDATE_NOTES_ANDROID": "<p>Cette version vous apporte plusieurs mises à jour et nouvelles fonctionnalités. Veuillez consulter GitHub pour plus de détails.</p>",
-        "UPDATE_NOTES_IOS": "<p>Cette version vous apporte plusieurs mises à jour et nouvelles fonctionnalités. Veuillez consulter GitHub pour plus de détails.</p>"
+        "UPDATE_NOTES_ANDROID": "<p>Cette rubrique présentera les changements, corrections et nouvelles fonctions de chaque version de QRWerk.</p><p>Les notes détaillées seront également publiées sur GitHub.</p>",
+        "UPDATE_NOTES_IOS": "<p>Cette rubrique présentera les changements, corrections et nouvelles fonctions de chaque version de QRWerk.</p><p>Les notes détaillées seront également publiées sur GitHub.</p>"
     }
 }

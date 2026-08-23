@@ -225,7 +225,7 @@
     "ORIGINAL": "Original",
     "OTHERS": "Others",
     "PASSWORD": "Password",
-    "PATCH_NOTES": "Patch Notes",
+    "PATCH_NOTES": "Version and Update Notes",
     "PERMISSION_REQUIRED": "Permission Required",
     "PERSONAL": "Personal",
     "PHONE_NO": "Phone No.",
@@ -274,7 +274,8 @@
     "STATE": "State",
     "STREET": "Street",
     "SUCCESS": "Success",
-    "SUPPORTED_BARCODE_TYPE": "Supported Barcode Type",
+    "SUPPORTED_BARCODE_TYPE": "Supported Barcode Types",
+    "SCROLL_FOR_MORE": "Scroll down to see all types",
     "SUPPORTED_TYPE": "Supported Type",
     "SYSTEM_DEFAULT": "System Default",
     "TASK": "Task",
@@ -400,7 +401,7 @@
         "UPC": "Universal Product Code "
     },
     "UPDATE": {
-        "UPDATE_NOTES_ANDROID": "<p>This release brings you several updates and new features. Please check GitHub for details.</p>",
-        "UPDATE_NOTES_IOS": "<p>This release brings you several updates and new features. Please check GitHub for details.</p>"
+        "UPDATE_NOTES_ANDROID": "<p>This area will provide notes about changes, fixes and new features in each QRWerk version.</p><p>Detailed release notes will also be published on GitHub.</p>",
+        "UPDATE_NOTES_IOS": "<p>This area will provide notes about changes, fixes and new features in each QRWerk version.</p><p>Detailed release notes will also be published on GitHub.</p>"
     }
 }

@@ -33,6 +33,29 @@
     overflow-wrap: anywhere;
 }
 
+/* Keep the long supported-format list visibly scrollable on iOS. */
+.barcode-types-alert .alert-message {
+  max-height: 52vh;
+  overflow-y: scroll !important;
+  scrollbar-width: auto;
+  scrollbar-color: var(--ion-color-primary) rgba(128, 128, 128, 0.2);
+}
+
+.barcode-types-alert .alert-message::-webkit-scrollbar {
+  display: block;
+  width: 5px;
+}
+
+.barcode-types-alert .alert-message::-webkit-scrollbar-track {
+  background: rgba(128, 128, 128, 0.2);
+  border-radius: 4px;
+}
+
+.barcode-types-alert .alert-message::-webkit-scrollbar-thumb {
+  background: var(--ion-color-primary);
+  border-radius: 4px;
+}
+
 .text-start-toast {
     text-align: left;
     --max-width: 320px;

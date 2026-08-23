@@ -49,13 +49,13 @@
       </p>
     </ion-label>
   </ion-item>
-  <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="reportBug()">
+  <ion-item class="ion-no-padding" detail="false" lines="none" [disabled]="true">
     <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="bug">
     </ion-icon>
     <ion-label>
       <p class="ion-padding-horizontal pre-line">
         <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'" style="font-size: large;">
-          {{ 'REPORT_ISSUE' | translate }}
+          {{ 'REPORT_ISSUE' | translate }} ({{ 'NOT_AVAILABLE' | translate }})
         </ion-text>
       </p>
     </ion-label>

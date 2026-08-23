@@ -224,7 +224,8 @@
     "STATE": "Stato",
     "STREET": "Strada",
     "SUCCESS": "Successo",
-    "SUPPORTED_BARCODE_TYPE": "Tipi di codice a barra supportati",
+    "SUPPORTED_BARCODE_TYPE": "Tipi di codice a barre supportati",
+    "SCROLL_FOR_MORE": "Scorri per vedere tutti i tipi",
     "SUPPORTED_TYPE": "Tipi supportati",
     "SYSTEM_DEFAULT": "Sistema Predefinito",
     "TASK": "Operazione",
@@ -348,7 +349,7 @@
         "UPC": "Codice Prodotto Universale "
     },
     "UPDATE": {
-        "UPDATE_NOTES_ANDROID": "<p>Questa versione offre numerosi aggiornamenti e nuove funzionalità. Si prega di controllare GitHub per i dettagli.</p>",
-        "UPDATE_NOTES_IOS": "<p>Questa versione offre numerosi aggiornamenti e nuove funzionalità. Si prega di controllare GitHub per i dettagli.</p>"
+        "UPDATE_NOTES_ANDROID": "<p>Questa sezione mostrerà modifiche, correzioni e nuove funzioni di ogni versione di QRWerk.</p><p>Le note dettagliate saranno pubblicate anche su GitHub.</p>",
+        "UPDATE_NOTES_IOS": "<p>Questa sezione mostrerà modifiche, correzioni e nuove funzioni di ogni versione di QRWerk.</p><p>Le note dettagliate saranno pubblicate anche su GitHub.</p>"
     }
 }
