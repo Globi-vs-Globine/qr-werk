@@ -5,3 +5,27 @@ mat-form-field {
 ::ng-deep .mat-form-field.mat-focused .mat-form-field-underline {
     display: none;
 }
+
+// Make the content-type control look interactive even before it is opened.
+::ng-deep .content-type-selector {
+    .mat-form-field-outline,
+    .mat-form-field-label,
+    .mat-select-arrow,
+    .mat-select-arrow-wrapper,
+    .mat-mdc-select-arrow,
+    .mat-mdc-select-arrow svg,
+    .mat-mdc-select-arrow svg path,
+    .mat-select-trigger,
+    .mat-select-value,
+    .mat-select-value-text,
+    mat-select-trigger span,
+    mat-icon {
+        color: var(--qrwerk-accent, #007f83) !important;
+        fill: var(--qrwerk-accent, #007f83) !important;
+        border-top-color: var(--qrwerk-accent, #007f83) !important;
+    }
+
+    .mat-form-field-outline-thick {
+        opacity: 1 !important;
+    }
+}

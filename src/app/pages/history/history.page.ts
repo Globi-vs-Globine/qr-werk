@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AlertController, IonItemSliding, LoadingController, ModalController, PopoverController, ToastController } from '@ionic/angular';
+import { ActionSheetController, AlertController, IonItemSliding, LoadingController, ModalController, PopoverController, ToastController } from '@ionic/angular';
 import { EnvService } from 'src/app/services/env.service';
 import { format, Locale } from 'date-fns';
-import { de, enUS, fr, it, ptBR, ru, zhCN, zhHK } from 'date-fns/locale';
+import { de, enUS, fr, it } from 'date-fns/locale';
 import { ScanRecord } from 'src/app/models/scan-record';
 import { TranslateService } from '@ngx-translate/core';
 import { Bookmark } from 'src/app/models/bookmark';
@@ -11,6 +11,8 @@ import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Toast } from '@capacitor/toast';
 import { fastFadeIn, flyOut } from 'src/app/utils/animations';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { HistoryExportContent, HistoryExportFormat, HistoryExportService } from 'src/app/services/history-export.service';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
     selector: 'app-history',
@@ -28,6 +30,87 @@ export class HistoryPage {
   dummyArr = Array.from(Array(10).keys());
 
   isLoading: boolean = false;
+  groupFilter: string = '__all__';
+  collapsedGroups = new Set<string>();
+  managedGroups: string[] = [];
+  private groupsInitialized = false;
+  private readonly groupsStorageKey = 'history-groups';
+
+  get groupNames(): string[] {
+    return [...new Set([
+      ...this.managedGroups,
+      ...this.env.scanRecords.map(record => record.group).filter((group): group is string => !!group),
+    ])]
+      .sort((a, b) => a.localeCompare(b));
+  }
+
+  get filteredScanRecords(): ScanRecord[] {
+    if (this.groupFilter === '__all__') return this.env.scanRecords;
+    if (this.groupFilter === '__ungrouped__') return this.env.scanRecords.filter(record => !record.group);
+    return this.env.scanRecords.filter(record => record.group === this.groupFilter);
+  }
+
+  get currentGroupFilterLabel(): string {
+    if (this.groupFilter === '__all__') return this.translate.instant('ALL_GROUPS');
+    if (this.groupFilter === '__ungrouped__') return this.translate.instant('UNGROUPED');
+    return this.groupFilter;
+  }
+
+  isBookmarked(record: ScanRecord): boolean {
+    return this.env.bookmarks.some(item => item.text === record.text);
+  }
+
+  bookmarkLabel(record: ScanRecord): string | undefined {
+    const bookmark = this.env.bookmarks.find(item => item.text === record.text);
+    if (!bookmark) return undefined;
+    return bookmark.tag?.trim() || undefined;
+  }
+
+  bookmarkGroups(bookmark: Bookmark): string[] {
+    return [...new Set(
+      this.env.scanRecords
+        .filter(record => record.text === bookmark.text)
+        .map(record => record.group?.trim() || this.translate.instant('UNGROUPED')),
+    )].sort((a, b) => a.localeCompare(b));
+  }
+
+  get groupedScanRecords(): Array<{ key: string; name: string; records: ScanRecord[] }> {
+    const groups = new Map<string, ScanRecord[]>();
+    if (this.groupFilter === '__all__') {
+      this.groupNames.forEach(group => groups.set(group, []));
+    } else if (this.groupFilter !== '__ungrouped__') {
+      groups.set(this.groupFilter, []);
+    }
+    for (const record of this.filteredScanRecords) {
+      const key = record.group || '__ungrouped__';
+      const records = groups.get(key) ?? [];
+      records.push(record);
+      groups.set(key, records);
+    }
+    return [...groups.entries()]
+      .map(([key, records]) => ({
+        key,
+        name: key === '__ungrouped__' ? this.translate.instant('UNGROUPED') : key,
+        records,
+      }))
+      .sort((a, b) => {
+        if (a.key === '__ungrouped__') return 1;
+        if (b.key === '__ungrouped__') return -1;
+        return a.name.localeCompare(b.name);
+      });
+  }
+
+  toggleGroup(key: string): void {
+    if (this.collapsedGroups.has(key)) {
+      this.collapsedGroups.delete(key);
+    } else {
+      this.collapsedGroups.add(key);
+    }
+  }
+
+  isGroupCollapsed(key: string): boolean {
+    return this.collapsedGroups.has(key);
+  }
 
   constructor(
     public alertController: AlertController,
@@ -39,7 +122,9 @@ export class HistoryPage {
     public modalController: ModalController,
     public popoverController: PopoverController,
     private route: ActivatedRoute,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private actionSheetController: ActionSheetController,
+    private historyExportService: HistoryExportService
   ) {
     this.route.params.subscribe(val => {
       setTimeout(() => this.firstLoadItems(), 200);
@@ -55,7 +140,7 @@ export class HistoryPage {
     }
     this.env.viewingScanRecords = [];
     this.env.viewingBookmarks = [];
-    const scanRecords = [...this.env.scanRecords];
+    const scanRecords = [...this.filteredScanRecords];
     this.env.viewingScanRecords = scanRecords.slice(0, 15);
     const bookmarks = [...this.env.bookmarks];
     this.env.viewingBookmarks = bookmarks.slice(0, 15);
@@ -63,7 +148,7 @@ export class HistoryPage {
   }
 
   loadMoreScanRecords() {
-    const scanRecords = [...this.env.scanRecords]
+    const scanRecords = [...this.filteredScanRecords]
     this.env.viewingScanRecords.push(...scanRecords.slice(this.env.viewingScanRecords.length, this.env.viewingScanRecords.length + 15));
   }
 
@@ -76,7 +161,7 @@ export class HistoryPage {
     setTimeout(() => {
       ev.target.complete();
       this.loadMoreScanRecords();
-      if (this.env.viewingScanRecords.length === this.env.scanRecords.length) {
+      if (this.env.viewingScanRecords.length === this.filteredScanRecords.length) {
         ev.target.disabled = true;
       }
     }, 500);
@@ -98,7 +183,80 @@ export class HistoryPage {
 
   async ionViewDidEnter() {
     await SplashScreen.hide()
+    await this.loadManagedGroups();
     this.segmentModel = this.env.historyPageStartSegment;
+  }
+
+  private async loadManagedGroups(): Promise<void> {
+    const stored = await Preferences.get({ key: this.groupsStorageKey });
+    try {
+      this.managedGroups = stored.value ? JSON.parse(stored.value) : [];
+    } catch {
+      this.managedGroups = [];
+    }
+    this.managedGroups = this.groupNames;
+    await this.saveManagedGroups();
+    if (!this.groupsInitialized) {
+      this.groupNames.forEach(group => this.collapsedGroups.add(group));
+      this.groupsInitialized = true;
+    }
+  }
+
+  private async saveManagedGroups(): Promise<void> {
+    await Preferences.set({
+      key: this.groupsStorageKey,
+      value: JSON.stringify(this.managedGroups),
+    });
+  }
+
+  async createGroup(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('CREATE_GROUP'),
+      inputs: [{ name: 'group', type: 'text', placeholder: this.translate.instant('GROUP_NAME'), attributes: { maxlength: 40 } }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CREATE'),
+          handler: async data => {
+            const name = data.group?.trim();
+            if (!name) return false;
+            if (!this.managedGroups.includes(name)) this.managedGroups.push(name);
+            this.managedGroups.sort((a, b) => a.localeCompare(b));
+            this.collapsedGroups.add(name);
+            await this.saveManagedGroups();
+            return true;
+          },
+        },
+      ],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
+  }
+
+  async deleteSelectedGroup(selectedGroup?: string): Promise<void> {
+    const group = selectedGroup ?? this.groupFilter;
+    if (group === '__all__' || group === '__ungrouped__') return;
+    const alert = await this.alertController.create({
+      header: this.translate.instant('DELETE_GROUP'),
+      message: `${group}: ${this.translate.instant('GROUP_DELETE_INFO')}`,
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('DELETE'),
+          role: 'destructive',
+          handler: async () => {
+            await this.env.removeScanRecordGroup(group);
+            this.managedGroups = this.managedGroups.filter(item => item !== group);
+            this.collapsedGroups.delete(group);
+            if (this.groupFilter === group) this.groupFilter = '__all__';
+            await this.saveManagedGroups();
+            this.firstLoadItems();
+          },
+        },
+      ],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
   }
 
   ionViewWillLeave() {
@@ -138,18 +296,6 @@ export class HistoryPage {
         break;
       case "it":
         locale = it;
-        break;
-      case "pt-BR":
-        locale = ptBR;
-        break;
-      case "ru":
-        locale = ru;
-        break;
-      case "zh-CN":
-        locale = zhCN;
-        break;
-      case "zh-HK":
-        locale = zhHK;
         break;
       default:
         locale = enUS;
@@ -211,7 +357,7 @@ export class HistoryPage {
     }
   }
 
-  viewRecord(data: string, source: "view-log" | "view-bookmark") {
+  viewRecord(data: string, source: "view-log" | "view-bookmark", recordId?: string) {
     this.isLoading = true;
     this.changeDetectorRef.detach();
     this.env.viewingScanRecords = [];
@@ -223,11 +369,133 @@ export class HistoryPage {
     this.env.recordSource = "view";
     this.env.detailedRecordSource = source;
     this.env.viewResultFrom = "/tabs/history";
+    this.env.selectedScanRecordId = recordId;
     this.router.navigate(['tabs/result']);
   }
 
   async segmentChanged(ev: any) {
     this.firstLoadItems();
+  }
+
+  groupFilterChanged() {
+    this.firstLoadItems();
+  }
+
+  async presentGroupFilter(): Promise<void> {
+    const choices = [
+      { value: '__all__', label: this.translate.instant('ALL_GROUPS') },
+      { value: '__ungrouped__', label: this.translate.instant('UNGROUPED') },
+      ...this.groupNames.map(group => ({ value: group, label: group })),
+    ];
+    const buttons: any[] = choices.map(choice => ({
+      text: choice.label,
+      icon: choice.value === this.groupFilter ? 'checkmark-circle' : 'folder-outline',
+      handler: () => {
+        this.groupFilter = choice.value;
+        this.groupFilterChanged();
+      },
+    }));
+    buttons.push({
+      text: this.translate.instant('CANCEL'),
+      icon: 'close',
+      role: 'cancel',
+      handler: () => undefined,
+    });
+    const actionSheet = await this.actionSheetController.create({
+      header: this.translate.instant('FILTER_GROUPS'),
+      buttons,
+    });
+    await actionSheet.present();
+  }
+
+  async assignGroup(record: ScanRecord, slidingItem: IonItemSliding) {
+    await slidingItem.close();
+    await this.presentGroupDestination([record]);
+  }
+
+  private async selectEntriesToMove(): Promise<void> {
+    const records = this.filteredScanRecords;
+    if (!records.length) return;
+    const alert = await this.alertController.create({
+      header: this.translate.instant('SELECT_ENTRIES'),
+      inputs: records.map(record => ({
+        type: 'checkbox',
+        label: record.text,
+        value: record.id,
+        checked: false,
+      })),
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CONTINUE'),
+          handler: (selected: string[]) => {
+            const chosen = records.filter(record => selected.includes(record.id));
+            if (!chosen.length) return false;
+            this.presentGroupDestination(chosen);
+            return true;
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  private async presentGroupDestination(records: ScanRecord[]): Promise<void> {
+    const actionSheet = await this.actionSheetController.create({
+      header: `${this.translate.instant('MOVE_TO_GROUP')} (${records.length})`,
+      buttons: [
+        {
+          text: this.translate.instant('UNGROUPED'),
+          icon: 'folder-outline',
+          handler: () => this.moveEntriesToGroup(records),
+        },
+        ...this.groupNames.map(group => ({
+          text: group,
+          icon: 'folder',
+          handler: () => this.moveEntriesToGroup(records, group),
+        })),
+        {
+          text: this.translate.instant('CREATE_GROUP'),
+          icon: 'folder-open-outline',
+          handler: () => this.createGroupForEntries(records),
+        },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+      ],
+    });
+    await actionSheet.present();
+  }
+
+  private async createGroupForEntries(records: ScanRecord[]): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('CREATE_GROUP'),
+      inputs: [{ name: 'group', type: 'text', placeholder: this.translate.instant('GROUP_NAME'), attributes: { maxlength: 40 } }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CREATE'),
+          handler: data => {
+            const group = data.group?.trim();
+            if (!group) return false;
+            this.moveEntriesToGroup(records, group);
+            return true;
+          },
+        },
+      ],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
+  }
+
+  private async moveEntriesToGroup(records: ScanRecord[], group?: string): Promise<void> {
+    for (const record of records) await this.env.setScanRecordGroup(record.id, group);
+    if (group && !this.managedGroups.includes(group)) {
+      this.managedGroups.push(group);
+      this.managedGroups.sort((a, b) => a.localeCompare(b));
+      this.collapsedGroups.add(group);
+      await this.saveManagedGroups();
+    }
+    this.firstLoadItems();
+    await this.presentToast(`${records.length} ${this.translate.instant('ENTRIES_MOVED')}`, 'short', 'bottom');
   }
 
   async addBookmark(record: ScanRecord, slidingItem: IonItemSliding) {
@@ -450,6 +718,348 @@ export class HistoryPage {
       });
       alert.present();
     }
+  }
+
+  async exportHistory() {
+    const actionSheet = await this.actionSheetController.create({
+      header: this.translate.instant('EXPORT_SCOPE'),
+      buttons: [
+        { text: this.translate.instant('CURRENT_FILTER'), icon: 'filter', handler: () => this.presentExportFormats(this.filteredScanRecords) },
+        { text: this.translate.instant('SELECT_GROUPS'), icon: 'folder-open', handler: () => this.selectGroupsForExport() },
+        { text: this.translate.instant('SELECT_CODES'), icon: 'checkbox', handler: () => this.selectCodesForExport() },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' }
+      ]
+    });
+    await actionSheet.present();
+  }
+
+  async historyActions(): Promise<void> {
+    const buttons: any[] = [];
+    if (this.segmentModel === 'history') {
+      buttons.push({
+        text: this.translate.instant('MANAGE_GROUPS'),
+        icon: 'folder-outline',
+        handler: () => this.presentGroupManagement(),
+      });
+      buttons.push({
+        text: this.translate.instant('MANAGE_ENTRIES'),
+        icon: 'list-outline',
+        handler: () => this.presentRecordManagement(),
+      });
+      buttons.push({ text: this.translate.instant('TRANSFER_DATA'), icon: 'swap-vertical-outline', handler: () => this.presentDataTransfer() });
+      if (this.env.scanRecords?.length) {
+        buttons.push({
+          text: this.translate.instant('DELETE_ALL_ENTRIES'),
+          icon: 'trash-outline',
+          role: 'destructive',
+          handler: () => this.removeAll(),
+        });
+      }
+    } else if (this.env.bookmarks?.length) {
+      buttons.push({ text: this.translate.instant('REMOVE_ALL'), icon: 'trash-outline', role: 'destructive', handler: () => this.removeAll() });
+    }
+    buttons.push({ text: this.translate.instant('CANCEL'), role: 'cancel' });
+    const actionSheet = await this.actionSheetController.create({
+      header: this.translate.instant('ACTIONS'),
+      buttons,
+    });
+    await actionSheet.present();
+  }
+
+  private async presentRecordManagement(): Promise<void> {
+    if (!this.env.scanRecords?.length) {
+      const alert = await this.alertController.create({
+        header: this.translate.instant('MANAGE_ENTRIES'),
+        message: this.translate.instant('NO_ENTRIES_TO_MANAGE'),
+        cssClass: ['alert-bg'],
+        buttons: [this.translate.instant('OK')],
+      });
+      await alert.present();
+      return;
+    }
+
+    const buttons: any[] = [
+      { text: this.translate.instant('MOVE_ENTRIES'), icon: 'move-outline', handler: () => this.selectEntriesToMove() },
+      { text: this.translate.instant('CANCEL'), role: 'cancel' },
+    ];
+    const actionSheet = await this.actionSheetController.create({ header: this.translate.instant('MANAGE_ENTRIES'), buttons });
+    await actionSheet.present();
+  }
+
+  private async presentGroupManagement(): Promise<void> {
+    const buttons: any[] = [{
+      text: this.translate.instant('CREATE_GROUP'),
+      icon: 'folder-open-outline',
+      handler: () => this.createGroup(),
+    }];
+    buttons.push(...this.groupNames.map(group => ({ text: group, icon: 'folder-outline', handler: () => this.presentSelectedGroupActions(group) })));
+    buttons.push({ text: this.translate.instant('CANCEL'), role: 'cancel' });
+    const actionSheet = await this.actionSheetController.create({ header: this.translate.instant('MANAGE_GROUPS'), buttons });
+    await actionSheet.present();
+  }
+
+  private async presentSelectedGroupActions(group: string): Promise<void> {
+    const actionSheet = await this.actionSheetController.create({
+      header: group,
+      buttons: [
+        { text: this.translate.instant('ADD_ENTRIES'), icon: 'add-circle-outline', handler: () => this.selectEntriesForGroup(group) },
+        { text: this.translate.instant('RENAME_GROUP'), icon: 'pencil-outline', handler: () => this.renameGroup(group) },
+        { text: this.translate.instant('DELETE_GROUP'), icon: 'trash-outline', role: 'destructive', handler: () => this.deleteSelectedGroup(group) },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+      ],
+    });
+    await actionSheet.present();
+  }
+
+  private async selectEntriesForGroup(group: string): Promise<void> {
+    const records = this.env.scanRecords.filter(record => record.group !== group);
+    if (!records.length) {
+      await this.presentToast(this.translate.instant('NO_ENTRIES_AVAILABLE'), 'short', 'bottom');
+      return;
+    }
+    const alert = await this.alertController.create({
+      header: `${this.translate.instant('ADD_ENTRIES')}: ${group}`,
+      inputs: records.map(record => ({ type: 'checkbox', label: record.text, value: record.id, checked: false })),
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('ADD'),
+          handler: (selected: string[]) => {
+            const chosen = records.filter(record => selected.includes(record.id));
+            if (!chosen.length) return false;
+            this.moveEntriesToGroup(chosen, group);
+            return true;
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  private async renameGroup(group: string): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('RENAME_GROUP'),
+      inputs: [{ name: 'group', type: 'text', value: group, attributes: { maxlength: 40 } }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('SAVE'),
+          handler: async data => {
+            const newGroup = data.group?.trim();
+            if (!newGroup) return false;
+            if (newGroup !== group) await this.env.renameScanRecordGroup(group, newGroup);
+            this.managedGroups = this.managedGroups.filter(item => item !== group);
+            if (!this.managedGroups.includes(newGroup)) this.managedGroups.push(newGroup);
+            this.managedGroups.sort((a, b) => a.localeCompare(b));
+            if (this.collapsedGroups.delete(group)) this.collapsedGroups.add(newGroup);
+            if (this.groupFilter === group) this.groupFilter = newGroup;
+            await this.saveManagedGroups();
+            this.firstLoadItems();
+            return true;
+          },
+        },
+      ],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
+  }
+
+  private async presentDataTransfer(): Promise<void> {
+    const buttons: any[] = [{ text: this.translate.instant('IMPORT_CODES'), icon: 'clipboard-outline', handler: () => this.importCodes() }];
+    if (this.env.scanRecords?.length) buttons.push({ text: this.translate.instant('EXPORT'), icon: 'share-outline', handler: () => this.exportHistory() });
+    buttons.push({ text: this.translate.instant('CANCEL'), role: 'cancel' });
+    const actionSheet = await this.actionSheetController.create({ header: this.translate.instant('TRANSFER_DATA'), buttons });
+    await actionSheet.present();
+  }
+
+  async importCodes(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('IMPORT_CODES'),
+      message: this.translate.instant('ONE_CODE_PER_LINE'),
+      inputs: [{
+        name: 'codes',
+        type: 'textarea',
+        placeholder: this.translate.instant('PASTE_CODES'),
+        attributes: { rows: 10, autocapitalize: 'off', autocorrect: 'off', spellcheck: false },
+      }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CONTINUE'),
+          handler: data => {
+            const codes = String(data.codes ?? '')
+              .split(/\r?\n/)
+              .map(code => code.trim())
+              .filter(code => code.length > 0);
+            if (!codes.length) {
+              this.presentToast(this.translate.instant('NO_VALID_CODES'), 'short', 'bottom');
+              return false;
+            }
+            this.presentCodeImportDestination(codes);
+            return true;
+          },
+        },
+      ],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
+  }
+
+  private async presentCodeImportDestination(codes: string[]): Promise<void> {
+    const buttons = [
+      {
+        text: this.translate.instant('UNGROUPED'),
+        icon: 'folder-outline',
+        handler: () => this.saveImportedCodes(codes),
+      },
+      ...this.groupNames.map(group => ({
+        text: group,
+        icon: 'folder',
+        handler: () => this.saveImportedCodes(codes, group),
+      })),
+      {
+        text: this.translate.instant('CREATE_GROUP'),
+        icon: 'folder-open-outline',
+        handler: () => this.createImportGroup(codes),
+      },
+      { text: this.translate.instant('CANCEL'), role: 'cancel' as const },
+    ];
+    const actionSheet = await this.actionSheetController.create({
+      header: `${this.translate.instant('IMPORT_TO_GROUP')} (${codes.length})`,
+      buttons,
+    });
+    await actionSheet.present();
+  }
+
+  private async createImportGroup(codes: string[]): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('CREATE_GROUP'),
+      inputs: [{ name: 'group', type: 'text', placeholder: this.translate.instant('GROUP_NAME'), attributes: { maxlength: 40 } }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CREATE'),
+          handler: data => {
+            const group = data.group?.trim();
+            if (!group) return false;
+            this.saveImportedCodes(codes, group);
+            return true;
+          },
+        },
+      ],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
+  }
+
+  private async saveImportedCodes(codes: string[], group?: string): Promise<void> {
+    const previousSource = this.env.recordSource;
+    const previousFormat = this.env.resultContentFormat;
+    this.env.recordSource = 'scan';
+    this.env.resultContentFormat = '';
+    try {
+      for (const code of codes) await this.env.saveScanRecord(code, group);
+      if (group && !this.managedGroups.includes(group)) {
+        this.managedGroups.push(group);
+        this.managedGroups.sort((a, b) => a.localeCompare(b));
+        this.collapsedGroups.add(group);
+        await this.saveManagedGroups();
+      }
+      this.firstLoadItems();
+      await this.presentToast(`${codes.length} ${this.translate.instant('CODES_IMPORTED')}`, 'short', 'bottom');
+    } finally {
+      this.env.recordSource = previousSource;
+      this.env.resultContentFormat = previousFormat;
+    }
+  }
+
+  private async presentExportFormats(records: ScanRecord[]) {
+    if (!records.length) return;
+    const actionSheet = await this.actionSheetController.create({
+      header: `${this.translate.instant('EXPORT')} (${records.length})`,
+      buttons: [
+        { text: `${this.translate.instant('FULL_DETAILS')} (CSV)`, icon: 'document-text', handler: () => this.shareHistory(records, 'csv', 'full') },
+        { text: `${this.translate.instant('FULL_DETAILS')} (TXT)`, icon: 'reader', handler: () => this.shareHistory(records, 'txt', 'full') },
+        { text: `${this.translate.instant('CODES_ONLY')} (TXT)`, icon: 'list', handler: () => this.shareHistory(records, 'txt', 'codes') },
+        { text: this.translate.instant('COPY_CODES'), icon: 'copy', handler: () => this.copyCodes(records) },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+      ],
+    });
+    await actionSheet.present();
+  }
+
+  private async selectGroupsForExport() {
+    const keys = [...this.groupNames, '__ungrouped__'];
+    const alert = await this.alertController.create({
+      header: this.translate.instant('SELECT_GROUPS'),
+      inputs: keys.map(key => ({
+        type: 'checkbox',
+        label: key === '__ungrouped__' ? this.translate.instant('UNGROUPED') : key,
+        value: key,
+        checked: true,
+      })),
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CONTINUE'),
+          handler: (selected: string[]) => {
+            const records = this.env.scanRecords.filter(record =>
+              selected.includes(record.group || '__ungrouped__'),
+            );
+            if (!records.length) return false;
+            this.presentExportFormats(records);
+            return true;
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  private async selectCodesForExport() {
+    const records = this.filteredScanRecords;
+    const alert = await this.alertController.create({
+      header: this.translate.instant('SELECT_CODES'),
+      inputs: records.map(record => ({
+        type: 'checkbox',
+        label: record.text,
+        value: record.id,
+        checked: true,
+      })),
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CONTINUE'),
+          handler: (selected: string[]) => {
+            const chosen = records.filter(record => selected.includes(record.id));
+            if (!chosen.length) return false;
+            this.presentExportFormats(chosen);
+            return true;
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+  private async shareHistory(records: ScanRecord[], exportFormat: HistoryExportFormat, content: HistoryExportContent) {
+    const loading = await this.presentLoading(this.translate.instant('EXPORTING'));
+    try {
+      await this.historyExportService.exportAndShare(records, this.env.bookmarks, exportFormat, content);
+    } catch (err) {
+      await this.presentToast(
+        this.env.isDebugging ? `Export failed: ${JSON.stringify(err)}` : this.translate.instant('MSG.EXPORT_FAILED'),
+        this.env.isDebugging ? 'long' : 'short',
+        'bottom'
+      );
+    } finally {
+      await loading.dismiss();
+    }
+  }
+
+  private async copyCodes(records: ScanRecord[]) {
+    await this.historyExportService.copyCodes(records);
+    await this.presentToast(this.translate.instant('COPIED'), 'short', 'bottom');
   }
 
   goSetting() {

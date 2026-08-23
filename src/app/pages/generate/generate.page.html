@@ -25,7 +25,7 @@
 
   <ion-row class="ion-padding-horizontal">
     <ion-col>
-      <mat-form-field [class]="ngMatThemeClass" color="accent" appearance="outline" [floatLabel]="'always'">
+      <mat-form-field [ngClass]="[ngMatThemeClass, 'content-type-selector']" color="accent" appearance="outline" [floatLabel]="'always'">
         <mat-label>{{ 'CONTENT_TYPE' | translate}}</mat-label>
         <mat-select [(ngModel)]="contentType">
           <mat-select-trigger>

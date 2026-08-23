@@ -29,6 +29,7 @@ export class AppComponent {
     // Initialize app listeners after platform is ready
     this.platform.ready().then(() => {
       this.initAppListeners();
+      document.addEventListener('click', this.handleSettingRowClick);
       // With SplashScreen.launchAutoHide=false we must hide manually.
       // Do it globally so deep-link cold-starts (e.g. share -> result) don't get stuck.
       setTimeout(() => {
@@ -41,6 +42,42 @@ export class AppComponent {
       this.checkLaunchUrl();
     });
   }
+
+  /**
+   * Make settings rows easy to use: tapping the label or empty area activates
+   * the radio button or toggle at the end of that row as well.
+   */
+  private readonly handleSettingRowClick = (event: MouseEvent): void => {
+    const path = event.composedPath();
+    const tagNames = path
+      .filter((entry): entry is HTMLElement => entry instanceof HTMLElement)
+      .map((entry) => entry.tagName);
+
+    // A direct tap on a control must not be forwarded a second time. Keep
+    // links and buttons inside rows independent as well.
+    if (
+      tagNames.includes('ION-RADIO') ||
+      tagNames.includes('ION-TOGGLE') ||
+      tagNames.includes('ION-BUTTON') ||
+      tagNames.includes('BUTTON') ||
+      tagNames.includes('A')
+    ) {
+      return;
+    }
+
+    const item = path.find(
+      (entry): entry is HTMLElement =>
+        entry instanceof HTMLElement && entry.tagName === 'ION-ITEM',
+    );
+    if (!item) {
+      return;
+    }
+
+    const control = item.querySelector<HTMLElement>(
+      ':scope > ion-radio[slot="end"], :scope > ion-toggle[slot="end"]',
+    );
+    control?.click();
+  };
 
   private initAppListeners(): void {
     // Handle app state changes (iOS)

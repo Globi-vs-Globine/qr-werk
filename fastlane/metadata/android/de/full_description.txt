@@ -1,4 +1,4 @@
-<i>Simple QR</i> ist eine FOSS-App zum Scannen, Erstellen und Speichern von QR-Codes mit einer einfachen Benutzeroberfläche und Erfahrung. Kein Back-End-Dienst verbunden. Keine Daten gesammelt. Keine Werbung.
+<i>QR Werk</i> ist eine quelloffene App zum Scannen, Erstellen und Organisieren von QR-Codes und Barcodes. Kein Werbe-Backend, kein Benutzerkonto und keine beabsichtigte Erfassung gescannter Inhalte.
 
 Englisch, Französisch, Deutsch, Italienisch, traditionelles Chinesisch und vereinfachtes Chinesisch werden unterstützt.
 

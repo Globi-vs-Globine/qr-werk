@@ -1,0 +1,40 @@
+.group-filter-button ion-icon[slot='start'] {
+  font-size: 28px;
+}
+
+.group-filter-button strong {
+  font-size: 16px;
+}
+
+.group-filter-button p {
+  margin-top: 4px;
+}
+
+ion-badge ion-icon {
+  margin-right: 4px;
+  vertical-align: -1px;
+}
+
+.barcode-type-badge {
+  --background: rgba(var(--qrwerk-accent-rgb, 0, 127, 131), 0.14);
+  --color: var(--qrwerk-accent, #007f83);
+  border: 1px solid rgba(var(--qrwerk-accent-rgb, 0, 127, 131), 0.22);
+  font-weight: 500;
+}
+
+:host-context(body.dark) .barcode-type-badge,
+:host-context(body.black) .barcode-type-badge {
+  --background: rgba(var(--qrwerk-accent-rgb, 0, 127, 131), 0.2);
+  --color: var(--ion-color-primary-tint);
+  border-color: rgba(var(--qrwerk-accent-rgb, 0, 127, 131), 0.28);
+}
+
+.bookmark-groups {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.duplicate-badge {
+  --background: rgba(154, 126, 63, 0.72);
+  --color: #fff8e6;
+}

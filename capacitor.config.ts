@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.tomfong.simpleqr',
-  appName: 'Simple QR',
+  appId: 'ch.qrwerk.app',
+  appName: 'QR Werk',
   webDir: 'www',
   android: {
     initialFocus: false,

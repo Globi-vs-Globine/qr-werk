@@ -2,6 +2,7 @@ import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   BarcodeScanner,
+  Barcode,
   BarcodeFormat,
   LensFacing,
   StartScanOptions,
@@ -16,7 +17,7 @@ import {
 } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvService } from 'src/app/services/env.service';
-import { Haptics, ImpactStyle } from '@capacitor/haptics';
+import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 import { Toast } from '@capacitor/toast';
 import {
   Camera,
@@ -30,6 +31,15 @@ import { Capacitor } from '@capacitor/core';
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 import { StatusBar } from '@capacitor/status-bar';
 import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
+import { Preferences } from '@capacitor/preferences';
+import { ScanFilterService } from 'src/app/services/scan-filter.service';
+
+type BatchDuplicateMode = 'allow' | 'batch' | 'history';
+interface BatchScanOptions {
+  duplicateMode: BatchDuplicateMode;
+  pauseMs: number;
+  autofocus: boolean;
+}
 
 @Component({
   selector: 'app-scan',
@@ -41,6 +51,7 @@ export class ScanPage {
   @ViewChild('content') contentEl: HTMLIonContentElement;
 
   cameraActive: boolean = false;
+  nativeScannerActive: boolean = false;
   flashActive: boolean = false;
 
   permissionAlert: HTMLIonAlertElement;
@@ -50,6 +61,8 @@ export class ScanPage {
   minZoomRatio: number | undefined;
   maxZoomRatio: number | undefined;
   zoomRatio: number = 0;
+
+  readonly usesNativeScanner = Capacitor.getPlatform() === 'ios';
 
   @ViewChild('square')
   public squareElement: ElementRef<HTMLDivElement> | undefined;
@@ -63,6 +76,7 @@ export class ScanPage {
     public translate: TranslateService,
     private readonly ngZone: NgZone,
     private platform: Platform,
+    private scanFilter: ScanFilterService,
   ) {}
 
   ionViewWillEnter() {
@@ -72,12 +86,28 @@ export class ScanPage {
   }
 
   async ionViewDidEnter(): Promise<void> {
-    await SplashScreen.hide();
     if (this.platform.is('android')) {
       await EdgeToEdge.setBackgroundColor({ color: '#000000' });
       await StatusBar.setBackgroundColor({ color: '#000000' });
     }
-    await this.prepareScanner();
+    if (this.router.url.startsWith('/tabs/import-image')) {
+      this.env.openScannerOnNextScanEntry = false;
+      await SplashScreen.hide();
+      await this.scanFromImage();
+    } else if (!this.usesNativeScanner || this.env.openScannerOnNextScanEntry) {
+      const isAutomaticNativeStart = this.usesNativeScanner && this.env.openScannerOnNextScanEntry;
+      this.env.openScannerOnNextScanEntry = false;
+      const scannerPromise = this.prepareScanner();
+      if (isAutomaticNativeStart) {
+        // Keep the launch screen visible while iOS presents its native camera
+        // so the scan menu cannot flash briefly between both screens.
+        await new Promise(resolve => setTimeout(resolve, 220));
+      }
+      await SplashScreen.hide();
+      await scannerPromise;
+    } else {
+      await SplashScreen.hide();
+    }
   }
 
   async ionViewWillLeave() {
@@ -87,6 +117,7 @@ export class ScanPage {
   }
 
   async ionViewDidLeave(): Promise<void> {
+    this.setNativeScannerActive(false);
     try {
       const { available } = await BarcodeScanner.isTorchAvailable();
       if (available) {
@@ -175,6 +206,12 @@ export class ScanPage {
 
   async scanQrUsingMlkitModule(): Promise<void> {
     await this.stopScannerUsingMlkitModule();
+
+    if (this.usesNativeScanner) {
+      await this.scanUsingNativeInterface();
+      return;
+    }
+
     document.querySelector('body')?.classList.add('barcode-scanning-active');
 
     const options: StartScanOptions = {
@@ -330,6 +367,10 @@ export class ScanPage {
               }
             });
           }
+          if (!(await this.acceptScannedValue(text))) {
+            await this.scanQrUsingMlkitModule();
+            return;
+          }
           this.processQrCode(text, firstBarcode.format);
         });
       },
@@ -351,6 +392,216 @@ export class ScanPage {
     }
   }
 
+  async scanUsingNativeInterface(): Promise<void> {
+    this.setNativeScannerActive(true);
+    try {
+      const result = await BarcodeScanner.scan({
+        formats: [
+          BarcodeFormat.Aztec,
+          BarcodeFormat.Codabar,
+          BarcodeFormat.Code128,
+          BarcodeFormat.Code39,
+          BarcodeFormat.Code93,
+          BarcodeFormat.DataMatrix,
+          BarcodeFormat.Ean13,
+          BarcodeFormat.Ean8,
+          BarcodeFormat.Itf,
+          BarcodeFormat.Pdf417,
+          BarcodeFormat.QrCode,
+          BarcodeFormat.UpcA,
+          BarcodeFormat.UpcE,
+        ],
+      });
+      const barcode = result.barcodes[0];
+      if (!barcode?.rawValue?.trim()) {
+        return;
+      }
+      if (!(await this.acceptScannedValue(barcode.rawValue))) {
+        await this.scanUsingNativeInterface();
+        return;
+      }
+      if (
+        this.env.vibration === 'on' ||
+        this.env.vibration === 'on-scanned'
+      ) {
+        await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
+      }
+      await this.processQrCode(barcode.rawValue, barcode.format);
+    } catch (err) {
+      const manualValue = this.manualCodeFromScannerError(err);
+      if (manualValue) {
+        if (!(await this.acceptScannedValue(manualValue))) {
+          await this.scanUsingNativeInterface();
+          return;
+        }
+        await this.processQrCode(manualValue, '' as BarcodeFormat);
+        return;
+      }
+      // Closing the native scanner is a normal action. The scan page remains
+      // usable and offers a button to open it again.
+      if (this.env.debugMode === 'on') {
+        console.log('Native scanner closed:', err);
+      }
+    } finally {
+      // Keep the launcher and tab bar covered until the native camera has
+      // completely finished its dismissal animation.
+      await new Promise(resolve => setTimeout(resolve, 260));
+      this.setNativeScannerActive(false);
+    }
+  }
+
+  async scanBatchUsingNativeInterface(): Promise<void> {
+    const duplicateMode = (await Preferences.get({ key: 'batch-duplicate-mode' })).value as BatchDuplicateMode | null;
+    const pauseRawValue = (await Preferences.get({ key: 'batch-pause-ms' })).value;
+    const autofocusValue = (await Preferences.get({ key: 'batch-autofocus' })).value;
+    const batchOptions: BatchScanOptions = {
+      duplicateMode: duplicateMode ?? 'batch',
+      pauseMs: pauseRawValue == null || !Number.isFinite(Number(pauseRawValue)) ? 1000 : Number(pauseRawValue),
+      autofocus: autofocusValue !== 'off',
+    };
+
+    await Preferences.set({
+      key: 'qrwerk-batch-autofocus',
+      value: batchOptions.autofocus ? 'on' : 'off',
+    });
+    this.setNativeScannerActive(true);
+    const scannedValues = new Set<string>();
+    const valuesBeforeBatch = new Set(
+      (this.env.scanRecords ?? []).map(record => record.text.trim()),
+    );
+    let savedCount = 0;
+    let currentBatchDuplicates = 0;
+    let historyDuplicates = 0;
+    try {
+      while (true) {
+        let value: string | undefined;
+        let barcodeFormat: BarcodeFormat | string = '';
+        try {
+          const result = await BarcodeScanner.scan({
+            formats: [
+              BarcodeFormat.Aztec,
+              BarcodeFormat.Codabar,
+              BarcodeFormat.Code128,
+              BarcodeFormat.Code39,
+              BarcodeFormat.Code93,
+              BarcodeFormat.DataMatrix,
+              BarcodeFormat.Ean13,
+              BarcodeFormat.Ean8,
+              BarcodeFormat.Itf,
+              BarcodeFormat.Pdf417,
+              BarcodeFormat.QrCode,
+              BarcodeFormat.UpcA,
+              BarcodeFormat.UpcE,
+            ],
+          });
+          const barcode = result.barcodes[0];
+          value = barcode?.rawValue?.trim();
+          barcodeFormat = barcode?.format ?? '';
+        } catch (err) {
+          const manualValue = this.manualCodeFromScannerError(err);
+          if (!manualValue) throw err;
+          value = manualValue;
+        }
+        if (!value) {
+          continue;
+        }
+
+        if (!(await this.acceptScannedValue(value))) {
+          await this.waitBetweenBatchScans(batchOptions.pauseMs);
+          continue;
+        }
+
+        const duplicateInBatch = scannedValues.has(value);
+        const duplicateInHistory = !duplicateInBatch && valuesBeforeBatch.has(value);
+        const isDuplicate = duplicateInBatch || duplicateInHistory;
+
+        if (duplicateInBatch) currentBatchDuplicates += 1;
+        if (duplicateInHistory) historyDuplicates += 1;
+
+        if (isDuplicate) {
+          await this.env.recordDuplicateScan(value);
+          const shouldBlock = batchOptions.duplicateMode === 'history' ||
+            (batchOptions.duplicateMode === 'batch' && duplicateInBatch);
+          if (shouldBlock) {
+            await Haptics.notification({ type: NotificationType.Error }).catch(() => undefined);
+            await this.presentToast(
+              this.translate.instant(
+                duplicateInBatch ? 'DUPLICATE_IN_BATCH' : 'DUPLICATE_IN_HISTORY',
+              ),
+              'short',
+              'top',
+            );
+            await this.waitBetweenBatchScans(batchOptions.pauseMs);
+            continue;
+          }
+        }
+
+        scannedValues.add(value);
+        this.env.recordSource = 'scan';
+        this.env.detailedRecordSource = 'scan-camera';
+        this.env.resultContentFormat = barcodeFormat;
+        await this.env.saveScanRecord(value);
+        savedCount += 1;
+        await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
+        await this.waitBetweenBatchScans(batchOptions.pauseMs);
+      }
+    } catch (err) {
+      // The native X button ends the batch intentionally.
+      if (this.env.debugMode === 'on') {
+        console.log('Batch scanner closed:', err);
+      }
+    } finally {
+      delete this.env.recordSource;
+      delete this.env.detailedRecordSource;
+      await Preferences.set({ key: 'qrwerk-batch-autofocus', value: 'on' });
+      if (savedCount > 0 || currentBatchDuplicates > 0 || historyDuplicates > 0) {
+        await this.showBatchSummary(savedCount, currentBatchDuplicates, historyDuplicates);
+      }
+      await new Promise(resolve => setTimeout(resolve, 260));
+      this.setNativeScannerActive(false);
+    }
+  }
+
+  private setNativeScannerActive(active: boolean): void {
+    this.nativeScannerActive = active;
+    document.body.classList.toggle('native-barcode-scanner-active', active);
+  }
+
+  private async waitBetweenBatchScans(milliseconds: number): Promise<void> {
+    if (milliseconds > 0) await new Promise(resolve => setTimeout(resolve, milliseconds));
+  }
+
+  private manualCodeFromScannerError(error: unknown): string | undefined {
+    const message = typeof error === 'string'
+      ? error
+      : String((error as { message?: string })?.message ?? error ?? '');
+    const marker = 'QRWERK_MANUAL:';
+    const markerIndex = message.indexOf(marker);
+    if (markerIndex < 0) return undefined;
+    const value = message.slice(markerIndex + marker.length).trim();
+    return value || undefined;
+  }
+
+
+  private async showBatchSummary(
+    savedCount: number,
+    currentBatchDuplicates: number,
+    historyDuplicates: number,
+  ): Promise<void> {
+    const message = [
+      `${this.translate.instant('BATCH_SAVED')}: ${savedCount}`,
+      `${this.translate.instant('DUPLICATES_CURRENT_BATCH')}: ${currentBatchDuplicates}`,
+      `${this.translate.instant('DUPLICATES_HISTORY')}: ${historyDuplicates}`,
+    ].join('<br>');
+    const alert = await this.alertController.create({
+      header: this.translate.instant('BATCH_SUMMARY'),
+      message,
+      buttons: [this.translate.instant('OK')],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
+  }
+
   async setZoomRatio(event: InputCustomEvent) {
     if (!this.zoomRatio) {
       return;
@@ -365,9 +616,11 @@ export class ScanPage {
       this.translate.instant('PLEASE_WAIT'),
     );
     const options = {
-      quality: 50,
+      quality: 100,
       allowEditing: false,
-      resultType: CameraResultType.DataUrl,
+      resultType: Capacitor.isNativePlatform()
+        ? CameraResultType.Uri
+        : CameraResultType.DataUrl,
       source: CameraSource.Photos,
       saveToGallery: false,
     } as ImageOptions;
@@ -432,6 +685,72 @@ export class ScanPage {
         },
       );
     }
+
+    if (Capacitor.isNativePlatform()) {
+      await getPictureLoading.dismiss();
+      try {
+        const selection = await Camera.pickImages({
+          quality: 100,
+          correctOrientation: true,
+          limit: 0,
+        });
+        if (!selection.photos.length) return;
+
+        const decodingLoading = await this.presentLoading(
+          this.translate.instant('DECODING'),
+        );
+        const detected: Barcode[] = [];
+        try {
+          for (const photo of selection.photos) {
+            if (!photo.path) continue;
+            const result = await BarcodeScanner.readBarcodesFromImage({
+              path: photo.path,
+              formats: [
+                BarcodeFormat.Aztec,
+                BarcodeFormat.Codabar,
+                BarcodeFormat.Code128,
+                BarcodeFormat.Code39,
+                BarcodeFormat.Code93,
+                BarcodeFormat.DataMatrix,
+                BarcodeFormat.Ean13,
+                BarcodeFormat.Ean8,
+                BarcodeFormat.Itf,
+                BarcodeFormat.Pdf417,
+                BarcodeFormat.QrCode,
+                BarcodeFormat.UpcA,
+                BarcodeFormat.UpcE,
+              ],
+            });
+            detected.push(...result.barcodes);
+          }
+        } finally {
+          await decodingLoading.dismiss();
+        }
+
+        const filterSettings = await this.scanFilter.load();
+        const unique = detected.filter(
+          (barcode, index, all) =>
+            !!barcode.rawValue?.trim() &&
+            all.findIndex(item => item.rawValue === barcode.rawValue) === index &&
+            this.scanFilter.matches(barcode.rawValue, filterSettings),
+        );
+        if (!unique.length) {
+          await this.presentToast(
+            this.translate.instant(detected.length ? 'CODE_DOES_NOT_MATCH_FILTER' : 'MSG.NO_QR_CODE'),
+            'short',
+            'center',
+          );
+          return;
+        }
+        await this.presentImportedBarcodes(unique);
+      } catch (err) {
+        if (this.env.debugMode === 'on') {
+          console.log('Image selection or barcode scan failed:', err);
+        }
+      }
+      return;
+    }
+
     await Camera.getPhoto(options).then(
       async (photo: Photo) => {
         getPictureLoading.dismiss();
@@ -447,7 +766,9 @@ export class ScanPage {
             ).then(
               async (qrValue) => {
                 decodingLoading.dismiss();
-                this.processQrCode(qrValue, 'QR_CODE');
+                if (await this.acceptScannedValue(qrValue)) {
+                  this.processQrCode(qrValue, 'QR_CODE');
+                }
               },
               async (_) => {
                 decodingLoading.dismiss();
@@ -479,6 +800,59 @@ export class ScanPage {
           );
         }
       },
+    );
+  }
+
+  private async presentImportedBarcodes(barcodes: Barcode[]): Promise<void> {
+    if (barcodes.length === 1) {
+      this.processQrCode(barcodes[0].rawValue, barcodes[0].format, 'scan-image');
+      return;
+    }
+
+    const alert = await this.alertController.create({
+      header: `${barcodes.length} ${this.translate.instant('SCANNED')}`,
+      inputs: barcodes.map((barcode, index) => ({
+        type: 'checkbox',
+        label: barcode.displayValue || barcode.rawValue,
+        value: String(index),
+        checked: true,
+      })),
+      buttons: [
+        {
+          text: this.translate.instant('SAVE_ALL'),
+          handler: async () => this.saveImportedBarcodes(barcodes),
+        },
+        {
+          text: this.translate.instant('SAVE_SELECTION'),
+          handler: async (selectedIndexes: string[]) => {
+            const selected = selectedIndexes
+              .map(index => barcodes[Number(index)])
+              .filter((barcode): barcode is Barcode => !!barcode);
+            if (!selected.length) return false;
+            await this.saveImportedBarcodes(selected);
+            return true;
+          },
+        },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+      ],
+      cssClass: ['alert-can-copy'],
+    });
+    await alert.present();
+  }
+
+  private async saveImportedBarcodes(barcodes: Barcode[]): Promise<void> {
+    for (const barcode of barcodes) {
+      this.env.recordSource = 'scan';
+      this.env.detailedRecordSource = 'scan-image';
+      this.env.resultContentFormat = barcode.format;
+      await this.env.saveScanRecord(barcode.rawValue);
+    }
+    delete this.env.recordSource;
+    delete this.env.detailedRecordSource;
+    await this.presentToast(
+      `${barcodes.length} ${this.translate.instant('SAVED')}`,
+      'short',
+      'bottom',
     );
   }
 
@@ -546,13 +920,30 @@ export class ScanPage {
     });
   }
 
-  processQrCode(scannedData: string, format: string) {
+  processQrCode(
+    scannedData: string,
+    format: string,
+    detailedSource: 'scan-camera' | 'scan-image' = 'scan-camera',
+  ) {
     this.env.resultContent = scannedData;
     this.env.resultContentFormat = format;
     this.env.recordSource = 'scan';
-    this.env.detailedRecordSource = 'scan-camera';
+    this.env.detailedRecordSource = detailedSource;
     this.env.viewResultFrom = '/tabs/scan';
     this.router.navigate(['tabs/result']);
+  }
+
+  private async acceptScannedValue(value: string): Promise<boolean> {
+    const settings = await this.scanFilter.load();
+    const accepted = this.scanFilter.matches(value, settings);
+    if (!accepted) {
+      await this.presentToast(
+        this.translate.instant('CODE_DOES_NOT_MATCH_FILTER'),
+        'short',
+        'top',
+      );
+    }
+    return accepted;
   }
 
   async toggleFlash(): Promise<void> {

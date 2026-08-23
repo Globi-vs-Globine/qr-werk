@@ -44,6 +44,15 @@
     </ng-container>
   </ion-segment>
 
+  <ion-item *ngIf="segmentModel === 'history'" button detail="true" lines="full"
+    class="group-filter-button" (click)="tapHaptic(); presentGroupFilter()">
+    <ion-icon name="filter-circle-outline" slot="start" color="primary"></ion-icon>
+    <ion-label>
+      <strong>{{ 'FILTER_GROUPS' | translate }}</strong>
+      <p>{{ 'CURRENT_SELECTION' | translate }}: {{ currentGroupFilterLabel }}</p>
+    </ion-label>
+  </ion-item>
+
   <!-- When loading -->
   <ng-container *ngIf="isLoading">
     <ion-list>
@@ -108,58 +117,67 @@
           </ion-text>
         </div>
       </ion-list-header>
-      <ng-container *ngFor="let record of env.viewingScanRecords; trackBy: scanRecordsTrackByFn; index as i;">
-        <ion-item-sliding #slidingItem [@fastInAnimation] [@flyOut]>
-          <ion-item class="ion-no-padding ripple-parent" detail="false"
-            [lines]="i === env.viewingScanRecords.length - 1? 'none' : 'full'"
-            (click)="viewRecord(record.text, 'view-log')">
-            <ion-label class="ion-padding-start">
-              <div class="ion-padding-horizontal" style="overflow-x: clip; text-overflow: ellipsis;">
-                <p *ngIf="env.debugMode === 'on'">
-                  <ion-text color="medium">
-                    Index {{ i }}
-                  </ion-text>
-                </p>
-                <p>
-                  <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'" style="font-size: large;">
-                    {{ record.text }}
-                  </ion-text>
-                </p>
-                <p *ngIf="env.debugMode === 'on'">
-                  <ion-text color="medium">
-                    {{ record.id }}
-                  </ion-text>
-                </p>
-                <p>
-                  <ion-text color="medium">
-                    {{ maskDatetimeAndSource(record.createdAt, record.source) }}
-                  </ion-text>
-                </p>
-                <ion-badge *ngIf="record.barcodeType" class="my-1" color="primary">
-                  <div class="d-flex align-items-center">
-                    <span>{{ getBarcodeFormat(record.barcodeType) }}</span>
+      <ng-container *ngFor="let group of groupedScanRecords">
+        <ion-item button detail="false" lines="full" (click)="toggleGroup(group.key)">
+          <ion-icon slot="start" [name]="isGroupCollapsed(group.key) ? 'folder-outline' : 'folder-open-outline'"
+            color="secondary"></ion-icon>
+          <ion-label>
+            <strong>{{ group.name }}</strong>
+          </ion-label>
+          <ion-badge slot="end" color="secondary">{{ group.records.length }}</ion-badge>
+          <ion-icon slot="end" [name]="isGroupCollapsed(group.key) ? 'chevron-down' : 'chevron-up'"></ion-icon>
+        </ion-item>
+
+        <ng-container *ngIf="!isGroupCollapsed(group.key)">
+          <ng-container *ngFor="let record of group.records; trackBy: scanRecordsTrackByFn; index as i;">
+            <ion-item-sliding #slidingItem>
+              <ion-item class="ion-no-padding ripple-parent" detail="false"
+                [lines]="i === group.records.length - 1? 'none' : 'full'"
+                (click)="viewRecord(record.text, 'view-log', record.id)">
+                <ion-label class="ion-padding-start">
+                  <div class="ion-padding-horizontal" style="overflow-x: clip; text-overflow: ellipsis;">
+                    <p>
+                      <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'" style="font-size: large;">
+                        {{ record.text }}
+                      </ion-text>
+                    </p>
+                    <p>
+                      <ion-text color="medium">
+                        {{ maskDatetimeAndSource(record.createdAt, record.source) }}
+                      </ion-text>
+                    </p>
+                    <ion-badge *ngIf="record.barcodeType" class="my-1 barcode-type-badge">
+                      {{ getBarcodeFormat(record.barcodeType) }}
+                    </ion-badge>
+                    <ion-badge *ngIf="isBookmarked(record)" class="my-1 ms-1" color="secondary">
+                      <ion-icon name="bookmark" aria-hidden="true"></ion-icon>
+                      <span *ngIf="bookmarkLabel(record) as label">{{ label }}</span>
+                    </ion-badge>
+                    <ion-badge *ngIf="record.duplicateCount" class="my-1 ms-1 duplicate-badge">
+                      <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
+                      {{ (record.duplicateCount || 0) + 1 }}× {{ 'DETECTED' | translate }}
+                    </ion-badge>
                   </div>
-                </ion-badge>
-              </div>
-            </ion-label>
-          </ion-item>
-          <ion-item-options side="start">
-            <ion-item-option [color]="'primary'" expandable (click)="addBookmark(record, slidingItem)">
-              <ion-icon slot="icon-only" name="bookmark"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-          <ion-item-options side="end">
-            <ion-item-option color="danger" expandable (click)="removeRecord(record, slidingItem)">
-              <ion-icon slot="icon-only" name="trash-bin"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
+                </ion-label>
+              </ion-item>
+              <ion-item-options side="start">
+                <ion-item-option color="secondary" (click)="assignGroup(record, slidingItem)">
+                  <ion-icon slot="icon-only" name="folder-open"></ion-icon>
+                </ion-item-option>
+                <ion-item-option color="primary" (click)="addBookmark(record, slidingItem)">
+                  <ion-icon slot="icon-only" name="bookmark"></ion-icon>
+                </ion-item-option>
+              </ion-item-options>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" expandable (click)="removeRecord(record, slidingItem)">
+                  <ion-icon slot="icon-only" name="trash-bin"></ion-icon>
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ng-container>
+        </ng-container>
       </ng-container>
     </ion-list>
-    <ion-infinite-scroll threshold="100px" (ionInfinite)="onLoadScanRecords($event)">
-      <ion-infinite-scroll-content [loadingText]="'LOADING_DATA' | translate">
-      </ion-infinite-scroll-content>
-    </ion-infinite-scroll>
   </ng-container>
 
   <!-- When bookmark segment but 0 bookmark  -->
@@ -202,6 +220,12 @@
                     {{ bookmark.text }}
                   </ion-text>
                 </p>
+                <div class="bookmark-groups" *ngIf="bookmarkGroups(bookmark) as groups">
+                  <ion-badge *ngFor="let group of groups" color="secondary" class="me-1 my-1">
+                    <ion-icon name="folder-outline" aria-hidden="true"></ion-icon>
+                    {{ group }}
+                  </ion-badge>
+                </div>
                 <p *ngIf="env.debugMode === 'on'">
                   <ion-text color="medium">
                     {{ bookmark.id }}
@@ -233,10 +257,10 @@
 
 <ion-footer
   [ngStyle]="env.colorTheme === 'dark'?  {'background-color': '#222428'} : (env.colorTheme === 'black'? {'background-color': '#000000'} : {'background-color': '#F0F0F0'})">
-  <ion-row class="d-flex justify-content-around">
-    <ion-button (click)="tapHaptic(); removeAll()" [color]="'danger'" fill="clear"
-      *ngIf="(segmentModel === 'bookmarks' && env.viewingBookmarks && env.viewingBookmarks.length > 0) || (segmentModel === 'history' && env.viewingScanRecords && env.viewingScanRecords.length > 0)">
-      {{ 'REMOVE_ALL' | translate }}
+  <ion-row class="ion-justify-content-center">
+    <ion-button (click)="tapHaptic(); historyActions()" color="primary" fill="clear">
+      <ion-icon name="ellipsis-horizontal-circle-outline" slot="start"></ion-icon>
+      {{ 'ACTIONS' | translate }}
     </ion-button>
   </ion-row>
 </ion-footer>

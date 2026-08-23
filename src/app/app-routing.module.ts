@@ -29,6 +29,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/about/about.module').then(m => m.AboutPageModule)
   },
   {
+    path: 'guide',
+    loadChildren: () => import('./pages/guide/guide.module').then(m => m.GuidePageModule)
+  },
+  {
     path: 'setting-vibration',
     loadChildren: () => import('./pages/setting-vibration/setting-vibration.module').then(m => m.SettingVibrationPageModule)
   },
@@ -59,6 +63,10 @@ const routes: Routes = [
   {
     path: 'setting-result',
     loadChildren: () => import('./pages/setting-result/setting-result.module').then(m => m.SettingResultPageModule)
+  },
+  {
+    path: 'setting-scan-filter',
+    loadChildren: () => import('./pages/setting-scan-filter/setting-scan-filter.module').then(m => m.SettingScanFilterPageModule)
   },
   {
     path: 'setting-result-buttons',

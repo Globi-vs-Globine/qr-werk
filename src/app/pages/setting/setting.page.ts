@@ -85,6 +85,10 @@ export class SettingPage {
     this.router.navigate(['about']);
   }
 
+  navigateGuide() {
+    this.router.navigate(['guide']);
+  }
+
   setAutoCloseApp() {
     this.router.navigate(['setting-auto-exit']);
   }

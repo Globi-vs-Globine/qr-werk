@@ -1,5 +1,10 @@
 <ion-header>
   <ion-toolbar [color]="env.colorTheme === 'black'? 'black' : 'dark'">
+    <ion-buttons slot="start" *ngIf="env.viewResultFrom">
+      <ion-button (click)="tapHaptic(); goBackToOverview()" fill="clear">
+        <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>{{ 'RESULT' | translate }}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="tapHaptic(); goSetting()" fill="clear" [color]="'primary'">
@@ -29,6 +34,27 @@
   <ng-container *ngIf="qrCodeContent && qrCodeContent.trim().length > 0" [ngTemplateOutlet]="contentBlock"
     [ngTemplateOutletContext]="{ label: barcodeFormat + ('CONTENT' | translate), content: qrCodeContent, hint: env.resultContentFormat, showEdit: true }">
   </ng-container>
+
+  <ion-list *ngIf="selectedHistoryRecord as record" class="history-timeline ion-margin">
+    <ion-list-header>
+      <ion-icon name="time-outline" color="primary"></ion-icon>
+      <ion-label class="ion-padding-start"><strong>{{ 'RECORD_TIMELINE' | translate }}</strong></ion-label>
+    </ion-list-header>
+    <ion-item lines="full">
+      <ion-icon slot="start" name="scan-circle-outline" color="primary"></ion-icon>
+      <ion-label>
+        <h3>{{ 'FIRST_DETECTED' | translate }}</h3>
+        <p>{{ record.createdAt | date:'medium' }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngFor="let timestamp of duplicateTimestamps; index as i" lines="full">
+      <ion-icon slot="start" name="repeat-outline" class="muted-duplicate-icon"></ion-icon>
+      <ion-label>
+        <h3>{{ 'DUPLICATE_DETECTED' | translate }} {{ i + 1 }}</h3>
+        <p>{{ timestamp | date:'medium' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 
   <ng-container *ngIf="base64Encoded && qrCodeContent && qrCodeContent.trim().length > 0"
     [ngTemplateOutlet]="contentBlock"
@@ -246,7 +272,7 @@
   </ng-container>
 
   <ng-container *ngIf="env.resultPageButtons === 'detailed'">
-    <ion-row class="ion-padding-horizontal py-2">
+    <ion-row class="ion-padding-horizontal py-1 compact-result-actions">
       <div class="d-flex justify-content-between detailed-action-button-container">
         <!-- <ion-button class="pe-1"
           *ngIf="contentType === 'wifi' && env.showConnectWifiButton === 'on' && wifiSSID && wifiSSID.length > 0"

@@ -17,11 +17,12 @@ import { Observable } from 'rxjs';
 import { EdgeToEdge } from '@capawesome/capacitor-android-edge-to-edge-support';
 import { StatusBar, Style } from '@capacitor/status-bar';
 
-export declare type LanguageType = 'de' | 'en' | 'fr' | 'it' | 'pt-BR' | 'ru' | 'zh-CN' | 'zh-HK';
+export declare type LanguageType = 'de' | 'en' | 'fr' | 'it';
 export declare type TabPageType = "/tabs/scan" | "/tabs/generate" | "/tabs/history" | "/tabs/setting";
 export declare type HistoryPageSegmentType = 'history' | 'bookmarks';
 export declare type OnOffType = "on" | "off";
 export declare type ColorThemeType = 'light' | 'dark' | 'black';
+export declare type AccentColorType = 'petrol' | 'blue' | 'violet' | 'green' | 'orange' | 'pink';
 export declare type ErrorCorrectionLevelType = 'L' | 'M' | 'Q' | 'H';
 export declare type VibrationType = "on" | "off" | 'on-haptic' | 'on-scanned';
 export declare type OrientationType = 'portrait' | 'landscape';
@@ -35,16 +36,17 @@ export declare type QrCreateContentTypeType = "freeText" | "url" | "contact" | "
 })
 export class EnvService {
 
-  public appVersionNumber: string = '5.1.1';
+  public appVersionNumber: string = '5.1.1-ios-fork.1';
 
   public startPage: TabPageType = "/tabs/scan";
   public historyPageStartSegment: HistoryPageSegmentType = 'history';
   public startPageHeader: OnOffType = 'on';
-  public languages: LanguageType[] = ['en', 'zh-HK', 'zh-CN', 'de', 'fr', 'it', 'pt-BR', 'ru'];
+  public languages: LanguageType[] = ['de', 'en', 'fr', 'it'];
   public language: LanguageType = 'en';
   public selectedLanguage: 'default' | LanguageType = 'default';
   public colorTheme: ColorThemeType = 'light';
   public selectedColorTheme: 'default' | ColorThemeType = 'default';
+  public accentColor: AccentColorType = 'petrol';
   public scanRecordLogging: OnOffType = 'on';
   public recordsLimit: 30 | 50 | 100 | -1 = -1;
   public showNumberOfRecords: OnOffType = 'on';
@@ -92,6 +94,7 @@ export class EnvService {
   public readonly KEY_BOOKMARKS = "bookmarks";
   public readonly KEY_LANGUAGE = "language";
   public readonly KEY_COLOR = "color";
+  public readonly KEY_ACCENT_COLOR = "accent-color";
   public readonly KEY_DEBUG_MODE = "debug-mode-on";
   public readonly KEY_SHOW_EXIT_APP_ALERT = "showExitAppAlert";
   public readonly KEY_ORIENTATION = "orientation";
@@ -132,7 +135,7 @@ export class EnvService {
   public readonly KEY_SHOW_CONNECT_WIFI_BUTTON = "showConnectWifiButton";
   public readonly KEY_AUTO_EXIT_MIN = "autoExitAppMin";
 
-  public readonly APP_FOLDER_NAME: string = 'SimpleQR';
+  public readonly APP_FOLDER_NAME: string = 'QRWerk';
 
   public readonly GOOGLE_SEARCH_URL: string = "https://www.google.com/search?q=";
   public readonly BING_SEARCH_URL: string = "https://www.bing.com/search?q=";
@@ -142,11 +145,12 @@ export class EnvService {
   public readonly ECOSIA_SEARCH_URL: string = "https://www.ecosia.org/search?method=index&q=";
   public readonly BRAVE_SEARCH_URL: string = "https://search.brave.com/search?q=";
 
-  public readonly GITHUB_REPO_URL: string = "https://github.com/tomfong/simple-qr";
+  public readonly GITHUB_REPO_URL: string = "https://github.com/Globi-vs-Globine/qr-werk";
+  public readonly UPSTREAM_REPO_URL: string = "https://github.com/tomfong/simple-qr";
   public readonly GOOGLE_PLAY_URL: string = "https://play.google.com/store/apps/details?id=com.tomfong.simpleqr";
   public readonly APP_STORE_URL: string = "https://apps.apple.com/us/app/simple-qr-by-tom-fong/id1621121553";
-  public readonly GITHUB_RELEASE_URL: string = "https://github.com/tomfong/simple-qr/releases";
-  public readonly PRIVACY_POLICY: string = "https://www.privacypolicies.com/live/771b1123-99bb-4bfe-815e-1046c0437a0f";
+  public readonly GITHUB_RELEASE_URL: string = "https://github.com/Globi-vs-Globine/qr-werk/commits/dev/ios-history-export";
+  public readonly PRIVACY_POLICY: string = "https://github.com/Globi-vs-Globine/qr-werk/blob/dev/ios-history-export/PRIVACY.md";
 
   resultContent: string = '';
   editingContent: boolean = false;
@@ -163,8 +167,10 @@ export class EnvService {
   recordSource: 'create' | 'view' | 'scan' | 'external-share' | undefined;
   detailedRecordSource: 'create' | 'view-log' | 'view-bookmark' | 'scan-camera' | 'scan-image' | 'external-share' | undefined;
   viewResultFrom: '/tabs/scan' | '/tabs/generate' | '/tabs/history' | undefined;
+  selectedScanRecordId: string | undefined;
 
   public firstAppLoad: boolean = true;  // once loaded, turn it false
+  public openScannerOnNextScanEntry: boolean = false;
 
   initObservable: Observable<boolean> | undefined;
 
@@ -273,6 +279,12 @@ export class EnvService {
         await this.toggleColorTheme();
       }
     );
+    const loadPromise7b = Preferences.get({ key: this.KEY_ACCENT_COLOR }).then(
+      result => {
+        this.accentColor = (result.value as AccentColorType | null) ?? 'petrol';
+        this.applyAccentColor();
+      }
+    );
     const loadPromise10 = Preferences.get({ key: this.KEY_ORIENTATION }).then(
       async result => {
         if (result.value != null) {
@@ -289,6 +301,7 @@ export class EnvService {
       loadPromise3,
       loadPromise6,
       loadPromise7,
+      loadPromise7b,
       loadPromise10,
     ]);
   }
@@ -734,6 +747,8 @@ export class EnvService {
     this.toggleLanguageChange();
     this.selectedColorTheme = 'default';
     await this.toggleColorTheme();
+    this.accentColor = 'petrol';
+    this.applyAccentColor();
     this.scanRecordLogging = 'on';
     this.recordsLimit = -1;
     this.showNumberOfRecords = 'on';
@@ -800,6 +815,10 @@ export class EnvService {
     this.selectedColorTheme = 'default';
     await this.toggleColorTheme();
     await Preferences.set({ key: this.KEY_COLOR, value: this.selectedColorTheme });
+
+    this.accentColor = 'petrol';
+    this.applyAccentColor();
+    await Preferences.set({ key: this.KEY_ACCENT_COLOR, value: this.accentColor });
 
     this.scanRecordLogging = 'on';
     await Preferences.set({ key: this.KEY_SCAN_RECORD_LOGGING, value: this.scanRecordLogging });
@@ -945,12 +964,13 @@ export class EnvService {
     await Preferences.set({ key: this.KEY_QR_CODE_MARGIN, value: JSON.stringify(this.qrCodeMargin) });
   }
 
-  async saveScanRecord(value: string): Promise<void> {
+  async saveScanRecord(value: string, group?: string): Promise<void> {
     const record = new ScanRecord();
     const date = new Date();
-    record.id = String(date.getTime());
+    record.id = uuidv4();
     record.text = value;
     record.createdAt = date;
+    record.group = group?.trim() || undefined;
     if (this.recordSource != null) {
       record.source = this.recordSource;
       if (this.recordSource == 'scan') {
@@ -976,6 +996,49 @@ export class EnvService {
         this.presentToast("Err when stringify scanRecords: " + JSON.stringify(e), "long", "top");
       }
     }
+  }
+
+  async recordDuplicateScan(value: string): Promise<boolean> {
+    const record = this.scanRecords.find(item => item.text.trim() === value.trim());
+    if (!record) return false;
+    record.duplicateCount = (record.duplicateCount ?? 0) + 1;
+    record.lastDuplicateAt = new Date();
+    record.duplicateDetectedAt = [...(record.duplicateDetectedAt ?? []), record.lastDuplicateAt];
+    await Preferences.set({
+      key: this.KEY_SCAN_RECORDS,
+      value: JSON.stringify(this.scanRecords),
+    });
+    return true;
+  }
+
+  async setScanRecordGroup(id: string, group?: string): Promise<void> {
+    const record = this.scanRecords.find(item => item.id === id);
+    if (!record) return;
+    record.group = group?.trim() || undefined;
+    await Preferences.set({
+      key: this.KEY_SCAN_RECORDS,
+      value: JSON.stringify(this.scanRecords),
+    });
+  }
+
+  async removeScanRecordGroup(group: string): Promise<void> {
+    this.scanRecords
+      .filter(record => record.group === group)
+      .forEach(record => delete record.group);
+    await Preferences.set({
+      key: this.KEY_SCAN_RECORDS,
+      value: JSON.stringify(this.scanRecords),
+    });
+  }
+
+  async renameScanRecordGroup(previousGroup: string, newGroup: string): Promise<void> {
+    this.scanRecords
+      .filter(record => record.group === previousGroup)
+      .forEach(record => record.group = newGroup.trim());
+    await Preferences.set({
+      key: this.KEY_SCAN_RECORDS,
+      value: JSON.stringify(this.scanRecords),
+    });
   }
 
   async saveRestoredScanRecords(records: ScanRecord[]): Promise<void> {
@@ -1163,25 +1226,8 @@ export class EnvService {
           case "it":
             language = "it"
             break;
-          case "pt":
-            language = "pt-BR";
-            break;
-          case "ru":
-            language = "ru"
-            break;
-          case "zh":
-            if (browserCultureLang == 'zh-CN' || browserCultureLang == 'zh-SG') {
-              language = 'zh-CN';
-            } else {
-              language = "zh-HK";
-            }
-            break;
           default:
-            if (browserCultureLang.slice(0, 3) == "yue") {
-              language = "zh-HK";
-            } else {
-              language = 'en';
-            }
+            language = 'en';
         }
       }
       this.translate.use(language);
@@ -1280,6 +1326,40 @@ export class EnvService {
         await StatusBar.setStyle({ style: Style.Dark });
       }
     }
+  }
+
+  applyAccentColor(): void {
+    const colors: Record<AccentColorType, string> = {
+      petrol: '#007f83',
+      blue: '#0068b8',
+      violet: '#6d4bc3',
+      green: '#287a43',
+      orange: '#a64b00',
+      pink: '#a83a72',
+    };
+    const hex = colors[this.accentColor] ?? colors.petrol;
+    const red = parseInt(hex.slice(1, 3), 16);
+    const green = parseInt(hex.slice(3, 5), 16);
+    const blue = parseInt(hex.slice(5, 7), 16);
+    const mix = (value: number, target: number, amount: number) =>
+      Math.round(value + (target - value) * amount);
+    const toHex = (value: number) => value.toString(16).padStart(2, '0');
+    const shade = `#${toHex(mix(red, 0, 0.12))}${toHex(mix(green, 0, 0.12))}${toHex(mix(blue, 0, 0.12))}`;
+    const tint = `#${toHex(mix(red, 255, 0.14))}${toHex(mix(green, 255, 0.14))}${toHex(mix(blue, 255, 0.14))}`;
+    const targets = [document.documentElement.style, document.body.style];
+
+    targets.forEach(target => ['primary', 'secondary', 'tertiary'].forEach(name => {
+      target.setProperty(`--ion-color-${name}`, hex);
+      target.setProperty(`--ion-color-${name}-rgb`, `${red}, ${green}, ${blue}`);
+      target.setProperty(`--ion-color-${name}-contrast`, '#ffffff');
+      target.setProperty(`--ion-color-${name}-contrast-rgb`, '255, 255, 255');
+      target.setProperty(`--ion-color-${name}-shade`, shade);
+      target.setProperty(`--ion-color-${name}-tint`, tint);
+    }));
+    targets.forEach(target => {
+      target.setProperty('--qrwerk-accent', hex);
+      target.setProperty('--qrwerk-accent-rgb', `${red}, ${green}, ${blue}`);
+    });
   }
 
   async toggleOrientationChange(): Promise<void> {

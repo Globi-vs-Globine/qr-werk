@@ -37,21 +37,6 @@
   </ion-item>
 
   <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" src="assets/icon/history.svg">
-    </ion-icon>
-    <ion-label>
-      <p class="ion-padding-horizontal pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'" style="font-size: large;">
-          {{ 'VIEW_LOG' | translate }}
-        </ion-text>
-      </p>
-    </ion-label>
-    <ion-toggle class="ion-padding-end" slot="end" [ngModel]="env.showQrAfterLogView == 'on'? true : false"
-      (ngModelChange)="onShowQrAfterLogViewChange($event)">
-    </ion-toggle>
-  </ion-item>
-
-  <ion-item class="ion-no-padding ripple-parent" detail="false" lines="none">
     <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="bookmark"></ion-icon>
     <ion-label>
       <p class="ion-padding-horizontal pre-line">

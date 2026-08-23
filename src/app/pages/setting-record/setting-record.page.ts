@@ -11,7 +11,8 @@ import { Bookmark } from 'src/app/models/bookmark';
 import { SocialSharing } from '@awesome-cordova-plugins/social-sharing/ngx';
 import { Haptics, ImpactStyle } from '@capacitor/haptics';
 import { Preferences } from '@capacitor/preferences';
-import { de, enUS, fr, it, ptBR, ru, zhCN, zhHK } from 'date-fns/locale';
+import { de, enUS, fr, it } from 'date-fns/locale';
+import { HistoryExportService } from 'src/app/services/history-export.service';
 
 @Component({
   selector: 'app-setting-record',
@@ -33,6 +34,7 @@ export class SettingRecordPage {
     private socialSharing: SocialSharing,
     private platform: Platform,
     private modalController: ModalController,
+    private historyExportService: HistoryExportService,
   ) { }
 
   ionViewDidEnter() {
@@ -69,7 +71,7 @@ export class SettingRecordPage {
   async onBackup() {
     // const loading1 = await this.presentLoading(this.translate.instant("ENCRYPTING"));
     const backup = {
-      application: "Simple QR",
+      application: "QR Werk",
       scanRecords: this.env.scanRecords,
       bookmarks: this.env.bookmarks
     };
@@ -195,7 +197,8 @@ export class SettingRecordPage {
   async restore(value: string) {
     try {
       const restore = JSON.parse(value);
-      if (restore.application != "Simple QR") {
+      // Keep backups created before the visible QR Werk rename and by the upstream app compatible.
+      if (!["QR Werk", "QRWerk", "Simple QR"].includes(restore.application)) {
         this.presentToast(this.translate.instant("MSG.INVALID_BK_FILE"), "short", "bottom");
         return;
       }
@@ -242,82 +245,17 @@ export class SettingRecordPage {
 
   async onExportToCsv() {
     const loading = await this.presentLoading(this.translate.instant("EXPORTING"));
-    const now = format(new Date(), "yyyyMMddHHmmss");
-    const filename = `simpleqr-${now}.csv`;
-    let rawCsvData: string;
-    switch (this.env.language) {
-      case "de":
-        rawCsvData = "ID,Inhalt,Erstellt um,Quelle,Barcode-Typ,Lesezeichen gesetzt?,Etikett\r\n";
-        break;
-      case "en":
-        rawCsvData = "ID,Content,Created at,Source,Barcode Type,Bookmarked?,Tag\r\n";
-        break;
-      case "fr":
-        rawCsvData = "ID,Le contenu,Créé à,La source,Type de code-barres,En signet?,Étiquette\r\n";
-        break;
-      case "it":
-        rawCsvData = "ID,Contenuto,Creato a,Fonte,Tipo di codice a barre,Aggiunto ai preferiti?,Etichetta\r\n";
-        break;
-      case "pt-BR":
-        rawCsvData = "ID,Conteúdo,Criado em,Origem,Tipo de código de barras,Marcado como favorito?,Tag\r\n";
-        break;
-      case "ru":
-        rawCsvData = "ID,Содержание,Создано в,Источник,Тип штрих-кода,В закладках?,Ярлык\r\n";
-        break;
-      case "zh-CN":
-        rawCsvData = "ID,内容,建立于,来源,条码类型,已书签?,标签\r\n";
-        break;
-      case "zh-HK":
-        rawCsvData = "ID,内容,建立於,來源,條碼類型,已書籤?,標籤\r\n";
-        break;
-      default:
-        rawCsvData = "ID,Content,Created at,Source,Barcode Type,Bookmarked?,Tag\r\n";
+    try {
+      await this.historyExportService.exportAndShare(this.env.scanRecords, this.env.bookmarks, 'csv');
+    } catch (err) {
+      this.presentToast(
+        this.env.isDebugging ? `Export failed: ${JSON.stringify(err)}` : this.translate.instant('MSG.EXPORT_FAILED'),
+        this.env.isDebugging ? 'long' : 'short',
+        'bottom'
+      );
+    } finally {
+      await loading.dismiss();
     }
-    this.env.scanRecords.forEach(r => {
-      rawCsvData += `"${r.id}","${r.text?.split('"').join('') ?? ""}","${this.maskDatetime(r.createdAt)}","${this.maskSource(r.source)}","${r.barcodeType ?? ''}",`
-      const bookmark = this.env.bookmarks.find(b => b.text == r.text);
-      if (bookmark != null) {
-        rawCsvData += `"TRUE","${bookmark.tag?.split('"').join('') ?? ""}"\r\n`;
-      } else {
-        rawCsvData += `"FALSE",""\r\n`;
-      }
-    });
-    this.env.bookmarks.forEach(b => {
-      if (this.env.scanRecords.findIndex(r => r.text == b.text) == -1) {
-        rawCsvData += `"-","${b.text?.split('"').join('') ?? ""}","${this.maskDatetime(b.createdAt)}","-","-","TRUE","${b.tag?.split('"').join('') ?? ""}"\r\n`
-      }
-    });
-    await Filesystem.writeFile({
-      path: `${filename}`,
-      data: rawCsvData,
-      directory: Directory.External,
-      encoding: Encoding.UTF8,
-      recursive: true
-    }).then(
-      async result => {
-        loading.dismiss();
-        const loading2 = await this.presentLoading(this.translate.instant("PLEASE_WAIT"));
-        await this.socialSharing.share(null, filename, result.uri, null).then(() => {
-          loading2.dismiss();
-        }).catch(
-          err => {
-            loading2.dismiss();
-            if (this.env.isDebugging) {
-              this.presentToast("Error when SocialSharing.share: " + JSON.stringify(err), "long", "top");
-            }
-          }
-        );
-      }
-    ).catch(
-      err => {
-        loading.dismiss();
-        if (this.env.isDebugging) {
-          this.presentToast("Error when call Filesystem.writeFile: " + JSON.stringify(err), "long", "top");
-        } else {
-          this.presentToast("Error!", "short", "bottom");
-        }
-      }
-    );
   }
 
   maskDatetime(date: Date): string {
@@ -337,18 +275,6 @@ export class SettingRecordPage {
         break;
       case "it":
         locale = it;
-        break;
-      case "pt-BR":
-        locale = ptBR;
-        break;
-      case "ru":
-        locale = ru;
-        break;
-      case "zh-CN":
-        locale = zhCN;
-        break;
-      case "zh-HK":
-        locale = zhHK;
         break;
       default:
         locale = enUS;
@@ -373,18 +299,6 @@ export class SettingRecordPage {
         break;
       case "it":
         locale = it;
-        break;
-      case "pt-BR":
-        locale = ptBR;
-        break;
-      case "ru":
-        locale = ru;
-        break;
-      case "zh-CN":
-        locale = zhCN;
-        break;
-      case "zh-HK":
-        locale = zhHK;
         break;
       default:
         locale = enUS;

@@ -32,8 +32,31 @@ ion-textarea[readonly] {
 .detailed-action-button-container {
     flex: 1;
     overflow-x: scroll;
+    gap: 4px;
 }
 
 .detailed-action-button-container::before, .detailed-action-button-container::after {
     content: ''
+}
+
+.compact-result-actions ion-button {
+    min-height: 44px;
+    height: 44px;
+    font-size: 13px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+}
+
+.compact-result-actions ion-icon {
+    font-size: 17px;
+}
+
+.history-timeline {
+    border: 1px solid rgba(var(--qrwerk-accent-rgb, 0, 127, 131), 0.35);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.muted-duplicate-icon {
+    color: rgba(154, 126, 63, 0.8);
 }

@@ -29,6 +29,7 @@ import { fadeIn } from 'src/app/utils/animations';
 import { Router } from '@angular/router';
 import { QRCodeElementType } from 'angularx-qrcode';
 import { SplashScreen } from '@capacitor/splash-screen';
+import { ScanRecord } from 'src/app/models/scan-record';
 
 @Component({
   selector: 'app-result',
@@ -82,6 +83,18 @@ export class ResultPage {
 
   resultSaved: boolean = false;
 
+  get selectedHistoryRecord(): ScanRecord | undefined {
+    if (!this.env.selectedScanRecordId) return undefined;
+    return this.env.scanRecords.find(record => record.id === this.env.selectedScanRecordId);
+  }
+
+  get duplicateTimestamps(): Date[] {
+    const record = this.selectedHistoryRecord;
+    if (!record) return [];
+    if (record.duplicateDetectedAt?.length) return record.duplicateDetectedAt;
+    return record.lastDuplicateAt ? [record.lastDuplicateAt] : [];
+  }
+
   @ViewChildren(MatFormField) formFields!: QueryList<MatFormField>;
 
   constructor(
@@ -100,11 +113,6 @@ export class ResultPage {
       if (
         this.env.detailedRecordSource == 'create' &&
         this.env.showQrAfterCreate == 'on'
-      ) {
-        this.showQrFirst = true;
-      } else if (
-        this.env.detailedRecordSource == 'view-log' &&
-        this.env.showQrAfterLogView == 'on'
       ) {
         this.showQrFirst = true;
       } else if (
@@ -163,6 +171,7 @@ export class ResultPage {
     }
     if (
       this.env.scanRecordLogging == 'on' &&
+      this.env.recordSource !== 'view' &&
       this.qrCodeContent != null &&
       this.qrCodeContent != ''
     ) {
@@ -212,6 +221,12 @@ export class ResultPage {
     delete this.env.recordSource;
     delete this.env.detailedRecordSource;
     delete this.env.viewResultFrom;
+    delete this.env.selectedScanRecordId;
+  }
+
+  goBackToOverview(): void {
+    const target = this.env.viewResultFrom ?? '/tabs/history';
+    this.router.navigateByUrl(target);
   }
 
   setContentType(): void {

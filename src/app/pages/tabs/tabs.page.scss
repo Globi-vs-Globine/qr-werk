@@ -1,1 +1,22 @@
+ion-tab-bar {
+    min-height: 58px;
+    padding-top: 4px;
+}
 
+ion-tab-button {
+    min-width: 44px;
+    min-height: 50px;
+}
+
+ion-tab-button ion-icon {
+    font-size: 23px;
+}
+
+ion-tab-button ion-label {
+    max-width: 100%;
+    overflow: hidden;
+    font-size: 10px;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
