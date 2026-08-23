@@ -2,3 +2,18 @@
     background: var(--ion-background-color, #fff);
     color: var(--ion-text-color, #000);
 }
+
+.color-preview {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(127, 127, 127, 0.5);
+}
+
+.native-color-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+}

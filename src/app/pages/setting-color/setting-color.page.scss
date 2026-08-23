@@ -4,3 +4,16 @@
   border-radius: 50%;
   border: 1px solid rgba(127, 127, 127, 0.45);
 }
+
+.native-color-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.custom-color-row {
+  margin-top: 6px;
+  border-top: 1px solid rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.12);
+}

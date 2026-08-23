@@ -22,8 +22,6 @@ export class SettingQrPage {
   readonly MAX_WIDTH = 300;
   defaultWidth: number = window.innerWidth * 0.4 > this.MAX_WIDTH ? this.MAX_WIDTH : window.innerWidth * 0.4;
 
-  colorLocked: boolean = true;
-  backgroundColorLocked: boolean = true;
   marginLocked: boolean = true;
 
   constructor(
@@ -36,8 +34,6 @@ export class SettingQrPage {
   }
 
   ionViewWillLeave() {
-    this.colorLocked = true;
-    this.backgroundColorLocked = true;
     this.marginLocked = true;
   }
 
@@ -47,6 +43,20 @@ export class SettingQrPage {
 
   get qrColorLight(): string {
     return rgbToHex(this.env.qrCodeLightR, this.env.qrCodeLightG, this.env.qrCodeLightB);
+  }
+
+  async chooseQrColor(event: Event, target: 'dark' | 'light'): Promise<void> {
+    const hex = (event.target as HTMLInputElement).value;
+    const red = parseInt(hex.slice(1, 3), 16);
+    const green = parseInt(hex.slice(3, 5), 16);
+    const blue = parseInt(hex.slice(5, 7), 16);
+    if (target === 'dark') {
+      [this.env.qrCodeDarkR, this.env.qrCodeDarkG, this.env.qrCodeDarkB] = [red, green, blue];
+      await Promise.all([this.saveQrCodeDarkR(), this.saveQrCodeDarkG(), this.saveQrCodeDarkB()]);
+    } else {
+      [this.env.qrCodeLightR, this.env.qrCodeLightG, this.env.qrCodeLightB] = [red, green, blue];
+      await Promise.all([this.saveQrCodeLightR(), this.saveQrCodeLightG(), this.saveQrCodeLightB()]);
+    }
   }
 
   setErrorCorrectionLevel() {
@@ -110,8 +120,6 @@ export class SettingQrPage {
         {
           text: this.translate.instant('YES'),
           handler: async () => {
-            this.colorLocked = true;
-            this.backgroundColorLocked = true;
             this.marginLocked = true;
             await this.env.resetQrCodeSettings();
           }

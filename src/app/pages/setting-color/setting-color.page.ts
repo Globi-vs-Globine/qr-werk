@@ -34,6 +34,17 @@ export class SettingColorPage {
     await Preferences.set({ key: this.env.KEY_ACCENT_COLOR, value: this.env.accentColor });
   }
 
+  async chooseCustomAccentColor(event: Event): Promise<void> {
+    const input = event.target as HTMLInputElement;
+    this.env.customAccentColor = this.env.normalizeHexColor(input.value, '#007f83');
+    this.env.accentColor = 'custom';
+    this.env.applyAccentColor();
+    await Promise.all([
+      Preferences.set({ key: this.env.KEY_CUSTOM_ACCENT_COLOR, value: this.env.customAccentColor }),
+      Preferences.set({ key: this.env.KEY_ACCENT_COLOR, value: this.env.accentColor })
+    ]);
+  }
+
   async saveHistoryPageStartSegment(): Promise<void> {
     await Preferences.set({
       key: this.env.KEY_HISTORY_PAGE_START_SEGMENT,

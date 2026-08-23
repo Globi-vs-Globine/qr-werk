@@ -22,7 +22,7 @@ export declare type TabPageType = "/tabs/scan" | "/tabs/generate" | "/tabs/histo
 export declare type HistoryPageSegmentType = 'history' | 'bookmarks';
 export declare type OnOffType = "on" | "off";
 export declare type ColorThemeType = 'light' | 'dark' | 'black';
-export declare type AccentColorType = 'petrol' | 'blue' | 'violet' | 'green' | 'orange' | 'pink';
+export declare type AccentColorType = 'petrol' | 'blue' | 'violet' | 'green' | 'orange' | 'pink' | 'custom';
 export declare type ErrorCorrectionLevelType = 'L' | 'M' | 'Q' | 'H';
 export declare type VibrationType = "on" | "off" | 'on-haptic' | 'on-scanned';
 export declare type OrientationType = 'portrait' | 'landscape';
@@ -47,6 +47,7 @@ export class EnvService {
   public colorTheme: ColorThemeType = 'light';
   public selectedColorTheme: 'default' | ColorThemeType = 'default';
   public accentColor: AccentColorType = 'petrol';
+  public customAccentColor: string = '#007f83';
   public scanRecordLogging: OnOffType = 'on';
   public recordsLimit: 30 | 50 | 100 | -1 = -1;
   public showNumberOfRecords: OnOffType = 'on';
@@ -95,6 +96,7 @@ export class EnvService {
   public readonly KEY_LANGUAGE = "language";
   public readonly KEY_COLOR = "color";
   public readonly KEY_ACCENT_COLOR = "accent-color";
+  public readonly KEY_CUSTOM_ACCENT_COLOR = "custom-accent-color";
   public readonly KEY_DEBUG_MODE = "debug-mode-on";
   public readonly KEY_SHOW_EXIT_APP_ALERT = "showExitAppAlert";
   public readonly KEY_ORIENTATION = "orientation";
@@ -320,8 +322,11 @@ export class EnvService {
         await this.toggleColorTheme();
       }
     );
-    const loadPromise7b = Preferences.get({ key: this.KEY_ACCENT_COLOR }).then(
-      result => {
+    const loadPromise7b = Promise.all([
+      Preferences.get({ key: this.KEY_ACCENT_COLOR }),
+      Preferences.get({ key: this.KEY_CUSTOM_ACCENT_COLOR })
+    ]).then(([result, customResult]) => {
+        this.customAccentColor = this.normalizeHexColor(customResult.value, '#007f83');
         this.accentColor = (result.value as AccentColorType | null) ?? 'petrol';
         this.applyAccentColor();
       }
@@ -1368,7 +1373,7 @@ export class EnvService {
   }
 
   applyAccentColor(): void {
-    const colors: Record<AccentColorType, string> = {
+    const colors: Record<Exclude<AccentColorType, 'custom'>, string> = {
       petrol: '#007f83',
       blue: '#0068b8',
       violet: '#6d4bc3',
@@ -1376,7 +1381,9 @@ export class EnvService {
       orange: '#a64b00',
       pink: '#a83a72',
     };
-    const hex = colors[this.accentColor] ?? colors.petrol;
+    const hex = this.accentColor === 'custom'
+      ? this.normalizeHexColor(this.customAccentColor, colors.petrol)
+      : colors[this.accentColor] ?? colors.petrol;
     const red = parseInt(hex.slice(1, 3), 16);
     const green = parseInt(hex.slice(3, 5), 16);
     const blue = parseInt(hex.slice(5, 7), 16);
@@ -1399,6 +1406,10 @@ export class EnvService {
       target.setProperty('--qrwerk-accent', hex);
       target.setProperty('--qrwerk-accent-rgb', `${red}, ${green}, ${blue}`);
     });
+  }
+
+  normalizeHexColor(value: string | null | undefined, fallback: string): string {
+    return /^#[0-9a-f]{6}$/i.test(value ?? '') ? (value as string).toLowerCase() : fallback;
   }
 
   async toggleOrientationChange(): Promise<void> {
