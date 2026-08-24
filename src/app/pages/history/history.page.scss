@@ -94,6 +94,23 @@ ion-badge ion-icon {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
 }
 
+.record-drag-handle {
+  width: 30px;
+  height: 30px;
+  margin-inline-start: 8px;
+  padding: 10px 4px;
+  font-size: 26px;
+  cursor: grab;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.record-drag-handle:active {
+  cursor: grabbing;
+  color: var(--ion-color-primary);
+}
+
 .cdk-drag-placeholder {
   opacity: 0.25;
 }
