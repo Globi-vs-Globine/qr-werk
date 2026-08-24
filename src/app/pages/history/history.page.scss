@@ -113,10 +113,13 @@ ion-badge ion-icon {
 .record-drag-row {
   display: block;
   touch-action: pan-y;
+  transition: opacity 120ms ease, transform 120ms ease;
 }
 
-.record-drag-row.cdk-drag-dragging {
+.record-drag-row.record-dragging {
   touch-action: none;
+  opacity: 0.55;
+  transform: scale(0.985);
 }
 
 .record-drag-handle:active {
@@ -124,10 +127,16 @@ ion-badge ion-icon {
   color: var(--ion-color-primary);
 }
 
-.cdk-drag-placeholder {
-  opacity: 0.25;
+.record-action-button {
+  width: 42px;
+  height: 44px;
+  margin: 0 2px 0 0;
+  --padding-start: 8px;
+  --padding-end: 8px;
 }
 
-.cdk-drop-list-dragging > ion-item:first-child {
+.record-drop-target > ion-item:first-child {
   --background: rgba(var(--qrwerk-accent-rgb, 0, 127, 131), 0.12);
+  outline: 2px solid var(--ion-color-primary);
+  outline-offset: -2px;
 }

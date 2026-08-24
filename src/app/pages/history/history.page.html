@@ -94,7 +94,7 @@
   <!-- When log segment and >0 logs -->
   <ng-container
     *ngIf="segmentModel === 'history' && env.viewingScanRecords && env.viewingScanRecords.length > 0 && !isLoading">
-    <ion-list cdkDropListGroup>
+    <ion-list>
       <ion-list-header class="ion-padding-horizontal" lines="none" *ngIf="env.showNumberOfRecords == 'on'">
         <div class="ion-padding-horizontal" *ngIf="env.recordsLimit !== -1">
           <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
@@ -107,8 +107,8 @@
           </ion-text>
         </div>
       </ion-list-header>
-      <div *ngFor="let group of groupedScanRecords" cdkDropList [cdkDropListData]="group.key"
-        [cdkDropListSortingDisabled]="true" (cdkDropListDropped)="dropRecordIntoGroup($event, group.key)">
+      <div *ngFor="let group of groupedScanRecords" [attr.data-history-drop-group]="group.key"
+        [class.record-drop-target]="dragHoverGroupKey === group.key">
         <ion-item button detail="false" lines="full" (click)="toggleGroup(group.key)">
           <ion-icon slot="start" [name]="isGroupCollapsed(group.key) ? 'folder-outline' : 'folder-open-outline'"
             color="secondary"></ion-icon>
@@ -121,8 +121,7 @@
 
         <ng-container *ngIf="!isGroupCollapsed(group.key)">
           <ng-container *ngFor="let record of group.records; trackBy: scanRecordsTrackByFn; index as i;">
-            <div class="record-drag-row" cdkDrag [cdkDragData]="record" cdkDragLockAxis="y">
-            <ion-item-sliding #slidingItem>
+            <div class="record-drag-row" [class.record-dragging]="draggingRecordId === record.id">
               <ion-item class="ion-no-padding ripple-parent" detail="false"
                 [lines]="i === group.records.length - 1? 'none' : 'full'"
                 (click)="viewRecord(record.text, 'view-log', record.id)">
@@ -151,24 +150,18 @@
                     </ion-badge>
                   </div>
                 </ion-label>
-                <ion-icon cdkDragHandle slot="end" class="record-drag-handle" name="reorder-three-outline"
+                <ion-icon slot="end" class="record-drag-handle" name="reorder-three-outline"
                   color="medium" [attr.aria-label]="'MOVE_TO_GROUP' | translate"
-                  (click)="$event.stopPropagation()"></ion-icon>
+                  (click)="$event.stopPropagation()"
+                  (pointerdown)="startRecordDrag($event, record)"
+                  (pointermove)="moveRecordDrag($event)"
+                  (pointerup)="finishRecordDrag($event)"
+                  (pointercancel)="cancelRecordDrag()"></ion-icon>
+                <ion-button slot="end" fill="clear" class="record-action-button"
+                  [attr.aria-label]="'MORE' | translate" (click)="presentRecordActions($event, record)">
+                  <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
+                </ion-button>
               </ion-item>
-              <ion-item-options side="start">
-                <ion-item-option color="secondary" (click)="assignGroup(record, slidingItem)" [attr.aria-label]="'GROUP' | translate">
-                  <ion-icon slot="icon-only" name="folder-open"></ion-icon>
-                </ion-item-option>
-                <ion-item-option color="primary" (click)="addBookmark(record, slidingItem)" [attr.aria-label]="'BOOKMARK' | translate">
-                  <ion-icon slot="icon-only" name="bookmark"></ion-icon>
-                </ion-item-option>
-              </ion-item-options>
-              <ion-item-options side="end">
-                <ion-item-option color="danger" expandable (click)="removeRecord(record, slidingItem)" [attr.aria-label]="'DELETE' | translate">
-                  <ion-icon slot="icon-only" name="trash-bin"></ion-icon>
-                </ion-item-option>
-              </ion-item-options>
-            </ion-item-sliding>
             </div>
           </ng-container>
         </ng-container>

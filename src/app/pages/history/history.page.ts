@@ -14,7 +14,6 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { HistoryExportContent, HistoryExportFormat, HistoryExportService } from 'src/app/services/history-export.service';
 import { Preferences } from '@capacitor/preferences';
 import { ICloudSyncService } from 'src/app/services/icloud-sync.service';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'app-history',
@@ -37,6 +36,13 @@ export class HistoryPage {
   managedGroups: string[] = [];
   private groupsInitialized = false;
   private readonly groupsStorageKey = 'history-groups';
+  draggingRecordId?: string;
+  dragHoverGroupKey?: string;
+  private draggingRecord?: ScanRecord;
+  private dragPointerId?: number;
+  private dragStartX = 0;
+  private dragStartY = 0;
+  private dragHasMoved = false;
 
   get groupNames(): string[] {
     return [...new Set([
@@ -419,8 +425,8 @@ export class HistoryPage {
     await actionSheet.present();
   }
 
-  async assignGroup(record: ScanRecord, slidingItem: IonItemSliding) {
-    await slidingItem.close();
+  async assignGroup(record: ScanRecord, slidingItem?: IonItemSliding) {
+    await slidingItem?.close();
     await this.presentGroupDestination([record]);
   }
 
@@ -509,8 +515,8 @@ export class HistoryPage {
     await this.presentToast(`${records.length} ${this.translate.instant('ENTRIES_MOVED')}`, 'short', 'bottom');
   }
 
-  async addBookmark(record: ScanRecord, slidingItem: IonItemSliding) {
-    await slidingItem.close();
+  async addBookmark(record: ScanRecord, slidingItem?: IonItemSliding) {
+    await slidingItem?.close();
     if (this.env.bookmarks.find(x => x.text === record.text)) {
       await this.presentToast(this.translate.instant("MSG.ALREADY_BOOKMARKED"), "short", "bottom");
       return;
@@ -647,8 +653,8 @@ export class HistoryPage {
     await alert.present();
   }
 
-  async removeRecord(record: ScanRecord, slidingItem: IonItemSliding) {
-    slidingItem.disabled = true;
+  async removeRecord(record: ScanRecord, slidingItem?: IonItemSliding) {
+    if (slidingItem) slidingItem.disabled = true;
     if (this.deleteToast) {
       await this.deleteToast.dismiss();
       this.deleteToast = null;
@@ -763,12 +769,82 @@ export class HistoryPage {
     await actionSheet.present();
   }
 
-  async dropRecordIntoGroup(event: CdkDragDrop<string>, groupKey: string): Promise<void> {
-    const record = event.item.data as ScanRecord;
-    if (!record) return;
+  async presentRecordActions(event: Event, record: ScanRecord): Promise<void> {
+    event.preventDefault();
+    event.stopPropagation();
+    const actionSheet = await this.actionSheetController.create({
+      header: record.text,
+      buttons: [
+        {
+          text: this.translate.instant('MOVE_TO_GROUP'),
+          icon: 'folder-open-outline',
+          handler: () => this.presentGroupDestination([record]),
+        },
+        {
+          text: this.translate.instant('BOOKMARK'),
+          icon: 'bookmark-outline',
+          handler: () => this.addBookmark(record),
+        },
+        {
+          text: this.translate.instant('DELETE'),
+          icon: 'trash-outline',
+          role: 'destructive',
+          handler: () => this.removeRecord(record),
+        },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+      ],
+    });
+    await actionSheet.present();
+  }
+
+  startRecordDrag(event: PointerEvent, record: ScanRecord): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.draggingRecord = record;
+    this.dragPointerId = event.pointerId;
+    this.dragStartX = event.clientX;
+    this.dragStartY = event.clientY;
+    this.dragHasMoved = false;
+    (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
+  }
+
+  moveRecordDrag(event: PointerEvent): void {
+    if (!this.draggingRecord || event.pointerId !== this.dragPointerId) return;
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!this.dragHasMoved) {
+      const distance = Math.hypot(event.clientX - this.dragStartX, event.clientY - this.dragStartY);
+      if (distance < 6) return;
+      this.dragHasMoved = true;
+      this.draggingRecordId = this.draggingRecord.id;
+    }
+
+    const element = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement | null;
+    const target = element?.closest<HTMLElement>('[data-history-drop-group]');
+    this.dragHoverGroupKey = target?.dataset.historyDropGroup;
+  }
+
+  async finishRecordDrag(event: PointerEvent): Promise<void> {
+    if (!this.draggingRecord || event.pointerId !== this.dragPointerId) return;
+    event.preventDefault();
+    event.stopPropagation();
+
+    const record = this.draggingRecord;
+    const groupKey = this.dragHoverGroupKey;
+    this.cancelRecordDrag();
+    if (!this.dragHasMoved || !groupKey) return;
+
     const destination = groupKey === '__ungrouped__' ? undefined : groupKey;
     if ((record.group || undefined) === destination) return;
     await this.moveEntriesToGroup([record], destination);
+  }
+
+  cancelRecordDrag(): void {
+    this.draggingRecord = undefined;
+    this.dragPointerId = undefined;
+    this.draggingRecordId = undefined;
+    this.dragHoverGroupKey = undefined;
   }
 
   async presentMoreActions(): Promise<void> {
