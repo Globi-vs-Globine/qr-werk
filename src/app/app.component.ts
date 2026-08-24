@@ -129,8 +129,8 @@ export class AppComponent {
     this.iCloudSyncRunning = true;
     try {
       await this.env.waitForFullInit();
-      const result = await this.iCloudSync.synchronize(this.env.scanRecords, this.env.bookmarks);
-      await this.env.replaceSynchronizedData(result.records, result.bookmarks);
+      const result = await this.iCloudSync.synchronize(this.env.scanRecords, this.env.bookmarks, this.env.trashedScanRecords);
+      await this.env.replaceSynchronizedData(result.records, result.bookmarks, result.trashedRecords);
     } catch {
       // Automatic synchronization stays quiet. The settings page shows errors
       // when the user explicitly requests a sync.

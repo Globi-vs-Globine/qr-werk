@@ -185,8 +185,8 @@ export class SettingRecordPage {
     const loading = await this.presentLoading(this.translate.instant('ICLOUD_SYNC_IN_PROGRESS'));
     try {
       await this.env.waitForFullInit();
-      const result = await this.iCloudSync.synchronize(this.env.scanRecords, this.env.bookmarks);
-      await this.env.replaceSynchronizedData(result.records, result.bookmarks);
+      const result = await this.iCloudSync.synchronize(this.env.scanRecords, this.env.bookmarks, this.env.trashedScanRecords);
+      await this.env.replaceSynchronizedData(result.records, result.bookmarks, result.trashedRecords);
       this.iCloudLastSync = result.syncedAt;
       this.iCloudStatus = 'available';
       this.presentToast(this.translate.instant('MSG.ICLOUD_SYNC_SUCCESS'), 'short', 'bottom');

@@ -260,7 +260,7 @@ export class EnvService {
     await this.ensureFullInit();
   }
 
-  async replaceSynchronizedData(records: ScanRecord[], bookmarks: Bookmark[]): Promise<void> {
+  async replaceSynchronizedData(records: ScanRecord[], bookmarks: Bookmark[], trashedRecords: ScanRecord[] = []): Promise<void> {
     this.scanRecords = records.map(record => {
       record.createdAt = new Date(record.createdAt);
       if (record.modifiedAt) record.modifiedAt = new Date(record.modifiedAt);
@@ -274,9 +274,16 @@ export class EnvService {
       if (bookmark.modifiedAt) bookmark.modifiedAt = new Date(bookmark.modifiedAt);
       return bookmark;
     }).sort((a, b) => ('' + a.tag).localeCompare(b.tag ?? ''));
+    this.trashedScanRecords = trashedRecords.map(record => {
+      record.createdAt = new Date(record.createdAt);
+      if (record.modifiedAt) record.modifiedAt = new Date(record.modifiedAt);
+      if (record.deletedAt) record.deletedAt = new Date(record.deletedAt);
+      return record;
+    }).sort((a, b) => new Date(b.deletedAt || 0).getTime() - new Date(a.deletedAt || 0).getTime());
     await Promise.all([
       Preferences.set({ key: this.KEY_SCAN_RECORDS, value: JSON.stringify(this.scanRecords) }),
       Preferences.set({ key: this.KEY_BOOKMARKS, value: JSON.stringify(this.bookmarks) }),
+      Preferences.set({ key: this.KEY_TRASHED_SCAN_RECORDS, value: JSON.stringify(this.trashedScanRecords) }),
     ]);
   }
 
@@ -1216,6 +1223,7 @@ export class EnvService {
     await this.iCloudSync.undoRecordDeletion(record.id);
     this.trashedScanRecords = this.trashedScanRecords.filter(item => item.id !== record.id);
     delete record.deletedAt;
+    this.markRecordModified(record);
     this.scanRecords.push(record);
     this.scanRecords.sort((r1, r2) => {
       return r2.createdAt.getTime() - r1.createdAt.getTime();
@@ -1263,13 +1271,17 @@ export class EnvService {
   }
 
   async permanentlyDeleteTrashedScanRecord(recordId: string): Promise<void> {
+    if (await this.iCloudSync.isEnabled()) await this.iCloudSync.markRecordsPurged([recordId]);
     this.trashedScanRecords = this.trashedScanRecords.filter(item => item.id !== recordId);
     await Preferences.set({ key: this.KEY_TRASHED_SCAN_RECORDS, value: JSON.stringify(this.trashedScanRecords) });
+    this.notifyCloudDataChanged();
   }
 
   async emptyTrash(): Promise<void> {
+    if (await this.iCloudSync.isEnabled()) await this.iCloudSync.markRecordsPurged(this.trashedScanRecords.map(record => record.id));
     this.trashedScanRecords = [];
     await Preferences.set({ key: this.KEY_TRASHED_SCAN_RECORDS, value: '[]' });
+    this.notifyCloudDataChanged();
   }
 
   async deleteAllScanRecords(synchronizeDeletion = true): Promise<void> {

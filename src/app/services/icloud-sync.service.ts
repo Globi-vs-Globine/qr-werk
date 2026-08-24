@@ -13,13 +13,15 @@ interface CloudPlugin {
 const Cloud = registerPlugin<CloudPlugin>('QRWerkCloudSync');
 
 export interface CloudSnapshot {
-  schemaVersion: 1 | 2 | 3;
+  schemaVersion: 1 | 2 | 3 | 4;
   records: ScanRecord[];
+  trashedRecords?: ScanRecord[];
   bookmarks: Bookmark[];
   deletedRecords?: DeletionMarker[];
   deletedBookmarks?: DeletionMarker[];
   groups?: CloudGroup[];
   deletedGroups?: DeletionMarker[];
+  purgedRecords?: DeletionMarker[];
   savedAt: string;
 }
 
@@ -35,12 +37,13 @@ export class ICloudSyncService {
   readonly groupsKey = 'history-groups';
   readonly groupMetadataKey = 'icloud-group-metadata';
   readonly deletedGroupsKey = 'icloud-deleted-groups';
+  readonly purgedRecordsKey = 'icloud-purged-records';
 
   get supported(): boolean { return Capacitor.getPlatform() === 'ios'; }
   accountStatus() { return Cloud.accountStatus(); }
   download() { return Cloud.download(); }
-  upload(records: ScanRecord[], bookmarks: Bookmark[], deletedRecords: DeletionMarker[], deletedBookmarks: DeletionMarker[], groups: CloudGroup[], deletedGroups: DeletionMarker[]) {
-    const snapshot: CloudSnapshot = { schemaVersion: 3, records, bookmarks, deletedRecords, deletedBookmarks, groups, deletedGroups, savedAt: new Date().toISOString() };
+  upload(records: ScanRecord[], trashedRecords: ScanRecord[], bookmarks: Bookmark[], deletedRecords: DeletionMarker[], deletedBookmarks: DeletionMarker[], groups: CloudGroup[], deletedGroups: DeletionMarker[], purgedRecords: DeletionMarker[]) {
+    const snapshot: CloudSnapshot = { schemaVersion: 4, records, trashedRecords, bookmarks, deletedRecords, deletedBookmarks, groups, deletedGroups, purgedRecords, savedAt: new Date().toISOString() };
     return Cloud.upload({ payload: JSON.stringify(snapshot) });
   }
 
@@ -79,6 +82,7 @@ export class ICloudSyncService {
 
   async undoRecordDeletion(id: string): Promise<void> { await this.removeDeletionMarker(this.deletedRecordsKey, id); }
   async undoBookmarkDeletion(id: string): Promise<void> { await this.removeDeletionMarker(this.deletedBookmarksKey, id); }
+  async markRecordsPurged(ids: string[]): Promise<void> { await this.addDeletionMarkers(this.purgedRecordsKey, ids); }
 
   /** Records locally created, renamed and deleted groups for the next cloud sync. */
   async saveLocalGroups(names: string[], modifiedAtByName: Map<string, Date | string> = new Map()): Promise<void> {
@@ -164,8 +168,9 @@ export class ICloudSyncService {
     return [...merged.values()];
   }
 
-  async synchronize(localRecords: ScanRecord[], localBookmarks: Bookmark[]): Promise<{
+  async synchronize(localRecords: ScanRecord[], localBookmarks: Bookmark[], localTrashedRecords: ScanRecord[] = []): Promise<{
     records: ScanRecord[];
+    trashedRecords: ScanRecord[];
     bookmarks: Bookmark[];
     syncedAt: Date;
   }> {
@@ -178,6 +183,7 @@ export class ICloudSyncService {
 
     const localDeletedRecords = [...(await this.loadMarkers(this.deletedRecordsKey)).values()];
     const localDeletedBookmarks = [...(await this.loadMarkers(this.deletedBookmarksKey)).values()];
+    const localPurgedRecords = [...(await this.loadMarkers(this.purgedRecordsKey)).values()];
     const storedGroupNames = await Preferences.get({ key: this.groupsKey });
     let localGroupNames: string[] = [];
     try { localGroupNames = storedGroupNames.value ? JSON.parse(storedGroupNames.value) : []; } catch { localGroupNames = []; }
@@ -195,12 +201,29 @@ export class ICloudSyncService {
     const deletedRecords = this.mergeMarkers(localDeletedRecords, remote?.deletedRecords ?? []);
     const deletedBookmarks = this.mergeMarkers(localDeletedBookmarks, remote?.deletedBookmarks ?? []);
     const deletedGroups = this.mergeMarkers(localDeletedGroups, remote?.deletedGroups ?? []);
+    const purgedRecords = this.mergeMarkers(localPurgedRecords, remote?.purgedRecords ?? []);
+    const purgeTimes = new Map(purgedRecords.map(marker => [marker.id, new Date(marker.deletedAt).getTime()]));
     const recordDeletions = new Map(deletedRecords.map(marker => [marker.id, new Date(marker.deletedAt).getTime()]));
     const bookmarkDeletions = new Map(deletedBookmarks.map(marker => [marker.id, new Date(marker.deletedAt).getTime()]));
     const records = this.merge(localRecords, remote?.records ?? []).filter(record => {
       const deletedAt = record.id ? recordDeletions.get(record.id) : undefined;
-      return deletedAt == null || deletedAt < new Date(record.modifiedAt || record.createdAt || 0).getTime();
+      const purgedAt = record.id ? purgeTimes.get(record.id) : undefined;
+      const modifiedAt = new Date(record.modifiedAt || record.createdAt || 0).getTime();
+      return (deletedAt == null || deletedAt < modifiedAt) && (purgedAt == null || purgedAt < modifiedAt);
     });
+    const activeTimes = new Map(records.map(record => [record.id, new Date(record.modifiedAt || record.createdAt || 0).getTime()]));
+    const trashedMap = new Map<string, ScanRecord>();
+    for (const record of [...(remote?.trashedRecords ?? []), ...localTrashedRecords]) {
+      if (!record.id) continue;
+      const existing = trashedMap.get(record.id);
+      if (!existing || new Date(record.deletedAt || 0) >= new Date(existing.deletedAt || 0)) trashedMap.set(record.id, record);
+    }
+    const trashedRecords = [...trashedMap.values()].filter(record => {
+      const deletedAt = new Date(record.deletedAt || 0).getTime();
+      const purgedAt = purgeTimes.get(record.id);
+      const activeAt = activeTimes.get(record.id);
+      return (purgedAt == null || purgedAt < deletedAt) && (activeAt == null || activeAt < deletedAt);
+    }).sort((a, b) => new Date(b.deletedAt || 0).getTime() - new Date(a.deletedAt || 0).getTime());
     const bookmarks = this.merge(localBookmarks, remote?.bookmarks ?? []).filter(bookmark => {
       const deletedAt = bookmark.id ? bookmarkDeletions.get(bookmark.id) : undefined;
       return deletedAt == null || deletedAt < new Date(bookmark.modifiedAt || bookmark.createdAt || 0).getTime();
@@ -212,15 +235,16 @@ export class ICloudSyncService {
     }).sort((a, b) => a.name.localeCompare(b.name));
     const syncedAt = new Date();
     records.forEach(record => record.lastSyncedAt = syncedAt);
-    await this.upload(records, bookmarks, deletedRecords, deletedBookmarks, groups, deletedGroups);
+    await this.upload(records, trashedRecords, bookmarks, deletedRecords, deletedBookmarks, groups, deletedGroups, purgedRecords);
     await Promise.all([
       this.saveMarkers(this.deletedRecordsKey, deletedRecords),
       this.saveMarkers(this.deletedBookmarksKey, deletedBookmarks),
       this.saveMarkers(this.deletedGroupsKey, deletedGroups),
+      this.saveMarkers(this.purgedRecordsKey, purgedRecords),
       this.saveGroups(groups),
       Preferences.set({ key: this.groupsKey, value: JSON.stringify(groups.map(group => group.name)) }),
     ]);
     await Preferences.set({ key: this.lastSyncKey, value: syncedAt.toISOString() });
-    return { records, bookmarks, syncedAt };
+    return { records, trashedRecords, bookmarks, syncedAt };
   }
 }
