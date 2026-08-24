@@ -16,7 +16,7 @@ import {
   Platform,
 } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
-import { EnvService } from 'src/app/services/env.service';
+import { EnvService, ScanSoundType } from 'src/app/services/env.service';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 import { Toast } from '@capacitor/toast';
 import {
@@ -552,6 +552,12 @@ export class ScanPage {
   }
 
   private async confirmAcceptedScan(): Promise<void> {
+    // The native scanner can toggle this preference while the web view stays open.
+    // Reload it here so the next accepted scan immediately uses the new setting.
+    const storedScanSound = await Preferences.get({ key: this.env.KEY_SCAN_SOUND });
+    if (storedScanSound.value) {
+      this.env.scanSound = storedScanSound.value as ScanSoundType;
+    }
     const feedbackTasks: Promise<unknown>[] = [
       this.scanSound.play(this.env.scanSound, this.env.scanSoundVolume),
     ];

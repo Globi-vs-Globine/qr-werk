@@ -265,18 +265,63 @@ final class QRWerkScannerViewController: UIViewController, AVCaptureMetadataOutp
     }
 
     @objc private func showScanOptions(_ sender: UIButton) {
-        let sheet = UIAlertController(title: localized("Scanbereich", "Scan area"), message: localized("Ein eindeutig erkannter Code wird im gewählten Bereich erfasst.", "A clearly recognized code is captured inside the selected area."), preferredStyle: .actionSheet)
-        [("standard", localized("Standard", "Standard")), ("wide", localized("Breit", "Wide")), ("full", localized("Ganzes Bild", "Full image"))].forEach { value, title in
-            sheet.addAction(UIAlertAction(title: title, style: .default) { [weak self] _ in
-                UserDefaults.standard.set(value, forKey: "CapacitorStorage.qrwerk-scan-area")
-                self?.layoutGuide()
-            })
-        }
+        let sheet = UIAlertController(title: localized("Scan-Optionen", "Scan options"), message: nil, preferredStyle: .actionSheet)
+        let selectedArea = currentScanAreaTitle()
+        sheet.addAction(UIAlertAction(title: "\(localized("Scanbereich", "Scan area")): \(selectedArea)", style: .default) { [weak self, weak sender] _ in
+            guard let self = self, let sender = sender else { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
+                self.showScanAreaOptions(sender)
+            }
+        })
         sheet.addAction(UIAlertAction(title: localized("Scan-Filter", "Scan filter"), style: .default) { [weak self] _ in self?.showFilterOptions() })
+        let defaults = UserDefaults.standard
+        let soundKey = "CapacitorStorage.scan-sound"
+        let lastSoundKey = "CapacitorStorage.scan-sound-last-active"
+        let currentSound = defaults.string(forKey: soundKey) ?? "classic"
+        let soundEnabled = currentSound != "off"
+        let soundTitle = soundEnabled
+            ? localized("Scan-Ton ausschalten", "Turn scan sound off")
+            : localized("Scan-Ton einschalten", "Turn scan sound on")
+        sheet.addAction(UIAlertAction(title: soundTitle, style: .default) { _ in
+            if soundEnabled {
+                defaults.set(currentSound, forKey: lastSoundKey)
+                defaults.set("off", forKey: soundKey)
+            } else {
+                defaults.set(defaults.string(forKey: lastSoundKey) ?? "classic", forKey: soundKey)
+            }
+        })
         sheet.addAction(UIAlertAction(title: localized("Abbrechen", "Cancel"), style: .cancel))
         sheet.popoverPresentationController?.sourceView = sender
         sheet.popoverPresentationController?.sourceRect = sender.bounds
         present(sheet, animated: true)
+    }
+
+    private func showScanAreaOptions(_ sender: UIButton) {
+        let sheet = UIAlertController(
+            title: localized("Scanbereich", "Scan area"),
+            message: localized("Ein eindeutig erkannter Code wird im gewählten Bereich erfasst.", "A clearly recognized code is captured inside the selected area."),
+            preferredStyle: .actionSheet
+        )
+        let selected = UserDefaults.standard.string(forKey: "CapacitorStorage.qrwerk-scan-area") ?? "standard"
+        [("standard", localized("Standard", "Standard")), ("wide", localized("Breit", "Wide")), ("full", localized("Ganzes Bild", "Full image"))].forEach { value, title in
+            let displayedTitle = value == selected ? "✓ \(title)" : title
+            sheet.addAction(UIAlertAction(title: displayedTitle, style: .default) { [weak self] _ in
+                UserDefaults.standard.set(value, forKey: "CapacitorStorage.qrwerk-scan-area")
+                self?.layoutGuide()
+            })
+        }
+        sheet.addAction(UIAlertAction(title: localized("Abbrechen", "Cancel"), style: .cancel))
+        sheet.popoverPresentationController?.sourceView = sender
+        sheet.popoverPresentationController?.sourceRect = sender.bounds
+        present(sheet, animated: true)
+    }
+
+    private func currentScanAreaTitle() -> String {
+        switch UserDefaults.standard.string(forKey: "CapacitorStorage.qrwerk-scan-area") ?? "standard" {
+        case "wide": return localized("Breit", "Wide")
+        case "full": return localized("Ganzes Bild", "Full image")
+        default: return localized("Standard", "Standard")
+        }
     }
 
     private func showFilterOptions() {
@@ -345,6 +390,7 @@ final class QRWerkScannerViewController: UIViewController, AVCaptureMetadataOutp
                 "Ein eindeutig erkannter Code wird im gewählten Bereich erfasst.": "Un code clairement reconnu est capturé dans la zone sélectionnée.",
                 "Standard": "Standard", "Breit": "Large", "Ganzes Bild": "Image entière",
                 "Scan-Filter": "Filtre de scan",
+                "Scan-Ton ausschalten": "Désactiver le son du scan", "Scan-Ton einschalten": "Activer le son du scan",
                 "Optional: Nur Codes übernehmen, die alle ausgefüllten Bedingungen erfüllen.": "Facultatif : accepter uniquement les codes qui remplissent toutes les conditions.",
                 "Präfix – beginnt mit, z. B. CF": "Préfixe – commence par, p. ex. CF",
                 "Suffix – endet mit, z. B. 99": "Suffixe – se termine par, p. ex. 99",
@@ -360,6 +406,7 @@ final class QRWerkScannerViewController: UIViewController, AVCaptureMetadataOutp
                 "Ein eindeutig erkannter Code wird im gewählten Bereich erfasst.": "Un codice chiaramente riconosciuto viene acquisito nell’area selezionata.",
                 "Standard": "Standard", "Breit": "Ampia", "Ganzes Bild": "Immagine intera",
                 "Scan-Filter": "Filtro di scansione",
+                "Scan-Ton ausschalten": "Disattiva suono scansione", "Scan-Ton einschalten": "Attiva suono scansione",
                 "Optional: Nur Codes übernehmen, die alle ausgefüllten Bedingungen erfüllen.": "Facoltativo: accetta solo i codici che soddisfano tutte le condizioni.",
                 "Präfix – beginnt mit, z. B. CF": "Prefisso – inizia con, ad es. CF",
                 "Suffix – endet mit, z. B. 99": "Suffisso – termina con, ad es. 99",

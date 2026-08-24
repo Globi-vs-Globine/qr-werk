@@ -18,7 +18,9 @@
     <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'ABOUT' | translate }}</ion-text>
   </ion-list-header>
   <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="navigateAbout()">
-    <img slot="start" class="about-row-logo" src="assets/img/round_icon.png" alt="QR Werk">
+    <span slot="start" class="about-row-logo-slot">
+      <img class="about-row-logo" src="assets/img/round_icon.png" alt="QR Werk">
+    </span>
     <ion-label>
       <p class="pre-line">
         <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">

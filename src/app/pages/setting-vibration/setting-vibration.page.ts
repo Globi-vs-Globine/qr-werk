@@ -28,6 +28,9 @@ export class SettingVibrationPage {
   async setScanSound(value: ScanSoundType): Promise<void> {
     this.env.scanSound = value;
     await Preferences.set({ key: this.env.KEY_SCAN_SOUND, value });
+    if (value !== 'off') {
+      await Preferences.set({ key: 'scan-sound-last-active', value });
+    }
     await this.previewScanSound();
   }
 

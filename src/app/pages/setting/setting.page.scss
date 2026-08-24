@@ -7,14 +7,22 @@ ion-item img {
     min-width: 24px;
 }
 
+.about-row-logo-slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--qrwerk-icon-size);
+    min-width: var(--qrwerk-icon-size);
+    height: 30px;
+    margin: 0 var(--qrwerk-space-4) 0 0;
+    overflow: visible;
+}
+
 .about-row-logo {
-    width: 30px !important;
-    min-width: 30px !important;
-    height: 30px !important;
-    /* Keep the text aligned with rows whose standard icon is 23px wide. */
-    margin: 0 calc(var(--qrwerk-space-4) - 7px) 0 0 !important;
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
     object-fit: contain;
-    transform: translateX(-3px);
 }
 
 ion-list-header {

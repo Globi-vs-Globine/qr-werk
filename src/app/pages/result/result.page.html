@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar [color]="env.colorTheme === 'black'? 'black' : 'dark'">
     <ion-buttons slot="start" *ngIf="env.viewResultFrom">
-      <ion-button (click)="tapHaptic(); goBackToOverview()" fill="clear" [attr.aria-label]="'BACK' | translate">
+      <ion-button class="result-back-button" (click)="tapHaptic(); goBackToOverview()" fill="clear" [attr.aria-label]="'BACK' | translate">
         <ion-icon slot="icon-only" name="chevron-back"></ion-icon>
       </ion-button>
     </ion-buttons>
