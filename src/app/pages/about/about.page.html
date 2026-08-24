@@ -8,78 +8,78 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="pt-5 pb-1 d-flex justify-content-center align-content-center flex-column text-center">
-    <img class="align-self-center pb-3" src="assets/img/round_icon.png" alt="QR Werk" style="width: 150px; height: 150px; object-fit: contain;">
-    <div>Original: Tom Fong</div>
-    <div>iOS fork: Globi-vs-Globine</div>
+<ion-content class="qrwerk-standard-page about-page">
+  <div class="about-hero">
+    <img class="about-logo" src="assets/img/round_icon.png" alt="QR Werk">
+    <div class="about-credit">Original: Tom Fong</div>
+    <div class="about-credit">iOS fork: Globi-vs-Globine</div>
   </div>
   <div class="py-2">
   </div>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="showBarcodeType()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="barcode-sharp">
+  <ion-item button="true" class="qrwerk-settings-item" detail="false" lines="inset" (click)="showBarcodeType()">
+    <ion-icon slot="start" [color]="'primary'" name="barcode-sharp">
     </ion-icon>
     <ion-label>
-      <p class="ion-padding-horizontal pre-line">
+      <h2>
         <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
           {{ 'SUPPORTED_BARCODE_TYPE' | translate }}
         </ion-text>
-      </p>
+      </h2>
     </ion-label>
   </ion-item>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="showUpdateNotes()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" src="assets/icon/patch-update.svg">
+  <ion-item button="true" class="qrwerk-settings-item" detail="false" lines="inset" (click)="showUpdateNotes()">
+    <ion-icon slot="start" [color]="'primary'" src="assets/icon/patch-update.svg">
     </ion-icon>
     <ion-label>
-      <p class="ion-padding-horizontal pre-line">
+      <h2>
         <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
           {{ 'PATCH_NOTES' | translate }}
         </ion-text>
-      </p>
+      </h2>
     </ion-label>
   </ion-item>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="openRepoUrl()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="logo-github">
+  <ion-item button="true" class="qrwerk-settings-item" detail="false" lines="inset" (click)="openRepoUrl()">
+    <ion-icon slot="start" [color]="'primary'" name="logo-github">
     </ion-icon>
     <ion-label>
-      <p class="ion-padding-horizontal pre-line">
+      <h2>
         <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
           {{ 'VIEW_GITHUB' | translate }}
         </ion-text>
-      </p>
+      </h2>
     </ion-label>
   </ion-item>
-  <ion-item class="ion-no-padding" detail="false" lines="none" [disabled]="true">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="bug">
+  <ion-item class="qrwerk-settings-item" detail="false" lines="inset" [disabled]="true">
+    <ion-icon slot="start" [color]="'primary'" name="bug">
     </ion-icon>
     <ion-label>
-      <p class="ion-padding-horizontal pre-line">
+      <h2>
         <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
           {{ 'REPORT_ISSUE' | translate }} ({{ 'NOT_AVAILABLE' | translate }})
         </ion-text>
-      </p>
+      </h2>
     </ion-label>
   </ion-item>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="viewPrivacyPolicy()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="document-text-sharp">
+  <ion-item button="true" class="qrwerk-settings-item" detail="false" lines="inset" (click)="viewPrivacyPolicy()">
+    <ion-icon slot="start" [color]="'primary'" name="document-text-sharp">
     </ion-icon>
     <ion-label>
-      <p class="ion-padding-horizontal pre-line">
+      <h2>
         <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
           {{ 'PRIVACY_POLICY' | translate }}
         </ion-text>
-      </p>
+      </h2>
     </ion-label>
   </ion-item>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="viewLicense()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="document-text-outline">
+  <ion-item button="true" class="qrwerk-settings-item" detail="false" lines="none" (click)="viewLicense()">
+    <ion-icon slot="start" [color]="'primary'" name="document-text-outline">
     </ion-icon>
     <ion-label>
-      <p class="ion-padding-horizontal pre-line">
+      <h2>
         <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
           {{ 'OPEN_SOURCE_LICENSE' | translate }}
         </ion-text>
-      </p>
+      </h2>
     </ion-label>
   </ion-item>
 

@@ -18,18 +18,14 @@
     <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'ABOUT' | translate }}</ion-text>
   </ion-list-header>
   <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="navigateAbout()">
-    <div class="d-flex align-items-baseline my-1">
-      <div class="ion-margin-start ion-padding-horizontal">
-        <img src="assets/img/round_icon.png" width="24" alt="QR Werk">
-      </div>
-      <ion-label>
-        <p class="ion-padding-horizontal pre-line">
-          <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-            {{ 'ABOUT_SIMPLE_QR' | translate }}
-          </ion-text>
-        </p>
-      </ion-label>
-    </div>
+    <img slot="start" class="about-row-logo" src="assets/img/round_icon.png" alt="QR Werk">
+    <ion-label>
+      <p class="pre-line">
+        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
+          {{ 'ABOUT_SIMPLE_QR' | translate }}
+        </ion-text>
+      </p>
+    </ion-label>
   </ion-item>
   <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="navigateGuide()">
     <ion-icon class="ion-margin-start ion-padding-horizontal" color="primary" name="book-outline"></ion-icon>

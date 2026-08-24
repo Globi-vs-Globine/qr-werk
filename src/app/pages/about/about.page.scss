@@ -1,0 +1,19 @@
+.about-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--qrwerk-space-6) var(--qrwerk-space-4) var(--qrwerk-space-4);
+  text-align: center;
+}
+
+.about-logo {
+  width: 150px;
+  height: 150px;
+  margin-bottom: var(--qrwerk-space-3);
+  object-fit: contain;
+}
+
+.about-credit {
+  font-size: var(--qrwerk-font-body);
+  line-height: 1.4;
+}

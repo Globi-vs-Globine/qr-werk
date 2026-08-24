@@ -38,8 +38,7 @@ export class AboutPage {
     const formats = '<ul><li>QR Code</li><li>EAN-8 / EAN-13</li><li>UPC-A / UPC-E</li><li>Code 39 / 93 / 128</li><li>Codabar / ITF</li><li>Aztec</li><li>Data Matrix</li><li>PDF417</li></ul>';
     const alert = await this.alertController.create({
       header: this.translate.instant("SUPPORTED_TYPE"),
-      subHeader: this.translate.instant('SCROLL_FOR_MORE'),
-      message: `<div class="barcode-types-scroll"><b>${this.translate.instant('SCAN')}</b>${formats}<b>${this.translate.instant('BATCH_SCAN')}</b>${formats}<b>${this.translate.instant('IMPORT_IMAGE')}</b>${formats}<b>${this.translate.instant('CREATE')}</b><ul><li>QR Code</li></ul></div>`,
+      message: `<div class="barcode-types-scroll"><b>${this.translate.instant('RECOGNIZED_CODE_TYPES')}</b>${formats}<p>${this.translate.instant('CODE_TYPES_APPLY_TO')}</p><b>${this.translate.instant('IMAGE_IMPORT_FILES')}</b><p>${this.translate.instant('IMAGE_IMPORT_FILES_DETAIL')}</p><b>${this.translate.instant('CREATE')}</b><ul><li>QR Code</li></ul></div>`,
       buttons: [this.translate.instant("CLOSE")],
       cssClass: ['left-align', 'alert-bg', 'barcode-types-alert']
     });

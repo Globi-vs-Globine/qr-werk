@@ -7,6 +7,14 @@ ion-item img {
     min-width: 24px;
 }
 
+.about-row-logo {
+    width: 30px !important;
+    min-width: 30px !important;
+    height: 30px !important;
+    margin: 0 var(--qrwerk-space-4) 0 0 !important;
+    object-fit: contain;
+}
+
 ion-list-header {
     min-height: auto;
     font-size: var(--qrwerk-font-section);
