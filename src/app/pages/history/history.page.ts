@@ -577,7 +577,7 @@ export class HistoryPage {
     }
     this.deleteToast = await this.toastController.create({
       message: this.translate.instant('MSG.UNDO_DELETE'),
-      duration: 2000,
+      duration: 5000,
       color: "light",
       position: "top",
       buttons: [
