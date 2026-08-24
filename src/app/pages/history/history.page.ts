@@ -762,20 +762,14 @@ export class HistoryPage {
     await actionSheet.present();
   }
 
-  async historyActions(): Promise<void> {
+  async presentMoreActions(): Promise<void> {
     const buttons: any[] = [];
     if (this.segmentModel === 'history') {
-      buttons.push({
-        text: this.translate.instant('MANAGE_GROUPS'),
-        icon: 'folder-outline',
-        handler: () => this.presentGroupManagement(),
-      });
       buttons.push({
         text: this.translate.instant('MANAGE_ENTRIES'),
         icon: 'list-outline',
         handler: () => this.presentRecordManagement(),
       });
-      buttons.push({ text: this.translate.instant('TRANSFER_DATA'), icon: 'swap-vertical-outline', handler: () => this.presentDataTransfer() });
       if (this.env.scanRecords?.length) {
         buttons.push({
           text: this.translate.instant('DELETE_ALL_ENTRIES'),
@@ -815,7 +809,7 @@ export class HistoryPage {
     await actionSheet.present();
   }
 
-  private async presentGroupManagement(): Promise<void> {
+  async presentGroupManagement(): Promise<void> {
     const buttons: any[] = [{
       text: this.translate.instant('CREATE_GROUP'),
       icon: 'folder-open-outline',
@@ -893,7 +887,7 @@ export class HistoryPage {
     await alert.present();
   }
 
-  private async presentDataTransfer(): Promise<void> {
+  async presentDataTransfer(): Promise<void> {
     const buttons: any[] = [{ text: this.translate.instant('IMPORT_CODES'), icon: 'clipboard-outline', handler: () => this.importCodes() }];
     if (this.env.scanRecords?.length) buttons.push({ text: this.translate.instant('EXPORT'), icon: 'share-outline', handler: () => this.exportHistory() });
     buttons.push({ text: this.translate.instant('CANCEL'), role: 'cancel' });

@@ -103,6 +103,7 @@
     "SAVE_SELECTION": "Save selection",
     "CREATE_GROUP": "Create group", "DELETE_GROUP": "Delete group", "GROUP_DELETE_INFO": "Its codes will be moved to Ungrouped.", "EXPORT_SCOPE": "What do you want to export?", "CURRENT_FILTER": "Current view", "SELECT_GROUPS": "Select groups", "SELECT_CODES": "Select codes", "CONTINUE": "Continue",
     "GROUP": "Group",
+    "GROUPS": "Groups",
     "GROUP_NAME": "Group name",
     "ALL_GROUPS": "All groups",
     "UNGROUPED": "Ungrouped",

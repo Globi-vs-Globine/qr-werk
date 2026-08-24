@@ -4,22 +4,12 @@
   <ng-template #mainHeader>
     <ion-toolbar color="primary">
       <ion-title>{{ 'SIMPLE_QR' | translate}}</ion-title>
-      <ion-buttons slot="end">
-        <ion-button (click)="tapHaptic(); goSetting()" fill="clear">
-          {{ 'MORE' | translate }}
-        </ion-button>
-      </ion-buttons>
     </ion-toolbar>
   </ng-template>
   <ng-template #selfHeader>
     <ion-toolbar [color]="env.colorTheme === 'black'? 'black' : 'dark'">
       <ion-title *ngIf="segmentModel === 'history'">{{ 'LOG' | translate }}</ion-title>
       <ion-title *ngIf="segmentModel === 'bookmarks'">{{ 'BOOKMARKS' | translate }}</ion-title>
-      <ion-buttons slot="end">
-        <ion-button (click)="tapHaptic(); goSetting()" fill="clear" color="primary">
-          {{ 'MORE' | translate }}
-        </ion-button>
-      </ion-buttons>
     </ion-toolbar>
   </ng-template>
 </ion-header>
@@ -257,10 +247,24 @@
 
 <ion-footer
   [ngStyle]="env.colorTheme === 'dark'?  {'background-color': '#222428'} : (env.colorTheme === 'black'? {'background-color': '#000000'} : {'background-color': '#F0F0F0'})">
-  <ion-row class="ion-justify-content-center">
-    <ion-button (click)="tapHaptic(); historyActions()" color="primary" fill="clear">
-      <ion-icon name="ellipsis-horizontal-circle-outline" slot="start"></ion-icon>
-      {{ 'ACTIONS' | translate }}
+  <div *ngIf="segmentModel === 'history'" class="history-action-footer">
+    <ion-button class="history-action-button" (click)="tapHaptic(); presentGroupManagement()" color="primary" fill="clear">
+      <ion-icon name="folder-outline"></ion-icon>
+      <span>{{ 'GROUPS' | translate }}</span>
     </ion-button>
-  </ion-row>
+    <ion-button class="history-action-button history-action-primary" (click)="tapHaptic(); presentDataTransfer()" color="primary" fill="solid">
+      <ion-icon name="share-outline"></ion-icon>
+      <span>{{ 'TRANSFER_DATA' | translate }}</span>
+    </ion-button>
+    <ion-button class="history-action-button" (click)="tapHaptic(); presentMoreActions()" color="primary" fill="clear">
+      <ion-icon name="ellipsis-horizontal-circle-outline"></ion-icon>
+      <span>{{ 'MORE' | translate }}</span>
+    </ion-button>
+  </div>
+  <div *ngIf="segmentModel === 'bookmarks'" class="history-action-footer history-action-footer-single">
+    <ion-button class="history-action-button" (click)="tapHaptic(); presentMoreActions()" color="primary" fill="clear">
+      <ion-icon name="ellipsis-horizontal-circle-outline"></ion-icon>
+      <span>{{ 'MORE' | translate }}</span>
+    </ion-button>
+  </div>
 </ion-footer>
