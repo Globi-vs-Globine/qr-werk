@@ -33,6 +33,7 @@ import { StatusBar } from '@capacitor/status-bar';
 import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
 import { Preferences } from '@capacitor/preferences';
 import { ScanFilterService } from 'src/app/services/scan-filter.service';
+import { ScanSoundService } from 'src/app/services/scan-sound.service';
 
 type BatchDuplicateMode = 'allow' | 'batch' | 'history';
 interface BatchScanOptions {
@@ -77,6 +78,7 @@ export class ScanPage {
     private readonly ngZone: NgZone,
     private platform: Platform,
     private scanFilter: ScanFilterService,
+    private scanSound: ScanSoundService,
   ) {}
 
   ionViewWillEnter() {
@@ -353,24 +355,11 @@ export class ScanPage {
             this.scanQrUsingMlkitModule();
             return;
           }
-          if (
-            this.env.vibration === 'on' ||
-            this.env.vibration === 'on-scanned'
-          ) {
-            await Haptics.vibrate({ duration: 100 }).catch(async (err) => {
-              if (this.env.debugMode === 'on') {
-                await Toast.show({
-                  text: 'Err when Haptics.impact: ' + JSON.stringify(err),
-                  position: 'top',
-                  duration: 'long',
-                });
-              }
-            });
-          }
           if (!(await this.acceptScannedValue(text))) {
             await this.scanQrUsingMlkitModule();
             return;
           }
+          await this.confirmAcceptedScan();
           this.processQrCode(text, firstBarcode.format);
         });
       },
@@ -420,12 +409,7 @@ export class ScanPage {
         await this.scanUsingNativeInterface();
         return;
       }
-      if (
-        this.env.vibration === 'on' ||
-        this.env.vibration === 'on-scanned'
-      ) {
-        await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
-      }
+      await this.confirmAcceptedScan();
       await this.processQrCode(barcode.rawValue, barcode.format);
     } catch (err) {
       const manualValue = this.manualCodeFromScannerError(err);
@@ -542,7 +526,7 @@ export class ScanPage {
         this.env.resultContentFormat = barcodeFormat;
         await this.env.saveScanRecord(value);
         savedCount += 1;
-        await Haptics.vibrate({ duration: 100 }).catch(() => undefined);
+        await this.confirmAcceptedScan();
         await this.waitBetweenBatchScans(batchOptions.pauseMs);
       }
     } catch (err) {
@@ -565,6 +549,16 @@ export class ScanPage {
   private setNativeScannerActive(active: boolean): void {
     this.nativeScannerActive = active;
     document.body.classList.toggle('native-barcode-scanner-active', active);
+  }
+
+  private async confirmAcceptedScan(): Promise<void> {
+    const feedbackTasks: Promise<unknown>[] = [
+      this.scanSound.play(this.env.scanSound, this.env.scanSoundVolume),
+    ];
+    if (this.env.vibration === 'on' || this.env.vibration === 'on-scanned') {
+      feedbackTasks.push(Haptics.vibrate({ duration: 100 }).catch(() => undefined));
+    }
+    await Promise.all(feedbackTasks);
   }
 
   private async waitBetweenBatchScans(milliseconds: number): Promise<void> {

@@ -4,22 +4,14 @@
       <ion-back-button text="" defaultHref="tabs/setting">
       </ion-back-button>
     </ion-buttons>
-    <ion-title>{{ 'VIBRATION' | translate }}</ion-title>
+    <ion-title>{{ 'SCAN_FEEDBACK' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="qrwerk-standard-page">
-
-  <ion-item class="ion-no-padding" lines="none">
-    <ion-label class="ion-padding-start ion-margin-start ion-margin-top">
-      <p>
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'" style="white-space: normal;">
-          <div [innerHTML]="'MSG.VIBRATION_EXPLAIN' | translate">
-          </div>
-        </ion-text>
-      </p>
-    </ion-label>
-  </ion-item>
+  <section class="feedback-section">
+    <h2>{{ 'VIBRATION' | translate }}</h2>
+    <p class="section-description">{{ 'MSG.VIBRATION_EXPLAIN' | translate }}</p>
 
   <ion-radio-group [(ngModel)]="env.vibration" (ionChange)="saveVibration()" style="margin-bottom: var(--ion-safe-area-bottom, 0);">
     <ion-item button="true" class="ion-no-padding ripple-parent" detail="false" lines="none" (click)="setVibration('on')">
@@ -71,5 +63,63 @@
       </ion-radio>
     </ion-item>
   </ion-radio-group>
+
+  </section>
+
+  <section class="feedback-section sound-section">
+    <h2>{{ 'SCAN_SOUND' | translate }}</h2>
+    <p class="section-description">{{ 'SCAN_SOUND_INFO' | translate }}</p>
+
+    <ion-radio-group [(ngModel)]="env.scanSound">
+      <ion-item button="true" detail="false" lines="none" (click)="setScanSound('off')">
+        <ion-label>{{ 'SCAN_SOUND_OFF' | translate }}</ion-label>
+        <ion-radio slot="end" value="off" color="primary"></ion-radio>
+      </ion-item>
+      <ion-item button="true" detail="false" lines="none" (click)="setScanSound('classic')">
+        <ion-label>{{ 'SCAN_SOUND_CLASSIC' | translate }}</ion-label>
+        <ion-radio slot="end" value="classic" color="primary"></ion-radio>
+      </ion-item>
+      <ion-item button="true" detail="false" lines="none" (click)="setScanSound('double')">
+        <ion-label>{{ 'SCAN_SOUND_DOUBLE' | translate }}</ion-label>
+        <ion-radio slot="end" value="double" color="primary"></ion-radio>
+      </ion-item>
+      <ion-item button="true" detail="false" lines="none" (click)="setScanSound('soft')">
+        <ion-label>{{ 'SCAN_SOUND_SOFT' | translate }}</ion-label>
+        <ion-radio slot="end" value="soft" color="primary"></ion-radio>
+      </ion-item>
+      <ion-item button="true" detail="false" lines="none" (click)="setScanSound('high')">
+        <ion-label>{{ 'SCAN_SOUND_HIGH' | translate }}</ion-label>
+        <ion-radio slot="end" value="high" color="primary"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+
+    <div class="volume-control" [class.disabled]="env.scanSound === 'off'">
+      <div class="volume-label">
+        <span>{{ 'SCAN_SOUND_VOLUME' | translate }}</span>
+        <span>{{ env.scanSoundVolume }} %</span>
+      </div>
+      <ion-range
+        [(ngModel)]="env.scanSoundVolume"
+        [disabled]="env.scanSound === 'off'"
+        min="0"
+        max="100"
+        step="5"
+        (ionChange)="saveScanSoundVolume()"
+        (ionKnobMoveEnd)="previewScanSound()">
+        <ion-icon slot="start" name="volume-low-outline"></ion-icon>
+        <ion-icon slot="end" name="volume-high-outline"></ion-icon>
+      </ion-range>
+    </div>
+
+    <ion-button
+      expand="block"
+      fill="outline"
+      class="test-sound-button"
+      [disabled]="env.scanSound === 'off'"
+      (click)="previewScanSound()">
+      <ion-icon slot="start" name="volume-high-outline"></ion-icon>
+      {{ 'TEST_SOUND' | translate }}
+    </ion-button>
+  </section>
 
 </ion-content>

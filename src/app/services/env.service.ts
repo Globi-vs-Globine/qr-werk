@@ -25,6 +25,7 @@ export declare type ColorThemeType = 'light' | 'dark' | 'black';
 export declare type AccentColorType = 'petrol' | 'blue' | 'violet' | 'green' | 'orange' | 'pink' | 'custom';
 export declare type ErrorCorrectionLevelType = 'L' | 'M' | 'Q' | 'H';
 export declare type VibrationType = "on" | "off" | 'on-haptic' | 'on-scanned';
+export declare type ScanSoundType = 'off' | 'classic' | 'double' | 'soft' | 'high';
 export declare type OrientationType = 'portrait' | 'landscape';
 export declare type SearchEngineType = 'google' | 'bing' | 'yahoo' | 'duckduckgo' | 'yandex' | 'ecosia' | 'brave';
 export declare type ResultPageButtonsType = 'detailed' | 'icon-only';
@@ -65,6 +66,8 @@ export class EnvService {
   public qrCodeFrameOpacity: number = 100;
   public qrCodeFrameWidth: number = 0;
   public vibration: VibrationType = 'on';
+  public scanSound: ScanSoundType = 'classic';
+  public scanSoundVolume: number = 60;
   public orientation: 'default' | OrientationType = 'default';
   public searchEngine: SearchEngineType = 'google';
   public resultPageButtons: ResultPageButtonsType = 'detailed';
@@ -108,6 +111,8 @@ export class EnvService {
   public readonly KEY_RECORDS_LIMIT = "recordsLimit";
   public readonly KEY_SHOW_NUMBER_OF_RECORDS = "showNumberOfRecords";
   public readonly KEY_VIBRATION = "vibration";
+  public readonly KEY_SCAN_SOUND = "scan-sound";
+  public readonly KEY_SCAN_SOUND_VOLUME = "scan-sound-volume";
   public readonly KEY_ERROR_CORRECTION_LEVEL = "error-correction-level";
   public readonly KEY_QR_CODE_LIGHT_R = "qrCodeLightR";
   public readonly KEY_QR_CODE_LIGHT_G = "qrCodeLightG";
@@ -486,6 +491,15 @@ export class EnvService {
         }
       }
     );
+    const loadScanSound = Preferences.get({ key: this.KEY_SCAN_SOUND }).then(result => {
+      this.scanSound = (result.value as ScanSoundType | null) ?? 'classic';
+    });
+    const loadScanSoundVolume = Preferences.get({ key: this.KEY_SCAN_SOUND_VOLUME }).then(result => {
+      const storedVolume = result.value == null ? 60 : Number(result.value);
+      this.scanSoundVolume = Number.isFinite(storedVolume)
+        ? Math.max(0, Math.min(100, storedVolume))
+        : 60;
+    });
     const loadPromise15 = Preferences.get({ key: this.KEY_ERROR_CORRECTION_LEVEL }).then(
       async result => {
         if (result.value != null) {
@@ -793,6 +807,8 @@ export class EnvService {
       loadPromise12,
       loadPromise13,
       loadPromise14,
+      loadScanSound,
+      loadScanSoundVolume,
       loadPromise15,
       loadPromise16,
       loadPromise17,
@@ -856,6 +872,8 @@ export class EnvService {
     this.qrCodeDarkB = 40;
     this.qrCodeMargin = 3;
     this.vibration = 'on';
+    this.scanSound = 'classic';
+    this.scanSoundVolume = 60;
     this.orientation = 'default';
     await this.toggleOrientationChange();
     this.searchEngine = 'google';
@@ -959,6 +977,10 @@ export class EnvService {
     await Preferences.set({ key: this.KEY_QR_CODE_FRAME_WIDTH, value: JSON.stringify(this.qrCodeFrameWidth) });
     this.vibration = 'on';
     await Preferences.set({ key: this.KEY_VIBRATION, value: this.vibration });
+    this.scanSound = 'classic';
+    await Preferences.set({ key: this.KEY_SCAN_SOUND, value: this.scanSound });
+    this.scanSoundVolume = 60;
+    await Preferences.set({ key: this.KEY_SCAN_SOUND_VOLUME, value: JSON.stringify(this.scanSoundVolume) });
 
     this.orientation = 'default';
     await this.toggleOrientationChange();
