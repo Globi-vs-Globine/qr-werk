@@ -94,37 +94,8 @@ ion-badge ion-icon {
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.32);
 }
 
-.record-drag-handle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 44px;
-  width: 30px;
-  height: 30px;
-  margin-inline-start: 8px;
-  padding: 10px 4px;
-  font-size: 26px;
-  cursor: grab;
-  touch-action: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.record-drag-row {
+.record-row {
   display: block;
-  touch-action: pan-y;
-  transition: opacity 120ms ease, transform 120ms ease;
-}
-
-.record-drag-row.record-dragging {
-  touch-action: none;
-  opacity: 0.55;
-  transform: scale(0.985);
-}
-
-.record-drag-handle:active {
-  cursor: grabbing;
-  color: var(--ion-color-primary);
 }
 
 .record-action-button {
@@ -133,10 +104,4 @@ ion-badge ion-icon {
   margin: 0 2px 0 0;
   --padding-start: 8px;
   --padding-end: 8px;
-}
-
-.record-drop-target > ion-item:first-child {
-  --background: rgba(var(--qrwerk-accent-rgb, 0, 127, 131), 0.12);
-  outline: 2px solid var(--ion-color-primary);
-  outline-offset: -2px;
 }

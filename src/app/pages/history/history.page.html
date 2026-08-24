@@ -107,8 +107,7 @@
           </ion-text>
         </div>
       </ion-list-header>
-      <div *ngFor="let group of groupedScanRecords" [attr.data-history-drop-group]="group.key"
-        [class.record-drop-target]="dragHoverGroupKey === group.key">
+      <div *ngFor="let group of groupedScanRecords">
         <ion-item button detail="false" lines="full" (click)="toggleGroup(group.key)">
           <ion-icon slot="start" [name]="isGroupCollapsed(group.key) ? 'folder-outline' : 'folder-open-outline'"
             color="secondary"></ion-icon>
@@ -121,7 +120,7 @@
 
         <ng-container *ngIf="!isGroupCollapsed(group.key)">
           <ng-container *ngFor="let record of group.records; trackBy: scanRecordsTrackByFn; index as i;">
-            <div class="record-drag-row" [class.record-dragging]="draggingRecordId === record.id">
+            <div class="record-row">
               <ion-item class="ion-no-padding ripple-parent" detail="false"
                 [lines]="i === group.records.length - 1? 'none' : 'full'"
                 (click)="viewRecord(record.text, 'view-log', record.id)">
@@ -150,10 +149,6 @@
                     </ion-badge>
                   </div>
                 </ion-label>
-                <ion-icon slot="end" class="record-drag-handle" name="reorder-three-outline"
-                  color="medium" [attr.aria-label]="'MOVE_TO_GROUP' | translate"
-                  (click)="$event.stopPropagation()"
-                  (pointerdown)="startRecordDrag($event, record)"></ion-icon>
                 <ion-button slot="end" fill="clear" class="record-action-button"
                   [attr.aria-label]="'MORE' | translate" (click)="presentRecordActions($event, record)">
                   <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
