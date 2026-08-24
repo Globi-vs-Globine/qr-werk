@@ -10,6 +10,7 @@ import { HistoryPage } from './history.page';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -20,6 +21,7 @@ export function HttpLoaderFactory(http: HttpClient): TranslateHttpLoader {
     CommonModule,
     FormsModule,
     IonicModule,
+    DragDropModule,
     TranslateModule.forChild({
       loader: {
         provide: TranslateLoader,

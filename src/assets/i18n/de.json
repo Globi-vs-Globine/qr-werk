@@ -101,7 +101,7 @@
     "DUPLICATE_DETECTED": "Doppelt erkannt",
     "SAVE_ALL": "Alle speichern",
     "SAVE_SELECTION": "Auswahl speichern",
-    "CREATE_GROUP": "Gruppe erstellen", "DELETE_GROUP": "Gruppe löschen", "GROUP_DELETE_INFO": "Die enthaltenen Codes werden nach Ohne Gruppe verschoben.", "EXPORT_SCOPE": "Was möchtest du exportieren?", "CURRENT_FILTER": "Aktuelle Ansicht", "SELECT_GROUPS": "Gruppen auswählen", "SELECT_CODES": "Codes auswählen", "CONTINUE": "Weiter",
+    "CREATE_GROUP": "Gruppe erstellen", "DELETE_GROUP": "Gruppe löschen", "GROUP_DELETE_INFO": "Die enthaltenen Codes werden nach Ohne Gruppe verschoben.", "EXPORT_SCOPE": "Was möchtest du exportieren?", "CURRENT_FILTER": "Aktuelle Ansicht", "ALL_ENTRIES": "Alle Einträge", "SELECT_GROUPS": "Gruppen auswählen", "SELECT_CODES": "Einzelne Codes auswählen", "CONTINUE": "Weiter",
     "GROUP": "Gruppe",
     "GROUPS": "Gruppen",
     "GROUP_NAME": "Gruppenname",

@@ -94,7 +94,7 @@
   <!-- When log segment and >0 logs -->
   <ng-container
     *ngIf="segmentModel === 'history' && env.viewingScanRecords && env.viewingScanRecords.length > 0 && !isLoading">
-    <ion-list>
+    <ion-list cdkDropListGroup>
       <ion-list-header class="ion-padding-horizontal" lines="none" *ngIf="env.showNumberOfRecords == 'on'">
         <div class="ion-padding-horizontal" *ngIf="env.recordsLimit !== -1">
           <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
@@ -107,7 +107,8 @@
           </ion-text>
         </div>
       </ion-list-header>
-      <ng-container *ngFor="let group of groupedScanRecords">
+      <div *ngFor="let group of groupedScanRecords" cdkDropList [cdkDropListData]="group.key"
+        [cdkDropListSortingDisabled]="true" (cdkDropListDropped)="dropRecordIntoGroup($event, group.key)">
         <ion-item button detail="false" lines="full" (click)="toggleGroup(group.key)">
           <ion-icon slot="start" [name]="isGroupCollapsed(group.key) ? 'folder-outline' : 'folder-open-outline'"
             color="secondary"></ion-icon>
@@ -120,7 +121,7 @@
 
         <ng-container *ngIf="!isGroupCollapsed(group.key)">
           <ng-container *ngFor="let record of group.records; trackBy: scanRecordsTrackByFn; index as i;">
-            <ion-item-sliding #slidingItem>
+            <ion-item-sliding #slidingItem cdkDrag [cdkDragData]="record" [cdkDragStartDelay]="350">
               <ion-item class="ion-no-padding ripple-parent" detail="false"
                 [lines]="i === group.records.length - 1? 'none' : 'full'"
                 (click)="viewRecord(record.text, 'view-log', record.id)">
@@ -166,7 +167,7 @@
             </ion-item-sliding>
           </ng-container>
         </ng-container>
-      </ng-container>
+      </div>
     </ion-list>
   </ng-container>
 
@@ -252,9 +253,9 @@
       <ion-icon name="folder-outline"></ion-icon>
       <span>{{ 'GROUPS' | translate }}</span>
     </ion-button>
-    <ion-button class="history-action-button history-action-primary" (click)="tapHaptic(); presentDataTransfer()" color="primary" fill="solid">
+    <ion-button class="history-action-button history-action-primary" (click)="tapHaptic(); exportHistory()" color="primary" fill="solid">
       <ion-icon name="share-outline"></ion-icon>
-      <span>{{ 'TRANSFER_DATA' | translate }}</span>
+      <span>{{ 'EXPORT' | translate }}</span>
     </ion-button>
     <ion-button class="history-action-button" (click)="tapHaptic(); presentMoreActions()" color="primary" fill="clear">
       <ion-icon name="ellipsis-horizontal-circle-outline"></ion-icon>

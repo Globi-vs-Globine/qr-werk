@@ -14,6 +14,7 @@ import { SplashScreen } from '@capacitor/splash-screen';
 import { HistoryExportContent, HistoryExportFormat, HistoryExportService } from 'src/app/services/history-export.service';
 import { Preferences } from '@capacitor/preferences';
 import { ICloudSyncService } from 'src/app/services/icloud-sync.service';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
     selector: 'app-history',
@@ -753,7 +754,7 @@ export class HistoryPage {
     const actionSheet = await this.actionSheetController.create({
       header: this.translate.instant('EXPORT_SCOPE'),
       buttons: [
-        { text: this.translate.instant('CURRENT_FILTER'), icon: 'filter', handler: () => this.presentExportFormats(this.filteredScanRecords) },
+        { text: this.translate.instant('ALL_ENTRIES'), icon: 'albums-outline', handler: () => this.presentExportFormats(this.env.scanRecords) },
         { text: this.translate.instant('SELECT_GROUPS'), icon: 'folder-open', handler: () => this.selectGroupsForExport() },
         { text: this.translate.instant('SELECT_CODES'), icon: 'checkbox', handler: () => this.selectCodesForExport() },
         { text: this.translate.instant('CANCEL'), role: 'cancel' }
@@ -762,14 +763,17 @@ export class HistoryPage {
     await actionSheet.present();
   }
 
+  async dropRecordIntoGroup(event: CdkDragDrop<string>, groupKey: string): Promise<void> {
+    const record = event.item.data as ScanRecord;
+    if (!record) return;
+    const destination = groupKey === '__ungrouped__' ? undefined : groupKey;
+    if ((record.group || undefined) === destination) return;
+    await this.moveEntriesToGroup([record], destination);
+  }
+
   async presentMoreActions(): Promise<void> {
     const buttons: any[] = [];
     if (this.segmentModel === 'history') {
-      buttons.push({
-        text: this.translate.instant('MANAGE_ENTRIES'),
-        icon: 'list-outline',
-        handler: () => this.presentRecordManagement(),
-      });
       if (this.env.scanRecords?.length) {
         buttons.push({
           text: this.translate.instant('DELETE_ALL_ENTRIES'),
@@ -887,115 +891,6 @@ export class HistoryPage {
     await alert.present();
   }
 
-  async presentDataTransfer(): Promise<void> {
-    const buttons: any[] = [{ text: this.translate.instant('IMPORT_CODES'), icon: 'clipboard-outline', handler: () => this.importCodes() }];
-    if (this.env.scanRecords?.length) buttons.push({ text: this.translate.instant('EXPORT'), icon: 'share-outline', handler: () => this.exportHistory() });
-    buttons.push({ text: this.translate.instant('CANCEL'), role: 'cancel' });
-    const actionSheet = await this.actionSheetController.create({ header: this.translate.instant('TRANSFER_DATA'), buttons });
-    await actionSheet.present();
-  }
-
-  async importCodes(): Promise<void> {
-    const alert = await this.alertController.create({
-      header: this.translate.instant('IMPORT_CODES'),
-      message: this.translate.instant('ONE_CODE_PER_LINE'),
-      inputs: [{
-        name: 'codes',
-        type: 'textarea',
-        placeholder: this.translate.instant('PASTE_CODES'),
-        attributes: { rows: 10, autocapitalize: 'off', autocorrect: 'off', spellcheck: false },
-      }],
-      buttons: [
-        { text: this.translate.instant('CANCEL'), role: 'cancel' },
-        {
-          text: this.translate.instant('CONTINUE'),
-          handler: data => {
-            const codes = String(data.codes ?? '')
-              .split(/\r?\n/)
-              .map(code => code.trim())
-              .filter(code => code.length > 0);
-            if (!codes.length) {
-              this.presentToast(this.translate.instant('NO_VALID_CODES'), 'short', 'bottom');
-              return false;
-            }
-            this.presentCodeImportDestination(codes);
-            return true;
-          },
-        },
-      ],
-      cssClass: ['alert-bg'],
-    });
-    await alert.present();
-  }
-
-  private async presentCodeImportDestination(codes: string[]): Promise<void> {
-    const buttons = [
-      {
-        text: this.translate.instant('UNGROUPED'),
-        icon: 'folder-outline',
-        handler: () => this.saveImportedCodes(codes),
-      },
-      ...this.groupNames.map(group => ({
-        text: group,
-        icon: 'folder',
-        handler: () => this.saveImportedCodes(codes, group),
-      })),
-      {
-        text: this.translate.instant('CREATE_GROUP'),
-        icon: 'folder-open-outline',
-        handler: () => this.createImportGroup(codes),
-      },
-      { text: this.translate.instant('CANCEL'), role: 'cancel' as const },
-    ];
-    const actionSheet = await this.actionSheetController.create({
-      header: `${this.translate.instant('IMPORT_TO_GROUP')} (${codes.length})`,
-      buttons,
-    });
-    await actionSheet.present();
-  }
-
-  private async createImportGroup(codes: string[]): Promise<void> {
-    const alert = await this.alertController.create({
-      header: this.translate.instant('CREATE_GROUP'),
-      inputs: [{ name: 'group', type: 'text', placeholder: this.translate.instant('GROUP_NAME'), attributes: { maxlength: 40 } }],
-      buttons: [
-        { text: this.translate.instant('CANCEL'), role: 'cancel' },
-        {
-          text: this.translate.instant('CREATE'),
-          handler: data => {
-            const group = data.group?.trim();
-            if (!group) return false;
-            this.saveImportedCodes(codes, group);
-            return true;
-          },
-        },
-      ],
-      cssClass: ['alert-bg'],
-    });
-    await alert.present();
-  }
-
-  private async saveImportedCodes(codes: string[], group?: string): Promise<void> {
-    const previousSource = this.env.recordSource;
-    const previousFormat = this.env.resultContentFormat;
-    this.env.recordSource = 'scan';
-    this.env.resultContentFormat = '';
-    try {
-      for (const code of codes) await this.env.saveScanRecord(code, group);
-      if (group && !this.managedGroups.includes(group)) {
-        this.managedGroups.push(group);
-        this.managedGroups.sort((a, b) => a.localeCompare(b));
-        this.collapsedGroups.add(group);
-        await this.saveManagedGroups();
-      }
-      this.firstLoadItems();
-      await this.presentToast(`${codes.length} ${this.translate.instant('CODES_IMPORTED')}`, 'short', 'bottom');
-    } finally {
-      this.env.recordSource = previousSource;
-      this.env.resultContentFormat = previousFormat;
-    }
-  }
-
   private async presentExportFormats(records: ScanRecord[]) {
     if (!records.length) return;
     const actionSheet = await this.actionSheetController.create({
@@ -1040,7 +935,7 @@ export class HistoryPage {
   }
 
   private async selectCodesForExport() {
-    const records = this.filteredScanRecords;
+    const records = this.env.scanRecords;
     const alert = await this.alertController.create({
       header: this.translate.instant('SELECT_CODES'),
       inputs: records.map(record => ({

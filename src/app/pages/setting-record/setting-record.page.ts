@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
+import { ActionSheetController, AlertController, LoadingController, ModalController, Platform } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { EnvService } from 'src/app/services/env.service';
 import { Toast } from '@capacitor/toast';
@@ -34,12 +34,93 @@ export class SettingRecordPage {
     public env: EnvService,
     // private encryptService: EncryptService,
     private alertController: AlertController,
+    private actionSheetController: ActionSheetController,
     private loadingController: LoadingController,
     private platform: Platform,
     private modalController: ModalController,
     private historyExportService: HistoryExportService,
     public iCloudSync: ICloudSyncService,
   ) { }
+
+  async importCodes(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('IMPORT_CODES'),
+      message: this.translate.instant('ONE_CODE_PER_LINE'),
+      inputs: [{
+        name: 'codes',
+        type: 'textarea',
+        placeholder: this.translate.instant('PASTE_CODES'),
+        attributes: { rows: 10, autocapitalize: 'off', autocorrect: 'off', spellcheck: false },
+      }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CONTINUE'),
+          handler: data => {
+            const codes = String(data.codes ?? '').split(/\r?\n/).map(code => code.trim()).filter(Boolean);
+            if (!codes.length) {
+              this.presentToast(this.translate.instant('NO_VALID_CODES'), 'short', 'bottom');
+              return false;
+            }
+            this.presentCodeImportDestination(codes);
+            return true;
+          },
+        },
+      ],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
+  }
+
+  private async presentCodeImportDestination(codes: string[]): Promise<void> {
+    const groupNames = [...new Set(this.env.scanRecords.map(record => record.group).filter((group): group is string => !!group))]
+      .sort((a, b) => a.localeCompare(b));
+    const actionSheet = await this.actionSheetController.create({
+      header: `${this.translate.instant('IMPORT_TO_GROUP')} (${codes.length})`,
+      buttons: [
+        { text: this.translate.instant('UNGROUPED'), icon: 'folder-outline', handler: () => this.saveImportedCodes(codes) },
+        ...groupNames.map(group => ({ text: group, icon: 'folder', handler: () => this.saveImportedCodes(codes, group) })),
+        { text: this.translate.instant('CREATE_GROUP'), icon: 'folder-open-outline', handler: () => this.createImportGroup(codes) },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+      ],
+    });
+    await actionSheet.present();
+  }
+
+  private async createImportGroup(codes: string[]): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('CREATE_GROUP'),
+      inputs: [{ name: 'group', type: 'text', placeholder: this.translate.instant('GROUP_NAME'), attributes: { maxlength: 40 } }],
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        {
+          text: this.translate.instant('CREATE'),
+          handler: data => {
+            const group = data.group?.trim();
+            if (!group) return false;
+            this.saveImportedCodes(codes, group);
+            return true;
+          },
+        },
+      ],
+      cssClass: ['alert-bg'],
+    });
+    await alert.present();
+  }
+
+  private async saveImportedCodes(codes: string[], group?: string): Promise<void> {
+    const previousSource = this.env.recordSource;
+    const previousFormat = this.env.resultContentFormat;
+    this.env.recordSource = 'scan';
+    this.env.resultContentFormat = '';
+    try {
+      for (const code of codes) await this.env.saveScanRecord(code, group);
+      await this.presentToast(`${codes.length} ${this.translate.instant('CODES_IMPORTED')}`, 'short', 'bottom');
+    } finally {
+      this.env.recordSource = previousSource;
+      this.env.resultContentFormat = previousFormat;
+    }
+  }
 
   async ionViewDidEnter() {
     this.env.recordsLimit = -1;
