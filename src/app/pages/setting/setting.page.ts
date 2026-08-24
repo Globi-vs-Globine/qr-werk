@@ -61,10 +61,6 @@ export class SettingPage {
     this.router.navigate(['backup-restore']);
   }
 
-  setStartPage() {
-    this.router.navigate(['setting-start-page']);
-  }
-
   setResult() {
     this.router.navigate(['setting-result']);
   }

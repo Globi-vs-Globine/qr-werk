@@ -1,5 +1,5 @@
 <ion-header>
-  <div *ngIf="env.startPage == '/tabs/generate' && env.startPageHeader == 'on'; then mainHeader else selfHeader">
+  <div *ngIf="env.startPage == '/tabs/generate'; then mainHeader else selfHeader">
   </div>
   <ng-template #mainHeader>
     <ion-toolbar color="primary">

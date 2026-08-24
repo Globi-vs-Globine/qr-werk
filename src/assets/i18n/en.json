@@ -55,7 +55,9 @@
     "ACCENT_ORANGE": "Orange",
     "ACCENT_PINK": "Pink",
     "CHOOSE_CUSTOM_COLOR": "Choose custom color…",
-    "APP_INITIAL_PAGE": "App Initial Page",
+    "APP_INITIAL_PAGE": "Start page",
+    "START_AND_NAVIGATION": "Start and navigation",
+    "DEFAULT_START_PAGE": "Start view",
     "APP_VERSION": "App Version",
     "AT": "at",
     "AT_LEAST_1_MINUTE_LATER": "At Least 1 Minute Later",
@@ -471,7 +473,7 @@
         "TUTORIAL_SWIPE_LEFT": "Swipe left to delete corresponding record.",
         "TUTORIAL_SWIPE_RIGHT": "Swipe right to bookmark the text of corresponding record / edit the tag of corresponding bookmark.",
         "UNDO_DELETE": "You can undo the deletion",
-        "VIBRATION_EXPLAIN": "Provide vibration or haptic feedback. Please note that not all devices support this feature."
+        "VIBRATION_EXPLAIN": "Choose when QR Werk provides tactile feedback. “Haptics and scan vibration” confirms supported controls and successful scans. “Haptics only” responds to supported controls. “Scan vibration only” signals only a successfully recognized code. Controls in the camera view deliberately do not trigger scan vibration."
         ,
         "WIFI_PASSWORD_COPIED": "Wi‑Fi password copied"
     },

@@ -1,50 +1,36 @@
-.feedback-section {
-  padding: 20px 16px 8px;
-
-  h2 {
-    margin: 0 0 8px;
-    font-size: 1.25rem;
-    font-weight: 600;
-  }
-
-  .section-description {
-    margin: 0 0 12px;
-    color: var(--ion-color-medium);
-    font-size: 0.94rem;
-    line-height: 1.4;
-  }
-
-  ion-item {
-    --padding-start: 12px;
-    --inner-padding-end: 10px;
-    --min-height: 52px;
-    border-radius: 10px;
-  }
+.section-info-button {
+  width: 48px;
+  min-width: 48px;
+  height: 48px;
+  margin: -10px -8px -10px 0;
+  --padding-start: 10px;
+  --padding-end: 10px;
 }
 
-.sound-section {
-  padding-bottom: calc(24px + var(--ion-safe-area-bottom, 0px));
+.section-info-button ion-icon {
+  font-size: 25px;
+}
+
+.sound-controls-section.disabled {
+  opacity: 0.55;
 }
 
 .volume-control {
-  margin-top: 14px;
-  padding: 12px;
+  margin: 0 var(--qrwerk-space-4);
+  padding: var(--qrwerk-space-4);
   border-radius: 12px;
   background: rgba(128, 128, 128, 0.12);
-
-  &.disabled {
-    opacity: 0.5;
-  }
 }
 
 .volume-label {
   display: flex;
   justify-content: space-between;
   padding: 0 4px;
-  font-size: 0.95rem;
+  font-size: var(--qrwerk-font-secondary);
   font-weight: 500;
 }
 
-.test-sound-button {
-  margin-top: 14px;
+.volume-control ion-button {
+  min-height: 46px;
+  margin: var(--qrwerk-space-3) 0 0;
 }

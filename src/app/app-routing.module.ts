@@ -57,10 +57,6 @@ const routes: Routes = [
     loadChildren: () => import('./pages/setting-auto-open-url/setting-auto-open-url.module').then(m => m.SettingAutoOpenUrlPageModule)
   },
   {
-    path: 'setting-start-page',
-    loadChildren: () => import('./pages/setting-start-page/setting-start-page.module').then(m => m.SettingStartPagePageModule)
-  },
-  {
     path: 'setting-result',
     loadChildren: () => import('./pages/setting-result/setting-result.module').then(m => m.SettingResultPageModule)
   },

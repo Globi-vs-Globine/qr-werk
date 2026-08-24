@@ -56,6 +56,8 @@
     "ACCENT_PINK": "Pink",
     "CHOOSE_CUSTOM_COLOR": "Eigene Farbe wählen …",
     "APP_INITIAL_PAGE": "Startseite",
+    "START_AND_NAVIGATION": "Start und Navigation",
+    "DEFAULT_START_PAGE": "Startansicht",
     "APP_VERSION": "App-Version",
     "AT": "um",
     "AT_LEAST_1_MINUTE_LATER": "Mindestens 1 Minute später",
@@ -471,7 +473,7 @@
         "TUTORIAL_SWIPE_LEFT": "Wische nach links, um den entsprechenden Datensatz zu löschen.",
         "TUTORIAL_SWIPE_RIGHT": "Wische nach rechts, um einen Eintrag als Lesezeichen zu speichern oder dessen Bezeichnung zu bearbeiten.",
         "UNDO_DELETE": "Löschen rückgängig machen",
-        "VIBRATION_EXPLAIN": "Lege fest, wann QR Werk haptisches Feedback oder eine Scan-Vibration ausgibt. Nicht alle Geräte unterstützen jede Variante.",
+        "VIBRATION_EXPLAIN": "Lege fest, wann QR Werk fühlbares Feedback ausgibt. „Haptik und Scan-Vibration“ bestätigt Bedieneingaben und erfolgreiche Scans. „Nur haptisches Feedback“ reagiert auf unterstützte Bedienelemente. „Nur beim Scannen vibrieren“ meldet ausschließlich einen erfolgreich erkannten Code. Die Bedienknöpfe im Kamerafenster lösen bewusst keine Scan-Vibration aus.",
         "WIFI_PASSWORD_COPIED": "WLAN-Passwort kopiert"
     },
     "BARCODE_TYPE": {

@@ -51,7 +51,9 @@
     "ACCENT_ORANGE": "Orange",
     "ACCENT_PINK": "Rose",
     "CHOOSE_CUSTOM_COLOR": "Choisir une couleur personnalisée…",
-    "APP_INITIAL_PAGE": "Première page de l'application",
+    "APP_INITIAL_PAGE": "Page de démarrage",
+    "START_AND_NAVIGATION": "Démarrage et navigation",
+    "DEFAULT_START_PAGE": "Vue de démarrage",
     "APP_VERSION": "Version de l'application",
     "AT": "à",
     "AT_LEAST_1_MINUTE_LATER": "Au moins 1 minute plus tard",
@@ -419,7 +421,7 @@
         "TUTORIAL_SWIPE_LEFT": "Balayez vers la gauche pour supprimer l'enregistrement correspondant.",
         "TUTORIAL_SWIPE_RIGHT": "Balayez vers la droite pour mettre en signet le texte de l'enregistrement / modifier la balise du signet correspondant.",
         "UNDO_DELETE": "Vous pouvez annuler la suppression",
-        "VIBRATION_EXPLAIN": "Fournir des vibrations ou un retour haptique. Veuillez noter que tous les appareils ne prennent pas en charge cette fonctionnalité.",
+        "VIBRATION_EXPLAIN": "Choisissez quand QR Werk fournit un retour tactile. « Retour haptique et vibration du scan » confirme les commandes prises en charge et les scans réussis. « Retour haptique uniquement » réagit aux commandes prises en charge. « Vibration au scan uniquement » signale seulement un code reconnu. Les commandes de la caméra ne déclenchent volontairement aucune vibration de scan.",
         "WIFI_PASSWORD_COPIED": "Mot de passe Wi‑Fi copié"
     },
     "BARCODE_TYPE": {

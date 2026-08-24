@@ -41,7 +41,6 @@ export class EnvService {
 
   public startPage: TabPageType = "/tabs/scan";
   public historyPageStartSegment: HistoryPageSegmentType = 'history';
-  public startPageHeader: OnOffType = 'on';
   public languages: LanguageType[] = ['de', 'en', 'fr', 'it'];
   public language: LanguageType = 'en';
   public selectedLanguage: 'default' | LanguageType = 'default';
@@ -96,7 +95,6 @@ export class EnvService {
 
   public readonly KEY_START_PAGE = "start-page";
   public readonly KEY_HISTORY_PAGE_START_SEGMENT = "history-page-start-segment";
-  public readonly KEY_START_PAGE_HEADER = "start-page-header";
   public readonly KEY_SCAN_RECORDS = "scanRecords";
   public readonly KEY_TRASHED_SCAN_RECORDS = "trashedScanRecords";
   public readonly KEY_BOOKMARKS = "bookmarks";
@@ -313,15 +311,6 @@ export class EnvService {
         }
       }
     );
-    const loadPromise3 = Preferences.get({ key: this.KEY_START_PAGE_HEADER }).then(
-      async result => {
-        if (result.value != null) {
-          this.startPageHeader = result.value as OnOffType;
-        } else {
-          this.startPageHeader = 'on';
-        }
-      }
-    );
     const loadPromise6 = Preferences.get({ key: this.KEY_LANGUAGE }).then(
       async result => {
         if (result.value != null) {
@@ -364,7 +353,6 @@ export class EnvService {
     await Promise.allSettled([
       loadPromise1,
       loadPromise2,
-      loadPromise3,
       loadPromise6,
       loadPromise7,
       loadPromise7b,
@@ -851,7 +839,6 @@ export class EnvService {
     await Preferences.clear();
     this.startPage = '/tabs/scan';
     this.historyPageStartSegment = 'history';
-    this.startPageHeader = 'on';
     this.selectedLanguage = 'default';
     this.toggleLanguageChange();
     this.selectedColorTheme = 'default';
@@ -915,9 +902,6 @@ export class EnvService {
 
     this.historyPageStartSegment = 'history';
     await Preferences.set({ key: this.KEY_HISTORY_PAGE_START_SEGMENT, value: this.historyPageStartSegment });
-
-    this.startPageHeader = 'on';
-    await Preferences.set({ key: this.KEY_START_PAGE_HEADER, value: this.startPageHeader });
 
     this.selectedLanguage = 'default';
     this.toggleLanguageChange();

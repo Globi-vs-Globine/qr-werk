@@ -52,6 +52,8 @@
     "ACCENT_PINK": "Rosa",
     "CHOOSE_CUSTOM_COLOR": "Scegli un colore personalizzato…",
     "APP_INITIAL_PAGE": "Pagina iniziale",
+    "START_AND_NAVIGATION": "Avvio e navigazione",
+    "DEFAULT_START_PAGE": "Vista iniziale",
     "APP_VERSION": "Versione",
     "AT": "alle",
     "AT_LEAST_1_MINUTE_LATER": "Almeno 1 minuto dopo",
@@ -419,7 +421,7 @@
         "TUTORIAL_SWIPE_LEFT": "Scorri verso sinistra per eliminare il record corrispondente.",
         "TUTORIAL_SWIPE_RIGHT": "Scorri verso destra per aggiungere ai segnalibri il testo del record / modificare il tag del segnalibro corrispondente.",
         "UNDO_DELETE": "È possibile annullare l'eliminazione",
-        "VIBRATION_EXPLAIN": "Fornire vibrazioni o feedback tattile. Tieni presente che non tutti i dispositivi supportano questa funzione.",
+        "VIBRATION_EXPLAIN": "Scegli quando QR Werk fornisce un feedback tattile. «Feedback aptico e vibrazione scansione» conferma i comandi supportati e le scansioni riuscite. «Solo feedback aptico» reagisce ai comandi supportati. «Vibrazione solo alla scansione» segnala esclusivamente un codice riconosciuto. I comandi della fotocamera non attivano volutamente la vibrazione di scansione.",
         "WIFI_PASSWORD_COPIED": "Password Wi‑Fi copiata"
     },
     "BARCODE_TYPE": {

@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { EnvService, ScanSoundType, VibrationType } from 'src/app/services/env.service';
 import { ScanSoundService } from 'src/app/services/scan-sound.service';
+import { AlertController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-setting-vibration',
@@ -10,10 +12,19 @@ import { ScanSoundService } from 'src/app/services/scan-sound.service';
     standalone: false
 })
 export class SettingVibrationPage {
+  readonly scanSounds: Array<{ value: ScanSoundType; label: string }> = [
+    { value: 'off', label: 'SCAN_SOUND_OFF' },
+    { value: 'classic', label: 'SCAN_SOUND_CLASSIC' },
+    { value: 'double', label: 'SCAN_SOUND_DOUBLE' },
+    { value: 'soft', label: 'SCAN_SOUND_SOFT' },
+    { value: 'high', label: 'SCAN_SOUND_HIGH' },
+  ];
 
   constructor(
     public env: EnvService,
     private scanSoundService: ScanSoundService,
+    private alertController: AlertController,
+    private translate: TranslateService,
   ) { }
 
   async saveVibration() {
@@ -43,5 +54,14 @@ export class SettingVibrationPage {
 
   async previewScanSound(): Promise<void> {
     await this.scanSoundService.play(this.env.scanSound, this.env.scanSoundVolume);
+  }
+
+  async showInfo(titleKey: string, messageKey: string): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant(titleKey),
+      message: this.translate.instant(messageKey),
+      buttons: [this.translate.instant('OK')],
+    });
+    await alert.present();
   }
 }

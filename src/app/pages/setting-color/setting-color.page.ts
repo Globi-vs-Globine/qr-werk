@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Preferences } from '@capacitor/preferences';
 import { TranslateService } from '@ngx-translate/core';
-import { AccentColorType, EnvService } from 'src/app/services/env.service';
+import { AccentColorType, ColorThemeType, EnvService } from 'src/app/services/env.service';
 
 @Component({
     selector: 'app-setting-color',
@@ -10,6 +10,12 @@ import { AccentColorType, EnvService } from 'src/app/services/env.service';
     standalone: false
 })
 export class SettingColorPage {
+  readonly colorThemes: Array<{ value: 'default' | ColorThemeType; label: string }> = [
+    { value: 'default', label: 'SYSTEM_DEFAULT' },
+    { value: 'light', label: 'LIGHT' },
+    { value: 'dark', label: 'DARK' },
+    { value: 'black', label: 'BLACK' },
+  ];
   readonly accentColors: Array<{ value: AccentColorType; label: string; hex: string }> = [
     { value: 'petrol', label: 'ACCENT_PETROL', hex: '#007f83' },
     { value: 'blue', label: 'ACCENT_BLUE', hex: '#0068b8' },
@@ -50,6 +56,14 @@ export class SettingColorPage {
       key: this.env.KEY_HISTORY_PAGE_START_SEGMENT,
       value: this.env.historyPageStartSegment
     });
+  }
+
+  get historyStartLabel(): string {
+    return this.env.historyPageStartSegment === 'bookmarks' ? 'BOOKMARKS' : 'LOG';
+  }
+
+  async saveStartPage(): Promise<void> {
+    await Preferences.set({ key: this.env.KEY_START_PAGE, value: this.env.startPage });
   }
 
 }

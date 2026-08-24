@@ -1,5 +1,5 @@
 <ion-header>
-  <div *ngIf="env.startPage == '/tabs/setting' && env.startPageHeader == 'on'; then mainHeader else selfHeader">
+  <div *ngIf="env.startPage == '/tabs/setting'; then mainHeader else selfHeader">
   </div>
   <ng-template #mainHeader>
     <ion-toolbar color="primary">
@@ -13,120 +13,60 @@
   </ng-template>
 </ion-header>
 
-<ion-content class="qrwerk-settings-page qrwerk-standard-page qrwerk-settings-overview">
-  <ion-list-header class="ion-margin-start ion-padding-horizontal mt-1">
-    <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'ABOUT' | translate }}</ion-text>
-  </ion-list-header>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="navigateAbout()">
-    <span slot="start" class="about-row-logo-slot">
-      <img class="about-row-logo" src="assets/img/round_icon.png" alt="QR Werk">
-    </span>
-    <ion-label>
-      <p class="pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          {{ 'ABOUT_SIMPLE_QR' | translate }}
-        </ion-text>
-      </p>
-    </ion-label>
-  </ion-item>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="navigateGuide()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" color="primary" name="book-outline"></ion-icon>
-    <ion-label>
-      <p class="ion-padding-horizontal pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          {{ 'GUIDE' | translate }}
-        </ion-text>
-      </p>
-    </ion-label>
-  </ion-item>
+<ion-content class="qrwerk-settings-page qrwerk-settings-overview">
+  <section class="qrwerk-settings-section">
+    <ion-list-header><ion-label class="qrwerk-section-title">{{ 'ABOUT' | translate }}</ion-label></ion-list-header>
+    <ion-list class="qrwerk-settings-list">
+      <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="inset" (click)="navigateAbout()">
+        <span slot="start" class="about-row-logo-slot"><img class="about-row-logo" src="assets/img/round_icon.png" alt="QR Werk"></span>
+        <ion-label><h2>{{ 'ABOUT_SIMPLE_QR' | translate }}</h2></ion-label>
+      </ion-item>
+      <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="none" (click)="navigateGuide()">
+        <ion-icon slot="start" color="primary" name="book-outline"></ion-icon>
+        <ion-label><h2>{{ 'GUIDE' | translate }}</h2></ion-label>
+      </ion-item>
+    </ion-list>
+  </section>
 
-  <ion-list-header class="ion-margin-start ion-padding-horizontal mt-1">
-    <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'FUNCTIONS' | translate }}</ion-text>
-  </ion-list-header>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setResult()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="qr-code-outline">
-    </ion-icon>
-    <ion-label>
-      <p class="ion-padding-horizontal pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          {{ 'QR_CODE_AND_DECODED_RESULT' | translate }}
-        </ion-text>
-      </p>
-    </ion-label>
-  </ion-item>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setScanRecordLogging()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" src="assets/icon/history.svg">
-    </ion-icon>
-    <ion-label>
-      <p class="ion-padding-horizontal pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          {{ 'LOG_BACKUP_AND_RESTORE' | translate }}
-        </ion-text>
-      </p>
-    </ion-label>
-  </ion-item>
+  <section class="qrwerk-settings-section">
+    <ion-list-header><ion-label class="qrwerk-section-title">{{ 'FUNCTIONS' | translate }}</ion-label></ion-list-header>
+    <ion-list class="qrwerk-settings-list">
+      <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="inset" (click)="setResult()">
+        <ion-icon slot="start" color="primary" name="qr-code-outline"></ion-icon>
+        <ion-label><h2>{{ 'QR_CODE_AND_DECODED_RESULT' | translate }}</h2></ion-label>
+      </ion-item>
+      <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="inset" (click)="setVibration()">
+        <ion-icon slot="start" color="primary" src="assets/icon/vibration.svg"></ion-icon>
+        <ion-label><h2>{{ 'SCAN_FEEDBACK' | translate }}</h2></ion-label>
+      </ion-item>
+      <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="none" (click)="setScanRecordLogging()">
+        <ion-icon slot="start" color="primary" src="assets/icon/history.svg"></ion-icon>
+        <ion-label><h2>{{ 'LOG_BACKUP_AND_RESTORE' | translate }}</h2></ion-label>
+      </ion-item>
+    </ion-list>
+  </section>
 
-  <ion-list-header class="ion-margin-start ion-padding-horizontal mt-1">
-    <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'APPEARANCE_AND_EFFECTS' |
-      translate}}</ion-text>
-  </ion-list-header>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setLanguage()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="language">
-    </ion-icon>
-    <ion-label>
-      <p class="ion-padding-horizontal pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          {{ 'LANGUAGE' | translate }}
-        </ion-text>
-      </p>
-    </ion-label>
-  </ion-item>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setColorTheme()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="color-palette"></ion-icon>
-    <ion-label>
-      <p class="ion-padding-horizontal pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          {{ 'COLOR_THEME' | translate }}
-        </ion-text>
-      </p>
-    </ion-label>
-  </ion-item>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setOrientation()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" src="assets/icon/screen-rotation.svg">
-    </ion-icon>
-    <ion-label>
-      <p class="ion-padding-horizontal pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          {{ 'SCREEN_ORIENTATION' | translate }}
-        </ion-text>
-      </p>
-    </ion-label>
-  </ion-item>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setVibration()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" src="assets/icon/vibration.svg">
-    </ion-icon>
-    <ion-label>
-      <p class="ion-padding-horizontal pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          {{ 'SCAN_FEEDBACK' | translate }}
-        </ion-text>
-      </p>
-    </ion-label>
-  </ion-item>
-  <ion-list-header class="ion-margin-start ion-padding-horizontal mt-1">
-    <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">{{ 'OTHERS' | translate
-      }}</ion-text></ion-list-header>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="setStartPage()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="log-in">
-    </ion-icon>
-    <ion-label>
-      <p class="ion-padding-horizontal pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          {{ 'APP_INITIAL_PAGE' | translate }}
-        </ion-text>
-      </p>
-    </ion-label>
-  </ion-item>
+  <section class="qrwerk-settings-section">
+    <ion-list-header><ion-label class="qrwerk-section-title">{{ 'APPEARANCE_AND_EFFECTS' | translate }}</ion-label></ion-list-header>
+    <ion-list class="qrwerk-settings-list">
+      <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="inset" (click)="setLanguage()">
+        <ion-icon slot="start" color="primary" name="language"></ion-icon>
+        <ion-label><h2>{{ 'LANGUAGE' | translate }}</h2></ion-label>
+      </ion-item>
+      <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="inset" (click)="setColorTheme()">
+        <ion-icon slot="start" color="primary" name="color-palette"></ion-icon>
+        <ion-label><h2>{{ 'COLOR_THEME' | translate }}</h2></ion-label>
+      </ion-item>
+      <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="none" (click)="setOrientation()">
+        <ion-icon slot="start" color="primary" src="assets/icon/screen-rotation.svg"></ion-icon>
+        <ion-label><h2>{{ 'SCREEN_ORIENTATION' | translate }}</h2></ion-label>
+      </ion-item>
+    </ion-list>
+  </section>
+
+  <section class="qrwerk-settings-section">
+    <ion-list-header><ion-label class="qrwerk-section-title">{{ 'OTHERS' | translate }}</ion-label></ion-list-header>
+    <ion-list class="qrwerk-settings-list">
   <ion-item *ngIf="isAndroid" class="ion-no-padding ripple-parent" detail="false" lines="none"
     (click)="setAutoCloseApp()">
     <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" name="stop-circle">
@@ -139,16 +79,9 @@
       </p>
     </ion-label>
   </ion-item>
-  <ion-item button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="resetApp()">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" [color]="'primary'" src="assets/icon/reset.svg">
-    </ion-icon>
-    <ion-label>
-      <p class="ion-padding-horizontal pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          {{ 'RESET_APP' | translate }}
-        </ion-text>
-      </p>
-    </ion-label>
+  <ion-item button="true" class="qrwerk-settings-item" detail="true" lines="inset" (click)="resetApp()">
+    <ion-icon slot="start" color="primary" src="assets/icon/reset.svg"></ion-icon>
+    <ion-label><h2>{{ 'RESET_APP' | translate }}</h2></ion-label>
   </ion-item>
   <ion-item *ngIf="isAndroid" class="ion-no-padding" detail="false" lines="none" [disabled]="true">
     <ion-icon class="ion-margin-start ion-padding-horizontal" color="primary" name="logo-google-playstore"></ion-icon>
@@ -160,15 +93,9 @@
       </p>
     </ion-label>
   </ion-item>
-  <ion-item *ngIf="isIos" class="ion-no-padding" detail="false" lines="none" [disabled]="true">
-    <ion-icon class="ion-margin-start ion-padding-horizontal" color="primary" name="logo-apple-appstore"></ion-icon>
-    <ion-label>
-      <p class="ion-padding-horizontal pre-line">
-        <ion-text [color]="env.colorTheme === 'light'? 'dark' : 'light'">
-          {{ 'RATE_THE_APP' | translate }} ({{ 'NOT_AVAILABLE' | translate }})
-        </ion-text>
-      </p>
-    </ion-label>
+  <ion-item *ngIf="isIos" class="qrwerk-settings-item" detail="false" lines="none" [disabled]="true">
+    <ion-icon slot="start" color="primary" name="logo-apple-appstore"></ion-icon>
+    <ion-label><h2>{{ 'RATE_THE_APP' | translate }} ({{ 'NOT_AVAILABLE' | translate }})</h2></ion-label>
   </ion-item>
   <ion-item *ngIf="isAndroid" button="true" class="ion-no-padding ripple-parent" detail="true" lines="full" (click)="exitApp()">
     <ion-icon class="ion-margin-start ion-padding-horizontal" color="danger" name="exit"></ion-icon>
@@ -192,4 +119,6 @@
       </p>
     </ion-label>
   </ion-item>
+    </ion-list>
+  </section>
 </ion-content>
