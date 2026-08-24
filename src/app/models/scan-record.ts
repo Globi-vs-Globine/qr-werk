@@ -14,4 +14,5 @@ export class ScanRecord {
     lastModifiedDeviceType?: string;
     modifiedAt?: Date;
     lastSyncedAt?: Date;
+    deletedAt?: Date;
 }

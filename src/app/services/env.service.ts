@@ -95,6 +95,7 @@ export class EnvService {
   public readonly KEY_HISTORY_PAGE_START_SEGMENT = "history-page-start-segment";
   public readonly KEY_START_PAGE_HEADER = "start-page-header";
   public readonly KEY_SCAN_RECORDS = "scanRecords";
+  public readonly KEY_TRASHED_SCAN_RECORDS = "trashedScanRecords";
   public readonly KEY_BOOKMARKS = "bookmarks";
   public readonly KEY_LANGUAGE = "language";
   public readonly KEY_COLOR = "color";
@@ -167,6 +168,7 @@ export class EnvService {
   pendingLaunchUrlCheck: boolean = false; // Flag to track when we're checking for launch URL
   pendingShareNavigation: boolean = false; // Flag to track if we're navigating due to shared content
   scanRecords: ScanRecord[] = [];
+  trashedScanRecords: ScanRecord[] = [];
   bookmarks: Bookmark[] = [];
   viewingScanRecords: ScanRecord[] = [];
   viewingBookmarks: Bookmark[] = [];
@@ -418,6 +420,17 @@ export class EnvService {
         }
       }
     )
+    const loadTrash = Preferences.get({ key: this.KEY_TRASHED_SCAN_RECORDS }).then(result => {
+      try {
+        this.trashedScanRecords = result.value ? JSON.parse(result.value) : [];
+        this.trashedScanRecords.forEach(record => {
+          record.createdAt = new Date(record.createdAt);
+          if (record.modifiedAt) record.modifiedAt = new Date(record.modifiedAt);
+          if (record.deletedAt) record.deletedAt = new Date(record.deletedAt);
+        });
+        this.trashedScanRecords.sort((a, b) => new Date(b.deletedAt || 0).getTime() - new Date(a.deletedAt || 0).getTime());
+      } catch { this.trashedScanRecords = []; }
+    });
     const loadPromise8 = Preferences.get({ key: this.KEY_SHOW_EXIT_APP_ALERT }).then(
       async result => {
         if (result.value != null) {
@@ -766,6 +779,7 @@ export class EnvService {
     await Promise.allSettled([
       loadPromise4,
       loadPromise5,
+      loadTrash,
       loadPromise8,
       loadPromise9,
       loadPromise11,
@@ -1200,13 +1214,18 @@ export class EnvService {
 
   async undoScanRecordDeletion(record: ScanRecord): Promise<void> {
     await this.iCloudSync.undoRecordDeletion(record.id);
+    this.trashedScanRecords = this.trashedScanRecords.filter(item => item.id !== record.id);
+    delete record.deletedAt;
     this.scanRecords.push(record);
     this.scanRecords.sort((r1, r2) => {
       return r2.createdAt.getTime() - r1.createdAt.getTime();
     });
     try {
       const stringified = JSON.stringify(this.scanRecords);
-      await Preferences.set({ key: this.KEY_SCAN_RECORDS, value: stringified });
+      await Promise.all([
+        Preferences.set({ key: this.KEY_SCAN_RECORDS, value: stringified }),
+        Preferences.set({ key: this.KEY_TRASHED_SCAN_RECORDS, value: JSON.stringify(this.trashedScanRecords) }),
+      ]);
       this.notifyCloudDataChanged();
     } catch (e) {
       if (this.isDebugging) {
@@ -1219,10 +1238,15 @@ export class EnvService {
     const index = this.scanRecords.findIndex(r => r.id === recordId);
     if (index !== -1) {
       if (synchronizeDeletion && await this.iCloudSync.isEnabled()) await this.iCloudSync.markRecordsDeleted([recordId]);
-      this.scanRecords.splice(index, 1);
+      const [record] = this.scanRecords.splice(index, 1);
+      record.deletedAt = new Date();
+      this.trashedScanRecords = [record, ...this.trashedScanRecords.filter(item => item.id !== record.id)];
       try {
         const stringified = JSON.stringify(this.scanRecords);
-        await Preferences.set({ key: this.KEY_SCAN_RECORDS, value: stringified });
+        await Promise.all([
+          Preferences.set({ key: this.KEY_SCAN_RECORDS, value: stringified }),
+          Preferences.set({ key: this.KEY_TRASHED_SCAN_RECORDS, value: JSON.stringify(this.trashedScanRecords) }),
+        ]);
         this.notifyCloudDataChanged();
       } catch (e) {
         if (this.isDebugging) {
@@ -1230,6 +1254,22 @@ export class EnvService {
         }
       }
     }
+  }
+
+  async restoreTrashedScanRecord(recordId: string): Promise<void> {
+    const record = this.trashedScanRecords.find(item => item.id === recordId);
+    if (!record) return;
+    await this.undoScanRecordDeletion(record);
+  }
+
+  async permanentlyDeleteTrashedScanRecord(recordId: string): Promise<void> {
+    this.trashedScanRecords = this.trashedScanRecords.filter(item => item.id !== recordId);
+    await Preferences.set({ key: this.KEY_TRASHED_SCAN_RECORDS, value: JSON.stringify(this.trashedScanRecords) });
+  }
+
+  async emptyTrash(): Promise<void> {
+    this.trashedScanRecords = [];
+    await Preferences.set({ key: this.KEY_TRASHED_SCAN_RECORDS, value: '[]' });
   }
 
   async deleteAllScanRecords(synchronizeDeletion = true): Promise<void> {

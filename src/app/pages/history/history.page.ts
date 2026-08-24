@@ -24,7 +24,7 @@ import { ICloudSyncService } from 'src/app/services/icloud-sync.service';
 })
 export class HistoryPage {
 
-  segmentModel: 'history' | 'bookmarks' = "history";
+  segmentModel: 'history' | 'bookmarks' | 'trash' = "history";
 
   deleteToast: HTMLIonToastElement;
 
@@ -788,6 +788,50 @@ export class HistoryPage {
       ],
     });
     await actionSheet.present();
+  }
+
+  async presentTrashActions(event: Event, record: ScanRecord): Promise<void> {
+    event.preventDefault();
+    event.stopPropagation();
+    const sheet = await this.actionSheetController.create({
+      header: record.text,
+      buttons: [
+        { text: this.translate.instant('RESTORE'), icon: 'arrow-undo-outline', handler: () => this.restoreTrashedRecord(record) },
+        { text: this.translate.instant('DELETE_PERMANENTLY'), icon: 'trash-outline', role: 'destructive', handler: () => this.confirmPermanentDelete(record) },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+      ],
+    });
+    await sheet.present();
+  }
+
+  private async restoreTrashedRecord(record: ScanRecord): Promise<void> {
+    await this.env.restoreTrashedScanRecord(record.id);
+    await this.presentToast(this.translate.instant('ENTRY_RESTORED'), 'short', 'bottom');
+  }
+
+  private async confirmPermanentDelete(record: ScanRecord): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('DELETE_PERMANENTLY'),
+      message: this.translate.instant('DELETE_PERMANENTLY_INFO'),
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        { text: this.translate.instant('DELETE'), role: 'destructive', handler: () => this.env.permanentlyDeleteTrashedScanRecord(record.id) },
+      ],
+    });
+    await alert.present();
+  }
+
+  async confirmEmptyTrash(): Promise<void> {
+    if (!this.env.trashedScanRecords.length) return;
+    const alert = await this.alertController.create({
+      header: this.translate.instant('EMPTY_TRASH'),
+      message: this.translate.instant('EMPTY_TRASH_INFO'),
+      buttons: [
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+        { text: this.translate.instant('EMPTY_TRASH'), role: 'destructive', handler: () => this.env.emptyTrash() },
+      ],
+    });
+    await alert.present();
   }
 
   async presentMoreActions(): Promise<void> {

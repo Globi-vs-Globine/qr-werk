@@ -10,6 +10,7 @@
     <ion-toolbar [color]="env.colorTheme === 'black'? 'black' : 'dark'">
       <ion-title *ngIf="segmentModel === 'history'">{{ 'LOG' | translate }}</ion-title>
       <ion-title *ngIf="segmentModel === 'bookmarks'">{{ 'BOOKMARKS' | translate }}</ion-title>
+      <ion-title *ngIf="segmentModel === 'trash'">{{ 'TRASH' | translate }}</ion-title>
     </ion-toolbar>
   </ng-template>
 </ion-header>
@@ -32,6 +33,9 @@
         <ion-icon src="assets/icon/history.svg"></ion-icon>
       </ion-segment-button>
     </ng-container>
+    <ion-segment-button [value]="'trash'">
+      <ion-icon name="trash-outline"></ion-icon>
+    </ion-segment-button>
   </ion-segment>
 
   <ion-item *ngIf="segmentModel === 'history'" button detail="true" lines="full"
@@ -74,6 +78,28 @@
           </ion-label>
         </ion-item>
       </ng-container>
+    </ion-list>
+  </ng-container>
+
+  <ng-container *ngIf="segmentModel === 'trash' && !env.trashedScanRecords.length && !isLoading">
+    <div class="ion-padding-horizontal vertical-center" style="height: 85%">
+      <ion-icon name="trash-outline" color="medium" style="font-size: 3rem"></ion-icon>
+      <p class="ion-text-center pt-3"><ion-text color="medium">{{ 'TRASH_EMPTY' | translate }}</ion-text></p>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="segmentModel === 'trash' && env.trashedScanRecords.length && !isLoading">
+    <ion-list>
+      <ion-item *ngFor="let record of env.trashedScanRecords; trackBy: scanRecordsTrackByFn" detail="false">
+        <ion-label>
+          <h2>{{ record.text }}</h2>
+          <p>{{ 'DELETED_AT' | translate }}: {{ maskDatetimeAndSource(record.deletedAt || record.createdAt, record.source) }}</p>
+        </ion-label>
+        <ion-button slot="end" fill="clear" class="record-action-button"
+          [attr.aria-label]="'MORE' | translate" (click)="presentTrashActions($event, record)">
+          <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>
+        </ion-button>
+      </ion-item>
     </ion-list>
   </ng-container>
 
@@ -256,6 +282,13 @@
     <ion-button class="history-action-button" (click)="tapHaptic(); presentMoreActions()" color="primary" fill="clear">
       <ion-icon name="ellipsis-horizontal-circle-outline"></ion-icon>
       <span>{{ 'MORE' | translate }}</span>
+    </ion-button>
+  </div>
+  <div *ngIf="segmentModel === 'trash'" class="history-action-footer history-action-footer-single">
+    <ion-button class="history-action-button" color="danger" fill="clear" [disabled]="!env.trashedScanRecords.length"
+      (click)="confirmEmptyTrash()">
+      <ion-icon name="trash-outline"></ion-icon>
+      <span>{{ 'EMPTY_TRASH' | translate }}</span>
     </ion-button>
   </div>
 </ion-footer>
