@@ -1,6 +1,6 @@
 .filter-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding-top: 24px; padding-bottom: 16px; }
-.filter-heading h1 { margin: 0; font-size: 1.4rem; font-weight: 650; }
-.filter-heading p { margin: 6px 0 0; color: var(--ion-color-medium); font-size: 0.95rem; line-height: 1.35; }
+.filter-heading h1 { margin: 0; font-size: 20px; font-weight: 650; line-height: 1.25; }
+.filter-heading p { margin: 6px 0 0; color: var(--ion-color-medium); font-size: 15px; line-height: 1.4; }
 .filter-heading ion-button { margin: -6px -8px 0 0; min-width: 44px; min-height: 44px; }
 .filter-heading ion-icon { font-size: 25px; }
 .filter-toggle { margin-bottom: 20px; --min-height: 58px; }
@@ -11,7 +11,7 @@
   --highlight-color-focused: var(--ion-color-primary);
   min-height: 68px;
 }
-.section-title { margin-top: 28px; margin-bottom: 12px; font-size: 1.08rem; font-weight: 650; }
+.section-title { margin-top: 28px; margin-bottom: 12px; font-size: var(--qrwerk-font-section); font-weight: 600; line-height: 1.25; }
 .test-area ion-chip { margin-top: 12px; }
 .footer-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 8px 16px calc(8px + var(--ion-safe-area-bottom, 0px)); }
 .footer-actions ion-button { min-height: 46px; margin: 0; }
