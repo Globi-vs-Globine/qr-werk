@@ -95,6 +95,10 @@ ion-badge ion-icon {
 }
 
 .record-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 44px;
   width: 30px;
   height: 30px;
   margin-inline-start: 8px;
@@ -104,6 +108,15 @@ ion-badge ion-icon {
   touch-action: none;
   -webkit-user-select: none;
   user-select: none;
+}
+
+.record-drag-row {
+  display: block;
+  touch-action: pan-y;
+}
+
+.record-drag-row.cdk-drag-dragging {
+  touch-action: none;
 }
 
 .record-drag-handle:active {
