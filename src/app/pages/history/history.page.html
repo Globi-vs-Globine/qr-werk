@@ -153,10 +153,7 @@
                 <ion-icon slot="end" class="record-drag-handle" name="reorder-three-outline"
                   color="medium" [attr.aria-label]="'MOVE_TO_GROUP' | translate"
                   (click)="$event.stopPropagation()"
-                  (pointerdown)="startRecordDrag($event, record)"
-                  (pointermove)="moveRecordDrag($event)"
-                  (pointerup)="finishRecordDrag($event)"
-                  (pointercancel)="cancelRecordDrag()"></ion-icon>
+                  (pointerdown)="startRecordDrag($event, record)"></ion-icon>
                 <ion-button slot="end" fill="clear" class="record-action-button"
                   [attr.aria-label]="'MORE' | translate" (click)="presentRecordActions($event, record)">
                   <ion-icon slot="icon-only" name="ellipsis-horizontal"></ion-icon>

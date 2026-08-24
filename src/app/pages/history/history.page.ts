@@ -43,6 +43,9 @@ export class HistoryPage {
   private dragStartX = 0;
   private dragStartY = 0;
   private dragHasMoved = false;
+  private readonly globalDragMove = (event: PointerEvent) => this.moveRecordDrag(event);
+  private readonly globalDragEnd = (event: PointerEvent) => void this.finishRecordDrag(event);
+  private readonly globalDragCancel = () => this.cancelRecordDrag();
 
   get groupNames(): string[] {
     return [...new Set([
@@ -805,7 +808,9 @@ export class HistoryPage {
     this.dragStartX = event.clientX;
     this.dragStartY = event.clientY;
     this.dragHasMoved = false;
-    (event.currentTarget as HTMLElement).setPointerCapture?.(event.pointerId);
+    window.addEventListener('pointermove', this.globalDragMove, { passive: false });
+    window.addEventListener('pointerup', this.globalDragEnd, { passive: false });
+    window.addEventListener('pointercancel', this.globalDragCancel);
   }
 
   moveRecordDrag(event: PointerEvent): void {
@@ -841,6 +846,9 @@ export class HistoryPage {
   }
 
   cancelRecordDrag(): void {
+    window.removeEventListener('pointermove', this.globalDragMove);
+    window.removeEventListener('pointerup', this.globalDragEnd);
+    window.removeEventListener('pointercancel', this.globalDragCancel);
     this.draggingRecord = undefined;
     this.dragPointerId = undefined;
     this.draggingRecordId = undefined;
