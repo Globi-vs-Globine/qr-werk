@@ -15,24 +15,17 @@
       </ion-button>
     </ion-list-header>
     <ion-list class="qrwerk-settings-list">
-      <ion-radio-group [(ngModel)]="env.vibration" (ionChange)="saveVibration()">
-        <ion-item button="true" class="qrwerk-settings-item" detail="false" lines="inset" (click)="setVibration('on')">
-          <ion-label><h2>{{ 'HAPTIC_AND_SCAN_FEEDBACK' | translate }}</h2></ion-label>
-          <ion-radio slot="end" value="on" color="primary"></ion-radio>
-        </ion-item>
-        <ion-item button="true" class="qrwerk-settings-item" detail="false" lines="inset" (click)="setVibration('on-haptic')">
-          <ion-label><h2>{{ 'HAPTIC_FEEDBACK_ONLY' | translate }}</h2></ion-label>
-          <ion-radio slot="end" value="on-haptic" color="primary"></ion-radio>
-        </ion-item>
-        <ion-item button="true" class="qrwerk-settings-item" detail="false" lines="inset" (click)="setVibration('on-scanned')">
-          <ion-label><h2>{{ 'SCAN_VIBRATION_ONLY' | translate }}</h2></ion-label>
-          <ion-radio slot="end" value="on-scanned" color="primary"></ion-radio>
-        </ion-item>
-        <ion-item button="true" class="qrwerk-settings-item" detail="false" lines="none" (click)="setVibration('off')">
-          <ion-label><h2>{{ 'OFF' | translate }}</h2></ion-label>
-          <ion-radio slot="end" value="off" color="primary"></ion-radio>
-        </ion-item>
-      </ion-radio-group>
+      <ion-item class="qrwerk-settings-item compact-select-row" lines="none">
+        <ion-icon slot="start" color="primary" name="phone-portrait-outline"></ion-icon>
+        <ion-select interface="action-sheet" [cancelText]="'CANCEL' | translate"
+          [label]="'VIBRATION' | translate" label-placement="stacked"
+          [(ngModel)]="env.vibration" (ionChange)="saveVibration()">
+          <ion-select-option value="on">{{ 'HAPTIC_AND_SCAN_FEEDBACK' | translate }}</ion-select-option>
+          <ion-select-option value="on-haptic">{{ 'HAPTIC_FEEDBACK_ONLY' | translate }}</ion-select-option>
+          <ion-select-option value="on-scanned">{{ 'SCAN_VIBRATION_ONLY' | translate }}</ion-select-option>
+          <ion-select-option value="off">{{ 'OFF' | translate }}</ion-select-option>
+        </ion-select>
+      </ion-item>
     </ion-list>
   </section>
 
@@ -45,26 +38,29 @@
       </ion-button>
     </ion-list-header>
     <ion-list class="qrwerk-settings-list">
-      <ion-radio-group [(ngModel)]="env.scanSound">
-        <ion-item *ngFor="let sound of scanSounds; let last = last" button="true" class="qrwerk-settings-item"
-          detail="false" [lines]="last ? 'none' : 'inset'" (click)="setScanSound(sound.value)">
-          <ion-label><h2>{{ sound.label | translate }}</h2></ion-label>
-          <ion-radio slot="end" [value]="sound.value" color="primary"></ion-radio>
-        </ion-item>
-      </ion-radio-group>
+      <ion-item class="qrwerk-settings-item compact-select-row" lines="none">
+        <ion-icon slot="start" color="primary" name="volume-high-outline"></ion-icon>
+        <ion-select interface="action-sheet" [cancelText]="'CANCEL' | translate"
+          [label]="'SCAN_SOUND' | translate" label-placement="stacked"
+          [(ngModel)]="env.scanSound" (ionChange)="setScanSound(env.scanSound)">
+          <ion-select-option *ngFor="let sound of scanSounds" [value]="sound.value">
+            {{ sound.label | translate }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
     </ion-list>
   </section>
 
-  <section class="qrwerk-settings-section sound-controls-section" [class.disabled]="env.scanSound === 'off'">
+  <section *ngIf="env.scanSound !== 'off'" class="qrwerk-settings-section sound-controls-section">
     <ion-list-header><ion-label class="qrwerk-section-title">{{ 'SCAN_SOUND_VOLUME' | translate }}</ion-label></ion-list-header>
     <div class="volume-control">
       <div class="volume-label"><span>{{ 'SCAN_SOUND_VOLUME' | translate }}</span><span>{{ env.scanSoundVolume }} %</span></div>
-      <ion-range [(ngModel)]="env.scanSoundVolume" [disabled]="env.scanSound === 'off'" min="0" max="100" step="5"
+      <ion-range [(ngModel)]="env.scanSoundVolume" min="0" max="100" step="5"
         (ionChange)="saveScanSoundVolume()" (ionKnobMoveEnd)="previewScanSound()">
         <ion-icon slot="start" name="volume-low-outline"></ion-icon>
         <ion-icon slot="end" name="volume-high-outline"></ion-icon>
       </ion-range>
-      <ion-button expand="block" fill="outline" [disabled]="env.scanSound === 'off'" (click)="previewScanSound()">
+      <ion-button expand="block" fill="outline" (click)="previewScanSound()">
         <ion-icon slot="start" name="volume-high-outline"></ion-icon>{{ 'TEST_SOUND' | translate }}
       </ion-button>
     </div>

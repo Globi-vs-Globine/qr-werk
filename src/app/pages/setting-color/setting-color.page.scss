@@ -11,15 +11,6 @@
   margin-inline-end: var(--qrwerk-space-4);
 }
 
-.color-dot-input {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  cursor: pointer;
-}
-
 .native-color-input {
   position: absolute;
   inset: 0;
@@ -38,4 +29,8 @@
   width: 100%;
   max-width: none;
   min-height: 48px;
+}
+
+.compact-select-row ion-select {
+  flex: 1;
 }

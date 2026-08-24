@@ -40,6 +40,13 @@ export class SettingColorPage {
     await Preferences.set({ key: this.env.KEY_ACCENT_COLOR, value: this.env.accentColor });
   }
 
+  get currentAccentHex(): string {
+    if (this.env.accentColor === 'custom') {
+      return this.env.customAccentColor;
+    }
+    return this.accentColors.find(color => color.value === this.env.accentColor)?.hex || '#007f83';
+  }
+
   async chooseCustomAccentColor(event: Event): Promise<void> {
     const input = event.target as HTMLInputElement;
     this.env.customAccentColor = this.env.normalizeHexColor(input.value, '#007f83');

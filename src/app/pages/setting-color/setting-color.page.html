@@ -9,46 +9,50 @@
   <section class="qrwerk-settings-section">
     <ion-list-header><ion-label class="qrwerk-section-title">{{ 'APPEARANCE' | translate }}</ion-label></ion-list-header>
     <ion-list class="qrwerk-settings-list">
-      <ion-radio-group [(ngModel)]="env.selectedColorTheme" (ionChange)="saveColorTheme()">
-        <ion-item *ngFor="let theme of colorThemes; let last = last" button="true" class="qrwerk-settings-item"
-          detail="false" [lines]="last ? 'none' : 'inset'" (click)="env.selectedColorTheme = theme.value; saveColorTheme()">
-          <ion-label><h2>{{ theme.label | translate }}</h2></ion-label>
-          <ion-radio slot="end" [value]="theme.value" color="primary"></ion-radio>
-        </ion-item>
-      </ion-radio-group>
+      <ion-item class="qrwerk-settings-item compact-select-row" lines="none">
+        <ion-icon slot="start" color="primary" name="contrast-outline"></ion-icon>
+        <ion-select interface="action-sheet" [cancelText]="'CANCEL' | translate"
+          [label]="'APPEARANCE' | translate" label-placement="stacked"
+          [(ngModel)]="env.selectedColorTheme" (ionChange)="saveColorTheme()">
+          <ion-select-option *ngFor="let theme of colorThemes" [value]="theme.value">
+            {{ theme.label | translate }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
     </ion-list>
   </section>
 
   <section class="qrwerk-settings-section">
     <ion-list-header><ion-label class="qrwerk-section-title">{{ 'ACCENT_COLOR' | translate }}</ion-label></ion-list-header>
     <ion-list class="qrwerk-settings-list">
-      <ion-radio-group [(ngModel)]="env.accentColor" (ionChange)="saveAccentColor()">
-        <ion-item *ngFor="let accent of accentColors" button="true" class="qrwerk-settings-item" detail="false"
-          lines="inset" (click)="env.accentColor = accent.value; saveAccentColor()">
-          <span slot="start" class="accent-swatch" [style.background]="accent.hex" aria-hidden="true"></span>
-          <ion-label><h2>{{ accent.label | translate }}</h2></ion-label>
-          <ion-radio slot="end" [value]="accent.value" color="primary"></ion-radio>
-        </ion-item>
-        <ion-item button="true" detail="false" lines="none" class="qrwerk-settings-item custom-color-row">
-          <label slot="start" class="accent-swatch" [style.background]="env.customAccentColor">
-            <input class="color-dot-input" type="color" [value]="env.customAccentColor"
-              (input)="chooseCustomAccentColor($event)" [attr.aria-label]="'CHOOSE_CUSTOM_COLOR' | translate">
-          </label>
-          <ion-label><h2>{{ 'CHOOSE_CUSTOM_COLOR' | translate }}</h2></ion-label>
-          <ion-radio slot="end" value="custom" color="primary"></ion-radio>
-          <input class="native-color-input" type="color" [value]="env.customAccentColor"
-            (input)="chooseCustomAccentColor($event)" [attr.aria-label]="'CHOOSE_CUSTOM_COLOR' | translate">
-        </ion-item>
-      </ion-radio-group>
+      <ion-item class="qrwerk-settings-item compact-select-row" lines="inset">
+        <span slot="start" class="accent-swatch" [style.background]="currentAccentHex" aria-hidden="true"></span>
+        <ion-select interface="action-sheet" [cancelText]="'CANCEL' | translate"
+          [label]="'ACCENT_COLOR' | translate" label-placement="stacked"
+          [(ngModel)]="env.accentColor" (ionChange)="saveAccentColor()">
+          <ion-select-option *ngFor="let accent of accentColors" [value]="accent.value">
+            {{ accent.label | translate }}
+          </ion-select-option>
+          <ion-select-option value="custom">{{ 'CHOOSE_CUSTOM_COLOR' | translate }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-item button="true" detail="false" lines="none" class="qrwerk-settings-item custom-color-row">
+        <span slot="start" class="accent-swatch" [style.background]="env.customAccentColor" aria-hidden="true"></span>
+        <ion-label><h2>{{ 'CHOOSE_CUSTOM_COLOR' | translate }}</h2></ion-label>
+        <ion-icon slot="end" name="color-palette-outline" color="primary"></ion-icon>
+        <input class="native-color-input" type="color" [value]="env.customAccentColor"
+          (input)="chooseCustomAccentColor($event)" [attr.aria-label]="'CHOOSE_CUSTOM_COLOR' | translate">
+      </ion-item>
     </ion-list>
   </section>
 
   <section class="qrwerk-settings-section">
     <ion-list-header><ion-label class="qrwerk-section-title">{{ 'START_AND_NAVIGATION' | translate }}</ion-label></ion-list-header>
     <ion-list class="qrwerk-settings-list">
-      <ion-item class="qrwerk-settings-item" lines="inset">
+      <ion-item class="qrwerk-settings-item compact-select-row" lines="inset">
         <ion-icon slot="start" color="primary" name="home-outline"></ion-icon>
-        <ion-select label="{{ 'DEFAULT_START_PAGE' | translate }}" label-placement="stacked" interface="popover"
+        <ion-select [label]="'DEFAULT_START_PAGE' | translate" label-placement="stacked" interface="action-sheet"
+          [cancelText]="'CANCEL' | translate"
           [(ngModel)]="env.startPage" (ionChange)="saveStartPage()">
           <ion-select-option value="/tabs/scan">{{ 'SCAN' | translate }}</ion-select-option>
           <ion-select-option value="/tabs/history">{{ historyStartLabel | translate }}</ion-select-option>
@@ -56,9 +60,10 @@
           <ion-select-option value="/tabs/setting">{{ 'SETTINGS' | translate }}</ion-select-option>
         </ion-select>
       </ion-item>
-      <ion-item class="qrwerk-settings-item" lines="none">
+      <ion-item class="qrwerk-settings-item compact-select-row" lines="none">
         <ion-icon slot="start" color="primary" src="assets/icon/history.svg"></ion-icon>
-        <ion-select label="{{ 'HISTORY_DEFAULT_VIEW' | translate }}" label-placement="stacked" interface="popover"
+        <ion-select [label]="'HISTORY_DEFAULT_VIEW' | translate" label-placement="stacked" interface="action-sheet"
+          [cancelText]="'CANCEL' | translate"
           [(ngModel)]="env.historyPageStartSegment" (ionChange)="saveHistoryPageStartSegment()">
           <ion-select-option value="history">{{ 'LOG' | translate }}</ion-select-option>
           <ion-select-option value="bookmarks">{{ 'BOOKMARKS' | translate }}</ion-select-option>

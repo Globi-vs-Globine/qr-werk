@@ -11,10 +11,6 @@
   font-size: 25px;
 }
 
-.sound-controls-section.disabled {
-  opacity: 0.55;
-}
-
 .volume-control {
   margin: 0 var(--qrwerk-space-4);
   padding: var(--qrwerk-space-4);
@@ -33,4 +29,10 @@
 .volume-control ion-button {
   min-height: 46px;
   margin: var(--qrwerk-space-3) 0 0;
+}
+
+.compact-select-row ion-select {
+  width: 100%;
+  max-width: none;
+  min-height: 48px;
 }
