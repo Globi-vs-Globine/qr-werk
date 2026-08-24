@@ -1,15 +1,9 @@
 # Quick start
 
-## Open QR Werk
-QR Werk opens the camera scanner at a normal app launch. Allow camera access when iOS asks for it.
+QR Werk opens the camera scanner on a normal app launch. Allow camera access when iOS asks, hold the complete code sharply in view and use the result actions after recognition.
 
-## Scan a code
-Hold the complete code steadily in view and avoid glare. After recognition, you can copy, share or open the result. The value is stored in History when automatic logging is enabled.
+After closing the camera, the Scan tab offers **Scan with Camera**, **Batch Scan** and **Import Image**. The scanner controls include manual entry, flashlight, zoom and options for the scan area, filter and scan sound.
 
-## Scan overview
-After closing the camera, the Scan tab offers **Scan with camera**, **Batch scan** and **Import image**. Batch scanning records several codes in succession. Image import can analyse one or more selected photos.
+Scanned, imported and created entries appear in History when automatic history is enabled. Batch entries initially appear under **No Group** and can be moved from their three-dot menu.
 
-## Good to know
-- Recognition is performed locally on the device.
-- New batch entries initially appear under **Without group**.
-- Camera and photo access are used only for actions you start.
+Recognition runs locally on the device. Optional iCloud synchronization is disabled until the user enables it under Data Management.

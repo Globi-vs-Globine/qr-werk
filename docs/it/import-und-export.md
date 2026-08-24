@@ -1,5 +1,9 @@
-# Importazione ed esportazione
+# Importazione, esportazione e backup
 
-Esporta i dettagli completi come CSV o TXT, soltanto i codici come TXT oppure copia una selezione. Nella cronologia apri **Azioni → Esporta** e scegli elementi o gruppi.
+Nella cronologia tocca direttamente **Esporta**, quindi scegli elementi visibili, gruppi o singoli codici. Esporta dettagli in CSV/TXT, solo i codici oppure copia i valori.
 
-Per importare, incolla un valore per riga in **Azioni → Trasferisci dati → Importa codici**. Un CSV non è un backup completo: usa **Gestione dati → Backup** per conservare anche gruppi e preferiti.
+Per importare un elenco, apri **Impostazioni → Gestione dati → Importa codici** e incolla un valore per riga. Le righe vuote vengono ignorate e puoi scegliere il gruppo di destinazione.
+
+L’importazione immagini si trova nella panoramica di scansione. Seleziona una o più immagini, controlla i codici rilevati e salva tutti o solo quelli scelti.
+
+CSV/TXT e iCloud non sostituiscono un backup indipendente. Usa anche **Backup** per i dati importanti.

@@ -4,7 +4,7 @@
 
 QR Werk verarbeitet Kamerabilder und importierte Fotos mit Apples AVFoundation- und Vision-Technik vollständig auf dem iPhone oder iPad. Bilder und Erkennungsergebnisse werden dafür weder an Apple noch an Google oder einen anderen Erkennungsdienst geschickt. Das Scannen funktioniert auch ohne Internetverbindung. Scan-Protokoll, Gruppen, Lesezeichen und Einstellungen bleiben lokal auf dem Gerät. Es gibt kein QR-Werk-Benutzerkonto und keine Werbung. Die App enthält keinen eigenen Analyse-, Tracking- oder Absturzberichtsdienst.
 
-Die optionale iCloud-Synchronisierung ist standardmässig ausgeschaltet. Nach dem Aktivieren werden Protokolle, Gruppen, Lesezeichen, Mehrfacherkennungen und die neutrale Geräteart (iPhone, iPad oder Mac) in deiner privaten iCloud gespeichert. Persönliche Gerätenamen und App-Einstellungen werden nicht synchronisiert. Beim ersten Abgleich werden lokale und bereits vorhandene iCloud-Einträge zusammengeführt.
+Die optionale iCloud-Synchronisierung ist standardmässig ausgeschaltet. Nach dem Aktivieren werden Protokolle, Gruppen, Lesezeichen, Mehrfacherkennungen, Papierkorb und die selbst gewählte Gerätebezeichnung in deiner privaten iCloud gespeichert. Persönliche Apple-Gerätenamen und App-Einstellungen werden nicht synchronisiert. Beim ersten Abgleich werden lokale und bereits vorhandene iCloud-Einträge zusammengeführt.
 
 ## Berechtigungen
 

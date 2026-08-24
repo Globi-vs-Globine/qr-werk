@@ -2,7 +2,7 @@
 
 ## Beta-Beschreibung
 
-QR Werk ist eine datenschutzfreundliche iPhone- und iPad-App zum Scannen, Erstellen und Organisieren von QR-Codes und Barcodes. Die Code-Erkennung erfolgt lokal auf dem Gerät. Optional können Protokoll, Gruppen und Lesezeichen über die private iCloud-Datenbank des Benutzers zwischen dessen Apple-Geräten synchronisiert werden.
+QR Werk ist eine datenschutzfreundliche iPhone- und iPad-App zum Scannen, Erstellen und Organisieren von QR-Codes und Barcodes. Die Code-Erkennung erfolgt lokal auf dem Gerät. Optional können Protokoll, Gruppen, Lesezeichen, Mehrfacherkennungen und Papierkorb über die private iCloud-Datenbank des Benutzers zwischen dessen Apple-Geräten synchronisiert werden.
 
 Diese interne Betaversion dient der Stabilitätsprüfung vor einer späteren Veröffentlichung. Sie ist nicht für produktionskritische Inventuren oder als einzige Sicherung wichtiger Daten vorgesehen.
 
@@ -14,12 +14,14 @@ Bitte insbesondere Folgendes ausprobieren:
 2. Bildimport mit einem oder mehreren Bildern und mehreren Codes pro Bild.
 3. Scanfilter mit Präfix, Suffix und exakter Zeichenlänge.
 4. Manuelle Code-Eingabe.
-5. Gruppen, Lesezeichen und Protokollansichten.
-6. Export, lokale Sicherung und Wiederherstellung.
-7. Optionale iCloud-Synchronisierung zwischen iPhone und iPad.
-8. Änderungen ohne Internet und Synchronisierung nach erneuter Verbindung.
-9. Helle, dunkle und schwarze Darstellung sowie unterschiedliche Akzentfarben.
-10. Deutsch, Englisch, Französisch und Italienisch.
+5. Gruppen, Lesezeichen, Protokollansichten und das Verschieben über das Drei-Punkte-Menü.
+6. Papierkorb, Wiederherstellung und endgültiges Löschen.
+7. Direkter Export, Code-Import, lokale Sicherung und Wiederherstellung.
+8. Optionale iCloud-Synchronisierung zwischen iPhone und iPad, einschliesslich Papierkorb.
+9. Änderungen ohne Internet und Synchronisierung nach erneuter Verbindung.
+10. Scanbereiche, Vibration, unterschiedliche Scan-Töne und Lautstärke.
+11. Helle, dunkle und schwarze Darstellung sowie vorgegebene und eigene Akzentfarben.
+12. Deutsch, Englisch, Französisch und Italienisch.
 
 ## Hinweise für die Beta-Prüfung
 

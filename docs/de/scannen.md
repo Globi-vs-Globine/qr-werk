@@ -23,7 +23,7 @@ Mit **Batch scannen** kannst du mehrere Codes nacheinander erfassen, ohne nach j
 3. Scanne die gewünschten Codes nacheinander.
 4. Beende den Vorgang mit **Schließen**.
 
-Bereits während des Batch-Vorgangs werden die erkannten Codes gespeichert. Die zugehörigen Optionen findest du unter **Einstellungen → QR-Code- und Scan-Einstellungen → Scan-Einstellungen**.
+Bereits während des Batch-Vorgangs werden die erkannten Codes gespeichert. Die zugehörigen Optionen findest du unter **Einstellungen → QR-Codes & Scannen → Scan-Einstellungen**.
 
 ### Doppelte Codes
 
@@ -45,7 +45,7 @@ Mit **Autofokus** lässt du die Kamera während des Scannens automatisch scharfs
 
 ### Scan-Optionen und Scanbereich
 
-Im geöffneten Kamerascanner findest du rechts unten die **Scan-Optionen**. Dort kannst du den **Scanbereich** und den **Scanfilter** unmittelbar während der Arbeit anpassen.
+Im geöffneten Kamerascanner findest du rechts unten die **Scan-Optionen**. Dort kannst du den **Scanbereich**, den **Scanfilter** und den **Scan-Ton** unmittelbar während der Arbeit anpassen. Die ausführliche Auswahl für Vibration, Tonart und Lautstärke befindet sich unter **Einstellungen → Scan-Rückmeldung**.
 
 Für den Scanbereich stehen drei Darstellungen zur Verfügung:
 
@@ -57,7 +57,7 @@ Der Rahmen hilft bei der gezielten Auswahl. Erkennt QR Werk im Kamerabild genau 
 
 ### Scanfilter
 
-Den Scanfilter findest du unter **Einstellungen → QR-Code- und Scan-Einstellungen → Scan-Einstellungen → Scanfilter**. Während der Kamerascanner geöffnet ist, erreichst du dieselben Regeln direkt über das Filtersymbol. Ein farbiges Filtersymbol zeigt an, dass der Filter aktiv ist.
+Den Scanfilter findest du unter **Einstellungen → QR-Codes & Scannen → Scan-Einstellungen → Scanfilter**. Während der Kamerascanner geöffnet ist, erreichst du dieselben Regeln direkt über das Filtersymbol. Ein farbiges Filtersymbol zeigt an, dass der Filter aktiv ist.
 
 Der Scanfilter legt fest, **wie ein erlaubter Code aufgebaut sein muss**. Er sucht keinen bestimmten Gegenstand und vergleicht nicht mit einer Soll-Liste. Dafür ist später der eigenständige Kontrollmodus vorgesehen.
 

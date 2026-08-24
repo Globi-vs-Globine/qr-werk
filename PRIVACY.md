@@ -6,13 +6,13 @@ Last updated / Zuletzt aktualisiert: 23 August 2026
 
 ### Local processing
 
-QR Werk processes camera images, imported photos, QR codes and barcodes entirely on the device using Apple's AVFoundation and Vision frameworks. Images and recognition results are not uploaded to Apple or another recognition service. Recognition also works without an internet connection. Scan history, groups, bookmarks and app settings are stored locally.
+QR Werk processes camera images, imported photos, QR codes and barcodes entirely on the device using Apple's AVFoundation and Vision frameworks. Images and recognition results are not uploaded to Apple or another recognition service. Recognition also works without an internet connection. Scan history, groups, bookmarks, deleted entries in the trash and app settings are stored locally.
 
 QR Werk does **not** transmit scanned, imported, created or manually entered code contents, the scan history, groups, bookmarks or app settings to the fork maintainer. The app contains no analytics, advertising, user-tracking or crash-reporting service operated by the fork maintainer or a third party.
 
 ### Optional iCloud synchronization
 
-iCloud synchronization is disabled by default. If the user enables it, QR Werk stores the scan history, groups, bookmarks, duplicate-detection history and the device label selected inside QR Werk in the user's private Apple CloudKit database. QR Werk does not read Apple's personal device name; the default label is only “iPhone” or “iPad”. App settings are not synchronized. The data is used only to keep the user's Apple devices consistent; it is not sent to or accessible through a server operated by the QR Werk maintainer. Apple's iCloud terms and privacy policy apply.
+iCloud synchronization is disabled by default. If the user enables it, QR Werk stores the scan history, groups, bookmarks, duplicate-detection history, deleted entries in the trash and the device label selected inside QR Werk in the user's private Apple CloudKit database. QR Werk does not read Apple's personal device name; the default label is only “iPhone” or “iPad”. App settings are not synchronized. The data is used only to keep the user's Apple devices consistent; it is not sent to or accessible through a server operated by the QR Werk maintainer. Apple's iCloud terms and privacy policy apply.
 
 ### Permissions
 
@@ -48,13 +48,13 @@ Exported files and copied content leave the protected app storage when the user 
 
 ### Lokale Verarbeitung
 
-QR Werk verarbeitet Kamerabilder, importierte Fotos, QR-Codes und Barcodes vollständig auf dem Gerät mit Apples Frameworks AVFoundation und Vision. Bilder und Erkennungsergebnisse werden weder zu Apple noch zu einem anderen Erkennungsdienst hochgeladen. Die Erkennung funktioniert auch ohne Internetverbindung. Scan-Protokoll, Gruppen, Lesezeichen und App-Einstellungen werden lokal gespeichert.
+QR Werk verarbeitet Kamerabilder, importierte Fotos, QR-Codes und Barcodes vollständig auf dem Gerät mit Apples Frameworks AVFoundation und Vision. Bilder und Erkennungsergebnisse werden weder zu Apple noch zu einem anderen Erkennungsdienst hochgeladen. Die Erkennung funktioniert auch ohne Internetverbindung. Scan-Protokoll, Gruppen, Lesezeichen, gelöschte Einträge im Papierkorb und App-Einstellungen werden lokal gespeichert.
 
 QR Werk überträgt **keine** gescannten, importierten, erstellten oder manuell eingegebenen Code-Inhalte, kein Scan-Protokoll, keine Gruppen, keine Lesezeichen und keine App-Einstellungen an den Betreiber des Forks. Die App enthält keinen Analyse-, Werbe-, Benutzer-Tracking- oder Absturzberichtsdienst des Fork-Betreibers oder eines Drittanbieters.
 
 ### Optionale iCloud-Synchronisierung
 
-Die iCloud-Synchronisierung ist standardmässig ausgeschaltet. Aktiviert der Benutzer sie, speichert QR Werk das Scan-Protokoll, Gruppen, Lesezeichen, den Verlauf von Mehrfacherkennungen sowie die innerhalb von QR Werk gewählte Gerätebezeichnung in der privaten Apple-CloudKit-Datenbank des Benutzers. QR Werk liest den persönlichen Apple-Gerätenamen nicht aus; als Vorgabe wird lediglich „iPhone“ oder „iPad“ verwendet. App-Einstellungen werden nicht synchronisiert. Die Daten dienen ausschliesslich dem Abgleich zwischen den Apple-Geräten des Benutzers; sie werden nicht an einen vom Betreiber von QR Werk betriebenen Server gesendet und sind dort nicht zugänglich. Es gelten Apples iCloud-Bedingungen und Datenschutzbestimmungen.
+Die iCloud-Synchronisierung ist standardmässig ausgeschaltet. Aktiviert der Benutzer sie, speichert QR Werk das Scan-Protokoll, Gruppen, Lesezeichen, den Verlauf von Mehrfacherkennungen, gelöschte Einträge im Papierkorb sowie die innerhalb von QR Werk gewählte Gerätebezeichnung in der privaten Apple-CloudKit-Datenbank des Benutzers. QR Werk liest den persönlichen Apple-Gerätenamen nicht aus; als Vorgabe wird lediglich „iPhone“ oder „iPad“ verwendet. App-Einstellungen werden nicht synchronisiert. Die Daten dienen ausschliesslich dem Abgleich zwischen den Apple-Geräten des Benutzers; sie werden nicht an einen vom Betreiber von QR Werk betriebenen Server gesendet und sind dort nicht zugänglich. Es gelten Apples iCloud-Bedingungen und Datenschutzbestimmungen.
 
 ### Berechtigungen
 

@@ -1,6 +1,6 @@
 # QR Werk quality audit
 
-Last reviewed: 2026-08-23
+Last reviewed: 2026-08-24
 
 This document records the technical checks performed before the first internal TestFlight build. It complements the hands-on device checklist and is not a substitute for testing on real iPhones and iPads.
 
@@ -14,16 +14,17 @@ This document records the technical checks performed before the first internal T
 - Automated tests cover scan-filter matching, the core iCloud item-merge behaviour and empty-group creation/deletion metadata.
 - Camera, Contacts and photo-library permission descriptions explain the user action that triggers access.
 - No analytics, advertising, tracking or third-party scanning backend is configured. Explicit actions such as opening a scanned URL, starting a web search, opening Open Food Facts or sharing content can transfer the selected content to that external service.
-- Interactive settings rows use full-row button behaviour, and the smallest tab label was raised to 11 pt.
+- Interactive settings rows use full-row button behaviour, compact native-style selections and consistent section typography.
+- The offline user guide and repository documentation cover German, English, French and Italian and describe the current scanner, history, trash, export and iCloud workflows.
 - Upstream App Store and Google Play links were removed from this fork.
 
 ## Remaining work before external testing or App Store review
 
 1. Deploy the CloudKit development schema to production before uploading a TestFlight build.
 2. Validate an Archive build in Xcode and review App Store Connect privacy answers against `PRIVACY.md`.
-3. Test first launch, denied permissions, camera scanning, batch scanning, image import, exports and iCloud on real iPhone and iPad hardware.
+3. Test first launch, denied permissions, camera scanning, batch scanning, image import, scan feedback, exports, trash and iCloud on real iPhone and iPad hardware.
 4. Test nearly simultaneous changes on two devices. QR Werk merges individual records by their modification time, but CloudKit currently stores a shared snapshot rather than a server-side record for every scan.
-5. The detailed in-app guide chapters are currently German. English, French and Italian display translated navigation and a clear language notice, but the full chapter content still needs professional translation.
+5. The four guide languages now describe the same current workflows. Native-language proofreading by fluent French and Italian speakers remains recommended before a public release.
 6. QR-code and backup sharing now use Capacitor Share, automatic light/dark appearance uses the standard system color-scheme API, and backup restoration uses the native document picker exposed by the web view. The corresponding legacy Cordova dependencies have been removed. The remaining Cordova dependencies (screen orientation and SMS) still build successfully but produce deprecation warnings in current Xcode. Replace them only with functionally equivalent implementations and verify each affected workflow on real devices.
 7. Configure a maintained linting setup. The existing `npm run lint` command has no Angular lint target.
 

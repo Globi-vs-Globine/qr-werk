@@ -3,7 +3,7 @@
 [English](README.md) | [Deutsch](README.de.md)
 
 [![Lizenz: GPL-3.0](https://img.shields.io/badge/Lizenz-GPL--3.0-orange.svg)](LICENSE)
-[![Status: Entwicklung](https://img.shields.io/badge/Status-Entwicklung-blue.svg)](https://github.com/Globi-vs-Globine/qr-werk/tree/dev/ios-history-export)
+[![Status: Entwicklung](https://img.shields.io/badge/Status-Entwicklung-blue.svg)](https://github.com/Globi-vs-Globine/qr-werk)
 
 <p align="center">
   <img src="src/assets/img/round_icon.png" alt="QR-Werk-App-Logo" width="160">
@@ -15,7 +15,7 @@ QR Werk ist eine datenschutzfreundliche App zum Scannen, Erstellen und Organisie
 >
 > QR Werk wird derzeit für iPhone und iPad entwickelt und getestet. Die App wurde noch nicht im Apple App Store veröffentlicht. Daher gibt es momentan keinen Download- oder Bewertungslink.
 
-Die ausführliche [Dokumentation zu QR Werk](docs/README.md) ist auf Deutsch verfügbar und zusätzlich in der App unter **Einstellungen → Anleitung** offline enthalten.
+Die ausführliche [Dokumentation zu QR Werk](docs/README.md) ist auf Deutsch, Englisch, Französisch und Italienisch verfügbar. Die passenden Kapitel sind zusätzlich in der App unter **Einstellungen → Anleitung** offline enthalten.
 
 Kamerabilder und importierte Fotos werden lokal mit Apples AVFoundation- und Vision-Technik erkannt und nicht zur Erkennung hochgeladen. Das Protokoll bleibt standardmässig auf dem Gerät. Eine Internetverbindung entsteht nur bei freiwilliger iCloud-Synchronisierung oder einer vom Benutzer bestätigten externen Aktion.
 
@@ -30,6 +30,8 @@ Kamerabilder und importierte Fotos werden lokal mit Apples AVFoundation- und Vis
 - Scans nach Präfix, Suffix und genauer Zeichenanzahl filtern und Bedingungen mit einem Testfeld prüfen.
 - Codes manuell eingeben, wenn ein beschädigtes Etikett nicht zuverlässig gelesen werden kann.
 - Im nativen iOS-Scanner zwischen 1×- und 2×-Zoom wechseln.
+- Direkt im Scanner zwischen Standard-, Breit- und Ganzbild-Scanbereich wählen.
+- Vibration, einen von vier Scan-Tönen und deren relative Lautstärke einstellen.
 - Ein oder mehrere Bilder aus der Fotomediathek importieren.
 - Mehrere Codes in einem einzigen Bild erkennen.
 - Erkannte Codes prüfen und alle oder nur eine Auswahl speichern.
@@ -44,14 +46,16 @@ Kamerabilder und importierte Fotos werden lokal mit Apples AVFoundation- und Vis
 - Einzelne Einträge oder vollständige Gruppen für den Export auswählen.
 - Als CSV oder TXT exportieren – wahlweise mit vollständigen Angaben oder nur mit den Code-Inhalten.
 - Ausgewählte Code-Inhalte direkt in die Zwischenablage kopieren.
-- Datensätze sichern und wiederherstellen.
+- Gelöschte Einträge zunächst in den wiederherstellbaren Papierkorb verschieben und erst dort endgültig löschen.
+- Protokoll, Gruppen, Lesezeichen, Mehrfacherkennungen und Papierkorb optional über die private iCloud zwischen eigenen Apple-Geräten synchronisieren.
+- Datensätze lokal sichern, wiederherstellen und importieren.
 
 ### Codes erstellen und Aktionen
 
 - QR-Codes aus Text, Internetadressen, Kontakten, Telefonnummern, Nachrichten, E-Mail-Adressen, WLAN-Zugangsdaten und Standorten erstellen.
 - Inhaltsabhängige Aktionen verwenden, beispielsweise Links öffnen, Inhalte kopieren oder eine Websuche starten.
 - Erstellte QR-Codes und die Darstellung der App anpassen.
-- Zwischen heller, dunkler und schwarzer Darstellung sowie sechs Akzentfarben wählen.
+- Zwischen heller, dunkler und schwarzer Darstellung, vorgegebenen oder eigenen Akzentfarben sowie der gewünschten Startansicht wählen.
 
 ## Sprachen
 
@@ -59,7 +63,7 @@ QR Werk ist auf Deutsch, Englisch, Französisch und Italienisch verfügbar. Verw
 
 ## Datenschutz
 
-Die App besitzt kein Werbe-Backend und benötigt kein Benutzerkonto. Scan-Protokoll und Gruppen werden lokal gespeichert. Auf Kamera und Fotomediathek wird nur zugegriffen, wenn der Benutzer einen Scan oder Bildimport auslöst.
+Die App besitzt kein Werbe-Backend und benötigt kein QR-Werk-Benutzerkonto. Scan-Protokoll, Gruppen, Lesezeichen und Papierkorb werden lokal gespeichert. Auf Kamera und Fotomediathek wird nur zugegriffen, wenn der Benutzer einen Scan oder Bildimport auslöst.
 
 Weitere Informationen enthält [PRIVACY.md](PRIVACY.md). Die optionale iCloud-Synchronisierung ist standardmässig ausgeschaltet und speichert ausgewählte App-Daten ausschliesslich in der privaten CloudKit-Datenbank des Benutzers.
 
@@ -79,7 +83,7 @@ Anschließend `ios/App/QRWerk.xcworkspace` in Xcode öffnen. Für die Installati
 
 ## Projektstatus und Versionen
 
-- Die aktive Entwicklung findet auf [`dev/ios-history-export`](https://github.com/Globi-vs-Globine/qr-werk/tree/dev/ios-history-export) statt.
+- Die aktive Entwicklung findet auf eigenen Funktionsbranches statt.
 - Änderungen werden über Pull Requests geprüft, bevor sie in `main` übernommen werden.
 - Für QR Werk gibt es momentan weder eine offizielle App-Store-Veröffentlichung noch eine verpackte GitHub-Version.
 - Fehler und Funktionswünsche für diesen Fork gehören in die [GitHub Issues](https://github.com/Globi-vs-Globine/qr-werk/issues).

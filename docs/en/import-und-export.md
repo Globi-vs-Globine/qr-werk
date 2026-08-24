@@ -1,7 +1,9 @@
-# Import and export
+# Import, export and backup
 
-QR Werk exports complete records as CSV or TXT, code contents only as TXT, or copies selected codes to the clipboard. In History, open **Actions → Export** and select individual entries or groups.
+In History, tap the direct **Export** button and choose visible entries, selected groups or individual codes. Export complete details as CSV or TXT, export code values only, or copy the selected values.
 
-Under **Actions → Transfer data → Import codes**, paste one value per line. Empty lines are ignored and a destination group can be selected.
+To import plain values, open **Settings → Data Management → Import Codes** and paste one value per line. Empty lines are ignored, and a destination group can be selected before saving.
 
-A CSV or TXT export is not a complete app backup. Use **Settings → Data management → Backup** when you need to restore groups, bookmarks and records later.
+Image import is available from the Scan overview. Select one or more images, review all detected codes and save all or only a selected subset.
+
+A CSV or TXT export is not a complete app backup. Use **Backup** under Data Management for important records. iCloud synchronization is also not an independent backup because edits and deletions synchronize between devices.

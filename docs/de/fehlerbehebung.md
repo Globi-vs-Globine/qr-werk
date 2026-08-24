@@ -23,11 +23,15 @@ QR Werk zeigt die erkannten Werte als Auswahl. Markiere die gewünschten Ergebni
 
 ## Wo sind meine Batch-Scans?
 
-Neue Batch-Scans werden unter **Protokoll → Ohne Gruppe** gespeichert. Über **Aktionen** kannst du mehrere Einträge markieren und gemeinsam verschieben.
+Neue Batch-Scans erscheinen zunächst unter **Protokoll → Ohne Gruppe**. Tippe beim gewünschten Eintrag auf die drei Punkte und wähle **In Gruppe verschieben**. Gruppen verwaltest du über **Gruppen** in der unteren Aktionsleiste.
 
 ## Warum fragt Batch-Scan nicht nach einer Gruppe?
 
-Der Scanner startet bewusst ohne vorgeschaltete Gruppenabfrage. Dadurch kann sofort gearbeitet werden. Die Zuordnung erfolgt anschließend gesammelt im Protokoll.
+Der Scanner startet bewusst ohne vorgeschaltete Gruppenabfrage. Dadurch kann sofort gearbeitet werden. Die Zuordnung erfolgt anschliessend über das Drei-Punkte-Menü des Eintrags.
+
+## Ein gelöschter Eintrag fehlt
+
+Öffne im Protokoll das Register **Papierkorb**. Dort kannst du den Eintrag wiederherstellen. Erst **Endgültig löschen** oder **Papierkorb leeren** entfernt ihn ohne Wiederherstellungsmöglichkeit. Bei aktiver iCloud-Synchronisierung wird auch der Papierkorb zwischen deinen Geräten abgeglichen.
 
 ## Was bedeuten gelbe Warnungen in Xcode?
 

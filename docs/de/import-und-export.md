@@ -1,25 +1,21 @@
-# Import und Export
+# Import, Export und Sicherung
 
-## Exportmöglichkeiten
+## Schnell exportieren
 
-QR Werk kann das gesamte Protokoll, einzelne Gruppen oder eine eigene Auswahl ausgeben.
+Tippe im Protokoll unten auf **Exportieren**. Danach wählst du, ob alle sichtbaren Einträge, bestimmte Gruppen oder einzelne Codes ausgegeben werden sollen. So erreichst du die häufig verwendete Funktion ohne verschachteltes Aktionsmenü.
 
-Verfügbare Formate:
+Verfügbare Ausgaben:
 
 - **Vollständige Details als CSV** für Tabellenprogramme
 - **Vollständige Details als TXT** für gut lesbaren Text
 - **Nur Codes als TXT** für eine reine Werteliste
 - **Codes kopieren** für die Zwischenablage
 
-Bei vollständigen Exporten können je nach Datensatz Datum, Quelle, Barcode-Typ, Lesezeichenstatus, Gruppe und Inhalt enthalten sein.
-
-## Gruppen oder einzelne Codes exportieren
-
-Öffne im Protokoll **Aktionen → Exportieren**. Wähle anschließend den aktuellen Filter, bestimmte Gruppen oder einzelne Codes. So musst du bei großen Protokollen nicht immer sämtliche Einträge ausgeben.
+Vollständige Exporte können je nach Eintrag Datum, Quelle, Barcode-Typ, Lesezeichenstatus, Gruppe, Gerätebezeichnung und Inhalt enthalten.
 
 ## Reine Codes importieren
 
-Unter **Aktionen → Daten übertragen → Codes importieren** kannst du eine einfache Liste einfügen. Pro Zeile wird ein Wert übernommen, zum Beispiel:
+Öffne **Einstellungen → Datenverwaltung → Codes importieren**. Füge pro Zeile genau einen Wert ein, zum Beispiel:
 
 `LAPTOP-WAGEN-01`
 
@@ -27,10 +23,14 @@ Unter **Aktionen → Daten übertragen → Codes importieren** kannst du eine ei
 
 `42238065`
 
-Leere Zeilen werden ignoriert. Vor dem Speichern kannst du eine Zielgruppe wählen oder die Werte unter **Ohne Gruppe** ablegen.
+Leere Zeilen werden ignoriert. Vor dem Speichern kannst du eine Zielgruppe auswählen oder die Werte unter **Ohne Gruppe** ablegen.
 
-## Datensicherung
+## Bilder importieren
 
-Die Sicherungsfunktion in den Einstellungen ist für eine spätere Wiederherstellung der QR Werk-Daten vorgesehen. Ältere kompatible Sicherungen aus dem ursprünglichen Simple-QR-Projekt können weiterhin eingelesen werden.
+Über die Scan-Übersicht kannst du ein oder mehrere Bilder auswählen. QR Werk erkennt unterstützte QR- und Barcodetypen im Bild. Werden mehrere Codes gefunden, markierst du alle gewünschten Ergebnisse oder nur eine Auswahl; **Abbrechen** speichert nichts.
 
-Ein CSV- oder TXT-Export ist keine vollständige App-Sicherung. Verwende für wichtige Bestände am besten zusätzlich die Sicherungsfunktion.
+## Sicherung und Wiederherstellung
+
+Unter **Einstellungen → Datenverwaltung** erzeugt **Sicherung** eine lokale App-Sicherung. **Wiederherstellen** liest eine kompatible Sicherung ein und führt deren Inhalt gemäss der angezeigten Bestätigung mit den vorhandenen Daten zusammen.
+
+Ein CSV- oder TXT-Export ist keine vollständige App-Sicherung. Verwende für wichtige Bestände zusätzlich die Sicherungsfunktion. iCloud-Synchronisierung ersetzt ebenfalls keine unabhängige Sicherung, da Löschungen und Änderungen zwischen Geräten übertragen werden.

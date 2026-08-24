@@ -1,5 +1,9 @@
-# Importation et exportation
+# Importation, exportation et sauvegarde
 
-Exportez les détails complets en CSV ou TXT, uniquement les codes en TXT, ou copiez une sélection. Dans l’historique, choisissez **Actions → Exporter** puis les entrées ou groupes voulus.
+Dans l’historique, touchez directement **Exporter**, puis choisissez les éléments visibles, des groupes ou des codes individuels. Exportez les détails en CSV/TXT, uniquement les codes, ou copiez les valeurs.
 
-Pour importer, collez un code par ligne sous **Actions → Transférer des données → Importer des codes**. Une exportation CSV n’est pas une sauvegarde complète; utilisez **Gestion des données → Sauvegarde** pour conserver aussi groupes et favoris.
+Pour importer une liste, ouvrez **Réglages → Gestion des données → Importer des codes** et collez une valeur par ligne. Les lignes vides sont ignorées et un groupe de destination peut être choisi.
+
+L’importation d’images se trouve dans l’aperçu du scanner. Sélectionnez une ou plusieurs images, contrôlez les codes détectés et enregistrez tout ou seulement une sélection.
+
+Un CSV/TXT et iCloud ne remplacent pas une sauvegarde indépendante. Utilisez aussi **Sauvegarde** pour les données importantes.

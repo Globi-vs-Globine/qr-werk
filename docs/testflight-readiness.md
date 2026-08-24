@@ -39,9 +39,11 @@ CloudKit schema deployment copies record types, fields and indexes, not developm
 - Fresh installation and update from a previous local build.
 - Camera, batch scanning, image import and manual entry.
 - Prefix, suffix and exact character-length filters.
-- Groups, bookmarks, export, local backup and restore.
+- Groups, bookmarks, direct export, local backup and restore.
+- Trash, restoration, permanent deletion and emptying trash.
+- Scan areas, scan sounds, vibration and relative sound volume.
 - iCloud sync between iPhone and iPad, including nearly simultaneous edits.
-- Local deletion compared with deletion from iCloud on every connected device.
+- Deletion, synchronized trash and restoration on every connected device.
 - Offline changes followed by reconnection.
 - Denied camera, photo and contact permissions.
 - German, English, French and Italian.

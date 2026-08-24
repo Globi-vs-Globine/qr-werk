@@ -15,7 +15,7 @@ QR Werk is a privacy-friendly app for scanning, creating and organizing QR codes
 >
 > QR Werk is currently being developed and tested for iPhone and iPad. It has not yet been published in the Apple App Store, so no download or rating link is available at present.
 
-The detailed [QR Werk documentation](docs/README.md) is available in German and is also included offline in the app under **Settings → User Guide**.
+The detailed [QR Werk documentation](docs/README.md) is available in German, English, French and Italian. The matching chapters are also included offline in the app under **Settings → User Guide**.
 
 Camera frames and imported images are recognized locally with Apple's AVFoundation and Vision frameworks. They are not uploaded for recognition. History remains on the device by default; internet access occurs only for optional iCloud sync or an external action confirmed by the user.
 
@@ -30,6 +30,8 @@ Camera frames and imported images are recognized locally with Apple's AVFoundati
 - Filter scans by prefix, suffix and exact character count, including a built-in test field.
 - Enter codes manually when damaged labels cannot be read reliably.
 - Switch between 1× and 2× zoom in the native iOS scanner.
+- Choose a standard, wide or full-image scan area directly in the scanner.
+- Configure vibration, one of four scan sounds and the relative sound volume.
 - Import one or multiple images from the photo library.
 - Detect multiple codes in a single image.
 - Review detected codes and save all or only a selected subset.
@@ -44,14 +46,16 @@ Camera frames and imported images are recognized locally with Apple's AVFoundati
 - Select individual entries or entire groups for export.
 - Export as CSV or TXT, with complete record details or only the code contents.
 - Copy selected code contents directly to the clipboard.
-- Back up and restore records.
+- Move deleted entries to a recoverable trash before permanently removing them.
+- Synchronize history, groups, bookmarks, duplicate events and trash between the user's Apple devices through optional private iCloud storage.
+- Back up, restore and import records locally.
 
 ### Creating codes and actions
 
 - Create QR codes from text, URLs, contacts, phone numbers, messages, email addresses, Wi-Fi access data and locations.
 - Use context-sensitive actions such as opening links, copying content or starting a web search.
 - Customize generated QR codes and the app appearance.
-- Choose a light, dark or black appearance and one of six accent colors.
+- Choose a light, dark or black appearance, a preset or custom accent color and the preferred start view.
 
 ## Languages
 
@@ -59,7 +63,7 @@ QR Werk is available in German, English, French and Italian. If the iPhone or iP
 
 ## Privacy
 
-The app has no advertising backend and does not require an account. Scan history and groups are stored locally. Camera and photo-library access are used only for scanning or importing codes initiated by the user.
+The app has no advertising backend and does not require a QR Werk account. Scan history, groups, bookmarks and trash are stored locally. Camera and photo-library access are used only for scanning or importing codes initiated by the user.
 
 See [PRIVACY.md](PRIVACY.md) for the privacy information maintained with this fork. Optional iCloud synchronization is disabled by default and stores selected app data only in the user's private CloudKit database.
 
@@ -80,7 +84,6 @@ Then open `ios/App/QRWerk.xcworkspace` in Xcode. A unique bundle identifier and 
 ## Project status and releases
 
 - Development takes place on dedicated feature branches. Reviewed changes are merged into `main` through pull requests.
-- Changes are reviewed through pull requests before they are merged into `main`.
 - QR Werk currently provides no official App Store or packaged GitHub release.
 - Bugs and feature requests for this fork belong in its [GitHub Issues](https://github.com/Globi-vs-Globine/qr-werk/issues).
 

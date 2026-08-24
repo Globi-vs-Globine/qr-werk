@@ -1,5 +1,7 @@
 # Démarrage rapide
 
-QR Werk ouvre directement le scanner au démarrage. Autorisez la caméra lorsque iOS le demande. Maintenez le code entier et net dans l’image; le résultat peut ensuite être copié, partagé ou ouvert.
+QR Werk ouvre le scanner au démarrage normal. Autorisez la caméra, gardez le code complet et net dans l’image, puis utilisez les actions du résultat.
 
-Après avoir fermé la caméra, l’onglet Scanner propose **Scanner avec la caméra**, **Scan par lots** et **Importer une image**. Les nouveaux scans par lots apparaissent d’abord dans **Sans groupe**. La reconnaissance est effectuée localement sur l’appareil.
+Après fermeture, l’onglet Scanner propose **Scanner avec la caméra**, **Scan par lots** et **Importer une image**. Les commandes donnent accès à la saisie manuelle, la lampe, le zoom, la zone, le filtre et le son.
+
+Les nouveaux scans apparaissent dans l’historique si la journalisation est active. Les éléments par lots sont d’abord dans **Sans groupe** et se déplacent par leur menu à trois points. La reconnaissance est locale; iCloud reste désactivé jusqu’à son activation volontaire.

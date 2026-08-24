@@ -17,11 +17,13 @@ Der erkannte Wert wird im Protokoll gespeichert, sofern die Protokollierung in d
 
 ## 3. Zur Scan-Übersicht wechseln
 
-Schließe den nativen Scanner mit **Schließen**. Wenn du später in der unteren Navigation auf **Scannen** tippst, erscheint die Übersicht mit drei Möglichkeiten:
+Schliesse den nativen Scanner mit **Schliessen**. Wenn du später in der unteren Navigation auf **Scannen** tippst, erscheint die Übersicht mit drei Möglichkeiten:
 
 - **Scannen mit der Kamera** für einen einzelnen Code
 - **Batch scannen** für mehrere Codes nacheinander
 - **Bild importieren** für Codes aus Fotos oder Bildern
+
+Im Kamerascanner erreichst du über die unteren Bedienelemente manuelle Eingabe, Taschenlampe, Zoom und die Scan-Optionen. Dort wechselst du Scanbereich und Filter oder schaltest den Scan-Ton rasch ein beziehungsweise aus.
 
 ## 4. Einen Code aus einem Bild lesen
 

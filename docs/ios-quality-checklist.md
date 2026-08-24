@@ -20,8 +20,9 @@ Test on at least one iPhone and one iPad:
 - Fresh installation and update over the previous build.
 - Camera scan, batch scan, manual entry and photo import (single/multiple images).
 - Scan-area modes, zoom, flashlight, autofocus, filters and duplicate handling.
-- History details, bookmarks, groups, import/export, backup and destructive confirmations.
-- iCloud opt-in, initial merge, automatic sync, device naming and local/cloud deletion.
+- History details, bookmarks, groups, three-dot actions, direct export, backup and destructive confirmations.
+- Trash restoration/permanent deletion and synchronization of trashed entries.
+- iCloud opt-in, initial merge, automatic sync and device naming.
 - Camera, photo and contact permission denied, restricted and later re-enabled.
 - German, English, French and Italian; light, dark and black appearance; every accent color.
 - Portrait and landscape on iPhone/iPad where supported.

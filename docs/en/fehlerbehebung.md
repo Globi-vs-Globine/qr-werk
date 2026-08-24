@@ -1,12 +1,9 @@
-# Frequently asked questions
+# Troubleshooting
 
-## The camera is black
-Check **iOS Settings → Privacy & Security → Camera**, close QR Werk completely and reopen it. A Mac screen mirror may intentionally hide the live camera image.
+If the camera remains black, check **iOS Settings → Privacy & Security → Camera**, close QR Werk completely and reopen it. Screen mirroring to a Mac may intentionally hide the camera preview on the Mac while scanning still works on the iPhone.
 
-## A photo is not recognized
-Use a sharper image, keep the complete code and quiet zone visible, improve contrast or crop closer to the code.
+For an unrecognized image, use a sharper original, keep the complete code visible and avoid heavy compression. If several codes are detected, select the required items or save all.
 
-## Old icon or screen remains
-Delete QR Werk from the test device, rebuild it in Xcode and install it again.
+Batch entries initially appear under **History → No Group**. Move one through its three-dot menu. A deleted entry first appears in the **Trash** segment and can be restored until it is permanently deleted or the trash is emptied.
 
-Yellow Xcode symbols are warnings; red symbols are errors. **Build Succeeded** means the app was built, although warnings should still be reviewed before release.
+Yellow Xcode messages are warnings; red messages indicate errors or future platform requirements. A successful build can still contain warnings, but they should be reviewed before release.
