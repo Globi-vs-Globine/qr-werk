@@ -11,8 +11,10 @@ ion-item img {
     width: 30px !important;
     min-width: 30px !important;
     height: 30px !important;
-    margin: 0 var(--qrwerk-space-4) 0 0 !important;
+    /* Keep the text aligned with rows whose standard icon is 23px wide. */
+    margin: 0 calc(var(--qrwerk-space-4) - 7px) 0 0 !important;
     object-fit: contain;
+    transform: translateX(-3px);
 }
 
 ion-list-header {
