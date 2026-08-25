@@ -18,8 +18,16 @@ Target for the first internal beta:
 - [x] Confirm iCloud and CloudKit remain enabled for the Release configuration and distribution provisioning profile.
 - [x] Build on a clean checkout, run the production web build, copy it to iOS and install native dependencies.
 - [x] Create the signed Release archive for a generic iOS device.
-- [ ] In Organizer, run **Validate App** before **Distribute App → App Store Connect → Upload**.
-- [ ] Check warnings concerning signing, entitlements, privacy manifests, icons and supported orientations.
+- [x] Export and upload the signed archive to App Store Connect; Apple accepted and verified build `0.9.0 (1)`.
+- [x] Check the processed build for warnings concerning signing, entitlements, privacy manifests, icons and supported orientations. No blocking upload warning is shown.
+
+## TestFlight status
+
+- [x] Build `0.9.0 (1)` is processed and **Ready to Test**.
+- [x] Internal group `Interner Test` is created with automatic distribution enabled.
+- [x] Build `0.9.0 (1)` is assigned to the internal group.
+- [x] German test instructions are saved for the build.
+- [ ] Add the desired internal App Store Connect users as testers.
 
 CloudKit schema deployment copies record types, fields and indexes, not development records. Production data is separate from development test data.
 
