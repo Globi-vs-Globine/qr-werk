@@ -33,6 +33,7 @@
     "DELETE_ON_ALL_DEVICES": "Supprimer sur tous les appareils",
     "DELETE_ONLY_THIS_DEVICE": "Supprimer uniquement sur cet appareil",
     "NO_ENTRIES_TO_MANAGE": "Il n’y a aucune entrée à gérer.",
+    "NO_ENTRIES_TO_EXPORT": "Aucune entrée n’est disponible pour l’exportation.",
     "MANAGE_ENTRIES": "Gérer les entrées", "MANAGE_GROUPS": "Gérer les groupes", "TRANSFER_DATA": "Transférer des données", "ADD_ENTRIES": "Ajouter des entrées", "RENAME_GROUP": "Renommer le groupe", "NO_ENTRIES_AVAILABLE": "Aucune autre entrée disponible",
     "MOVE_ENTRIES": "Déplacer des entrées", "SELECT_ENTRIES": "Sélectionner des entrées", "MOVE_TO_GROUP": "Déplacer vers quel groupe ?", "ENTRIES_MOVED": "entrées déplacées",
     "ADD_BCC": "Ajouter CCI",

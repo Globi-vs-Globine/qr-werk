@@ -8,7 +8,9 @@
   </ion-toolbar>
 </ion-header>
 
-<div class="top-qr-preview">
+<ion-content class="qrwerk-standard-page">
+
+<div class="top-qr-preview" [class.preview-ready]="pageReady" [attr.aria-hidden]="!pageReady">
   <ion-accordion-group value="preview">
     <ion-accordion value="preview">
       <ion-item [ngClass]="isAndroid? ['ion-no-padding', 'ion-margin-end'] : 'ion-no-padding'" lines="none"
@@ -40,8 +42,6 @@
     </ion-accordion>
   </ion-accordion-group>
 </div>
-
-<ion-content class="qrwerk-standard-page">
 
   <div class="ion-padding-bottom">
     <ion-accordion-group>

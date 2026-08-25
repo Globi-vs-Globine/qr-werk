@@ -33,6 +33,7 @@
     "DELETE_ON_ALL_DEVICES": "Delete on all devices",
     "DELETE_ONLY_THIS_DEVICE": "Delete only on this device",
     "NO_ENTRIES_TO_MANAGE": "There are no entries to manage.",
+    "NO_ENTRIES_TO_EXPORT": "There are no entries available to export.",
     "MANAGE_ENTRIES": "Manage entries",
     "MANAGE_GROUPS": "Manage groups",
     "TRANSFER_DATA": "Transfer data",

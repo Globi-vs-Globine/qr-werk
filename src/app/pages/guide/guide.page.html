@@ -15,27 +15,31 @@
 
 <ion-content>
   @if (!selectedChapter) {
-  <div class="guide-intro">
-    <img src="assets/img/round_icon.png" alt="QR Werk">
-    <h1>{{ 'GUIDE_TITLE' | translate }}</h1>
-    <p>{{ 'GUIDE_INTRO' | translate }}</p>
+  <div class="guide-view guide-view-overview">
+    <div class="guide-intro">
+      <img src="assets/img/round_icon.png" alt="QR Werk">
+      <h1>{{ 'GUIDE_TITLE' | translate }}</h1>
+      <p>{{ 'GUIDE_INTRO' | translate }}</p>
+    </div>
+    <ion-list lines="full">
+      @for (chapter of chapters; track chapter.file) {
+      <ion-item button="true" detail="true" (click)="openChapter(chapter)">
+        <ion-icon slot="start" color="primary" [name]="chapter.icon"></ion-icon>
+        <ion-label>
+          <h2>{{ chapter.titleKey | translate }}</h2>
+          <p>{{ chapter.descriptionKey | translate }}</p>
+        </ion-label>
+      </ion-item>
+      }
+    </ion-list>
   </div>
-  <ion-list lines="full">
-    @for (chapter of chapters; track chapter.file) {
-    <ion-item button="true" detail="true" (click)="openChapter(chapter)">
-      <ion-icon slot="start" color="primary" [name]="chapter.icon"></ion-icon>
-      <ion-label>
-        <h2>{{ chapter.titleKey | translate }}</h2>
-        <p>{{ chapter.descriptionKey | translate }}</p>
-      </ion-label>
-    </ion-item>
+  } @else {
+  <div class="guide-view guide-view-chapter">
+    @if (loading) {
+    <div class="loading"><ion-spinner></ion-spinner></div>
+    } @else {
+    <article class="guide-article" [innerHTML]="renderedChapter"></article>
     }
-  </ion-list>
-  } @else {
-  @if (loading) {
-  <div class="loading"><ion-spinner></ion-spinner></div>
-  } @else {
-  <article class="guide-article" [innerHTML]="renderedChapter"></article>
-  }
+  </div>
   }
 </ion-content>

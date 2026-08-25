@@ -23,6 +23,7 @@ export class SettingQrPage {
   defaultWidth: number = window.innerWidth * 0.4 > this.MAX_WIDTH ? this.MAX_WIDTH : window.innerWidth * 0.4;
 
   marginLocked: boolean = true;
+  pageReady = false;
 
   constructor(
     public env: EnvService,
@@ -33,7 +34,18 @@ export class SettingQrPage {
     this.setErrorCorrectionLevel();
   }
 
-  ionViewWillLeave() {
+  ionViewWillEnter(): void {
+    this.pageReady = false;
+  }
+
+  ionViewDidEnter(): void {
+    requestAnimationFrame(() => {
+      this.pageReady = true;
+    });
+  }
+
+  ionViewWillLeave(): void {
+    this.pageReady = false;
     this.marginLocked = true;
   }
 

@@ -750,6 +750,10 @@ export class HistoryPage {
   }
 
   async exportHistory() {
+    if (!this.env.scanRecords?.length) {
+      await this.presentNoEntriesToExport();
+      return;
+    }
     const actionSheet = await this.actionSheetController.create({
       header: this.translate.instant('EXPORT_SCOPE'),
       buttons: [
@@ -955,7 +959,10 @@ export class HistoryPage {
   }
 
   private async presentExportFormats(records: ScanRecord[]) {
-    if (!records.length) return;
+    if (!records.length) {
+      await this.presentNoEntriesToExport();
+      return;
+    }
     const actionSheet = await this.actionSheetController.create({
       header: `${this.translate.instant('EXPORT')} (${records.length})`,
       buttons: [
@@ -970,7 +977,17 @@ export class HistoryPage {
   }
 
   private async selectGroupsForExport() {
-    const keys = [...this.groupNames, '__ungrouped__'];
+    if (!this.env.scanRecords?.length) {
+      await this.presentNoEntriesToExport();
+      return;
+    }
+    const recordGroups = Array.from(new Set(
+      this.env.scanRecords
+        .map(record => record.group?.trim())
+        .filter((group): group is string => Boolean(group)),
+    )).sort((a, b) => a.localeCompare(b));
+    const hasUngroupedRecords = this.env.scanRecords.some(record => !record.group?.trim());
+    const keys = [...recordGroups, ...(hasUngroupedRecords ? ['__ungrouped__'] : [])];
     const alert = await this.alertController.create({
       header: this.translate.instant('SELECT_GROUPS'),
       inputs: keys.map(key => ({
@@ -999,6 +1016,10 @@ export class HistoryPage {
 
   private async selectCodesForExport() {
     const records = this.env.scanRecords;
+    if (!records?.length) {
+      await this.presentNoEntriesToExport();
+      return;
+    }
     const alert = await this.alertController.create({
       header: this.translate.instant('SELECT_CODES'),
       inputs: records.map(record => ({
@@ -1019,6 +1040,16 @@ export class HistoryPage {
           },
         },
       ],
+    });
+    await alert.present();
+  }
+
+  private async presentNoEntriesToExport(): Promise<void> {
+    const alert = await this.alertController.create({
+      header: this.translate.instant('EXPORT'),
+      message: this.translate.instant('NO_ENTRIES_TO_EXPORT'),
+      cssClass: ['alert-bg'],
+      buttons: [this.translate.instant('OK')],
     });
     await alert.present();
   }

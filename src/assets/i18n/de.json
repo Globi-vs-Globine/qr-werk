@@ -33,6 +33,7 @@
     "DELETE_ON_ALL_DEVICES": "Auf allen Geräten löschen",
     "DELETE_ONLY_THIS_DEVICE": "Nur auf diesem Gerät löschen",
     "NO_ENTRIES_TO_MANAGE": "Es gibt keine Einträge zu verwalten.",
+    "NO_ENTRIES_TO_EXPORT": "Es sind keine Einträge zum Exportieren vorhanden.",
     "MANAGE_ENTRIES": "Einträge verwalten",
     "MANAGE_GROUPS": "Gruppen verwalten",
     "TRANSFER_DATA": "Daten übertragen",

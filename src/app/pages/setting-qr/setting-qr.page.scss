@@ -1,6 +1,14 @@
 .top-qr-preview {
     background: var(--ion-background-color, #fff);
     color: var(--ion-text-color, #000);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 140ms ease;
+}
+
+.top-qr-preview.preview-ready {
+    opacity: 1;
+    visibility: visible;
 }
 
 .color-preview {
@@ -48,4 +56,10 @@
 .correction-picker {
     max-width: 430px;
     margin: 4px auto 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .top-qr-preview {
+        transition: none;
+    }
 }
