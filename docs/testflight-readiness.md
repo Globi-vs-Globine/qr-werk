@@ -11,13 +11,13 @@ Target for the first internal beta:
 
 ## Before archiving
 
-- [ ] Create the QR Werk app record in App Store Connect before uploading the first build.
-- [ ] Confirm that the app record uses `ch.qrwerk.app` and version `0.9.0`.
-- [ ] Open CloudKit Console, select `iCloud.ch.qrwerk.app`, review the development schema and deploy its schema changes to Production.
-- [ ] Confirm the production schema contains the private-database record type `QRWerkSnapshot` and its required fields/indexes.
-- [ ] Confirm iCloud and CloudKit remain enabled for the Release configuration and distribution provisioning profile.
-- [ ] Build on a clean checkout, run the production web build, copy it to iOS and install native dependencies.
-- [ ] In Xcode, select **Any iOS Device (arm64)**, then choose **Product → Archive**.
+- [x] Create the QR Werk app record in App Store Connect before uploading the first build (Apple ID `6804925032`).
+- [x] Confirm that the app record uses `ch.qrwerk.app`; the first TestFlight build uses version `0.9.0` and build `1`.
+- [x] Open CloudKit Console, select `iCloud.ch.qrwerk.app`, review the development schema and deploy its schema changes to Production.
+- [x] Confirm the production schema contains the private-database record type `QRWerkSnapshot` and its required fields/indexes.
+- [x] Confirm iCloud and CloudKit remain enabled for the Release configuration and distribution provisioning profile.
+- [x] Build on a clean checkout, run the production web build, copy it to iOS and install native dependencies.
+- [x] Create the signed Release archive for a generic iOS device.
 - [ ] In Organizer, run **Validate App** before **Distribute App → App Store Connect → Upload**.
 - [ ] Check warnings concerning signing, entitlements, privacy manifests, icons and supported orientations.
 
@@ -29,7 +29,8 @@ CloudKit schema deployment copies record types, fields and indexes, not developm
 - Platform: iOS
 - Primary language: German
 - Bundle ID: `ch.qrwerk.app`
-- Suggested SKU: `QRWERK-IOS-001` (internal and not shown to customers)
+- Apple ID: `6804925032`
+- SKU: `QRWERK-IOS-001` (internal and not shown to customers)
 - Category: Utilities
 - Privacy URL: `https://github.com/Globi-vs-Globine/qr-werk/blob/main/PRIVACY.md`
 - Support URL: `https://github.com/Globi-vs-Globine/qr-werk`
