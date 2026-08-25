@@ -6,6 +6,7 @@ Tippe im Protokoll unten auf **Exportieren**. Danach wählst du, ob alle sichtba
 
 Verfügbare Ausgaben:
 
+- **Vollständige Details als Excel-Datei (.xlsx)** mit formatierter Kopfzeile, Filtern und echten Datumsfeldern
 - **Vollständige Details als CSV** für Tabellenprogramme
 - **Vollständige Details als TXT** für gut lesbaren Text
 - **Nur Codes als TXT** für eine reine Werteliste
@@ -33,4 +34,4 @@ Leere Zeilen werden ignoriert. Vor dem Speichern kannst du eine Zielgruppe ausw�
 
 Unter **Einstellungen → Datenverwaltung** erzeugt **Sicherung** eine lokale App-Sicherung. **Wiederherstellen** liest eine kompatible Sicherung ein und führt deren Inhalt gemäss der angezeigten Bestätigung mit den vorhandenen Daten zusammen.
 
-Ein CSV- oder TXT-Export ist keine vollständige App-Sicherung. Verwende für wichtige Bestände zusätzlich die Sicherungsfunktion. iCloud-Synchronisierung ersetzt ebenfalls keine unabhängige Sicherung, da Löschungen und Änderungen zwischen Geräten übertragen werden.
+Ein Excel-, CSV- oder TXT-Export ist keine vollständige App-Sicherung. Verwende für wichtige Bestände zusätzlich die Sicherungsfunktion. iCloud-Synchronisierung ersetzt ebenfalls keine unabhängige Sicherung, da Löschungen und Änderungen zwischen Geräten übertragen werden.

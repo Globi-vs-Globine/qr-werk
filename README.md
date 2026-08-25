@@ -44,7 +44,7 @@ Camera frames and imported images are recognized locally with Apple's AVFoundati
 - Move individual entries into groups.
 - Collapse and expand groups for a clearer overview.
 - Select individual entries or entire groups for export.
-- Export as CSV or TXT, with complete record details or only the code contents.
+- Export as a formatted Excel workbook (.xlsx), CSV or TXT, with complete record details or only the code contents.
 - Copy selected code contents directly to the clipboard.
 - Move deleted entries to a recoverable trash before permanently removing them.
 - Synchronize history, groups, bookmarks, duplicate events and trash between the user's Apple devices through optional private iCloud storage.

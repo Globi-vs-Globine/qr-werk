@@ -5,27 +5,34 @@ import { Clipboard } from '@capacitor/clipboard';
 import { format } from 'date-fns';
 import { Bookmark } from '../models/bookmark';
 import { ScanRecord } from '../models/scan-record';
+import { TranslateService } from '@ngx-translate/core';
+import { buildHistoryXlsx, HistoryXlsxLabels, uint8ArrayToBase64 } from '../utils/history-xlsx';
 
-export type HistoryExportFormat = 'csv' | 'txt';
+export type HistoryExportFormat = 'csv' | 'txt' | 'xlsx';
 export type HistoryExportContent = 'full' | 'codes';
 
 @Injectable({ providedIn: 'root' })
 export class HistoryExportService {
 
+  constructor(private readonly translate: TranslateService) {}
+
   async exportAndShare(records: ScanRecord[], bookmarks: Bookmark[], exportFormat: HistoryExportFormat, content: HistoryExportContent = 'full'): Promise<void> {
     const timestamp = format(new Date(), 'yyyyMMddHHmmss');
     const filename = `qr-werk-${content === 'codes' ? 'codes' : 'history'}-${timestamp}.${exportFormat}`;
-    const data = content === 'codes'
-      ? this.codesOnly(records)
-      : exportFormat === 'csv'
-        ? this.toCsv(records, bookmarks)
-        : this.toText(records, bookmarks);
+    const isXlsx = exportFormat === 'xlsx';
+    const data = isXlsx
+      ? uint8ArrayToBase64(buildHistoryXlsx(records, bookmarks, this.xlsxLabels()))
+      : content === 'codes'
+        ? this.codesOnly(records)
+        : exportFormat === 'csv'
+          ? this.toCsv(records, bookmarks)
+          : this.toText(records, bookmarks);
 
     const result = await Filesystem.writeFile({
       path: filename,
       data,
       directory: Directory.Cache,
-      encoding: Encoding.UTF8
+      ...(isXlsx ? {} : { encoding: Encoding.UTF8 }),
     });
 
     try {
@@ -100,5 +107,23 @@ export class HistoryExportService {
   private isoDate(value: Date): string {
     const date = value instanceof Date ? value : new Date(value);
     return Number.isNaN(date.getTime()) ? '' : date.toISOString();
+  }
+
+  private xlsxLabels(): HistoryXlsxLabels {
+    return {
+      id: this.translate.instant('XLSX.ID'),
+      content: this.translate.instant('XLSX.CONTENT'),
+      createdAt: this.translate.instant('XLSX.CREATED_AT'),
+      source: this.translate.instant('XLSX.SOURCE'),
+      barcodeType: this.translate.instant('XLSX.BARCODE_TYPE'),
+      group: this.translate.instant('XLSX.GROUP'),
+      bookmarked: this.translate.instant('XLSX.BOOKMARKED'),
+      tag: this.translate.instant('XLSX.TAG'),
+      duplicateCount: this.translate.instant('XLSX.DUPLICATE_COUNT'),
+      lastDuplicateAt: this.translate.instant('XLSX.LAST_DUPLICATE_AT'),
+      originDevice: this.translate.instant('XLSX.ORIGIN_DEVICE'),
+      lastEditedOn: this.translate.instant('XLSX.LAST_EDITED_ON'),
+      modifiedAt: this.translate.instant('XLSX.MODIFIED_AT'),
+    };
   }
 }

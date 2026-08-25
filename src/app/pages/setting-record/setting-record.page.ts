@@ -389,10 +389,32 @@ export class SettingRecordPage {
     }
   }
 
-  async onExportToCsv() {
+  async presentDataExportFormats(): Promise<void> {
+    if (!this.env.scanRecords.length && !this.env.bookmarks.length) {
+      const alert = await this.alertController.create({
+        header: this.translate.instant('EXPORT'),
+        message: this.translate.instant('NO_ENTRIES_TO_EXPORT'),
+        buttons: [this.translate.instant('OK')],
+        cssClass: ['alert-bg'],
+      });
+      await alert.present();
+      return;
+    }
+    const actionSheet = await this.actionSheetController.create({
+      header: this.translate.instant('EXPORT'),
+      buttons: [
+        { text: 'Excel (.xlsx)', icon: 'grid-outline', handler: () => this.onExport('xlsx') },
+        { text: 'CSV (.csv)', icon: 'document-text-outline', handler: () => this.onExport('csv') },
+        { text: this.translate.instant('CANCEL'), role: 'cancel' },
+      ],
+    });
+    await actionSheet.present();
+  }
+
+  async onExport(exportFormat: 'csv' | 'xlsx'): Promise<void> {
     const loading = await this.presentLoading(this.translate.instant("EXPORTING"));
     try {
-      await this.historyExportService.exportAndShare(this.env.scanRecords, this.env.bookmarks, 'csv');
+      await this.historyExportService.exportAndShare(this.env.scanRecords, this.env.bookmarks, exportFormat);
     } catch (err) {
       this.presentToast(
         this.env.isDebugging ? `Export failed: ${JSON.stringify(err)}` : this.translate.instant('MSG.EXPORT_FAILED'),

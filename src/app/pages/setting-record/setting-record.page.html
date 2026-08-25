@@ -175,13 +175,13 @@
           <ion-label><h2>{{ 'EXPORT' | translate }}</h2></ion-label>
         </ion-item>
         <ion-item slot="content" lines="none">
-          <ion-label class="ion-text-wrap"><p>{{ 'MSG.EXPORT_TO_CSV_EXPLAIN' | translate }}</p></ion-label>
+          <ion-label class="ion-text-wrap"><p>{{ 'MSG.EXPORT_EXPLAIN' | translate }}</p></ion-label>
         </ion-item>
       </ion-accordion>
     </ion-accordion-group>
     <div class="ion-padding-horizontal d-flex justify-content-center align-content-start flex-column">
-      <ion-button class="ion-padding-horizontal" color="primary" (click)="onExportToCsv()">
-        {{ 'EXPORT_TO_CSV' | translate }}
+      <ion-button class="ion-padding-horizontal" color="primary" (click)="presentDataExportFormats()">
+        {{ 'EXPORT' | translate }}
       </ion-button>
     </div>
   </div>

@@ -966,6 +966,7 @@ export class HistoryPage {
     const actionSheet = await this.actionSheetController.create({
       header: `${this.translate.instant('EXPORT')} (${records.length})`,
       buttons: [
+        { text: `${this.translate.instant('FULL_DETAILS')} (Excel XLSX)`, icon: 'grid-outline', handler: () => this.shareHistory(records, 'xlsx', 'full') },
         { text: `${this.translate.instant('FULL_DETAILS')} (CSV)`, icon: 'document-text', handler: () => this.shareHistory(records, 'csv', 'full') },
         { text: `${this.translate.instant('FULL_DETAILS')} (TXT)`, icon: 'reader', handler: () => this.shareHistory(records, 'txt', 'full') },
         { text: `${this.translate.instant('CODES_ONLY')} (TXT)`, icon: 'list', handler: () => this.shareHistory(records, 'txt', 'codes') },

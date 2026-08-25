@@ -44,7 +44,7 @@ Kamerabilder und importierte Fotos werden lokal mit Apples AVFoundation- und Vis
 - Einzelne Einträge in Gruppen verschieben.
 - Gruppen für eine bessere Übersicht ein- und ausklappen.
 - Einzelne Einträge oder vollständige Gruppen für den Export auswählen.
-- Als CSV oder TXT exportieren – wahlweise mit vollständigen Angaben oder nur mit den Code-Inhalten.
+- Als formatierte Excel-Datei (.xlsx), CSV oder TXT exportieren – wahlweise mit vollständigen Angaben oder nur mit den Code-Inhalten.
 - Ausgewählte Code-Inhalte direkt in die Zwischenablage kopieren.
 - Gelöschte Einträge zunächst in den wiederherstellbaren Papierkorb verschieben und erst dort endgültig löschen.
 - Protokoll, Gruppen, Lesezeichen, Mehrfacherkennungen und Papierkorb optional über die private iCloud zwischen eigenen Apple-Geräten synchronisieren.
